@@ -13,7 +13,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: DefaultTabController(
           length: 3,
           child: Column(
-            children: <Widget>[_appBar, _tabBarItems, _expandedListView],
+            children: <Widget>[_appBar, _expandedListView, _tabBarItems],
           )),
     );
   }
@@ -58,8 +58,62 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget get _listView => ListView.builder(
       itemCount: 20,
       itemBuilder: (context, index) {
-        return Text("posts");
+        return _listViewCard;
       });
+
+  Widget get _listViewCard => Card(
+        child: ListTile(
+          title: _cardTitleText,
+          subtitle: Wrap(
+            runSpacing: 7,
+            children: <Widget>[
+              Text("Post Desc"),
+              _cardPlaceHolder,
+              _cardPostItemsRowPadding,
+            ],
+          ),
+        ),
+      );
+
+  Widget get _cardTitleText => Text(
+        "Post Title",
+        style: titleTextStyle,
+      );
+
+  Widget get _cardPlaceHolder => Container(
+        height: 100,
+        child: Placeholder(
+          color: Colors.redAccent,
+        ),
+      );
+
+  Widget get _cardPostItemsRowPadding => Padding(
+        padding: const EdgeInsets.only(left: 10, right: 10),
+        child: _postItemsRow,
+      );
+
+  Widget get _postItemsRow =>
+      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+        _iconLabelButton(_iconLabel("43", Icons.favorite_border)),
+        _iconLabelButton(_iconLabel("", Icons.star_border)),
+      ]);
+
+  Widget _iconLabel(String text, IconData icons) => Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        spacing: 3,
+        children: <Widget>[
+          Icon(
+            icons,
+            color: Colors.blueGrey,
+          ),
+          Text(text),
+        ],
+      );
+
+  Widget _iconLabelButton(Widget childWidget) => InkWell(
+        child: childWidget,
+        onTap: () {},
+      );
 }
 
 final titleTextStyle = TextStyle(
