@@ -6,6 +6,37 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool _appBarHideStatus = false;
+  double _lastOffset = 0;
+  ScrollController _scrollController;
+
+  @override
+  void initState() {
+    _scrollController = ScrollController();
+
+    _scrollController.addListener(() {
+      if (_scrollController.offset >=
+          _scrollController.position.maxScrollExtent) {
+        _appBarHideStatus = false;
+      } else if (_scrollController.offset < _lastOffset) {
+        _appBarHideStatus = false;
+      } else {
+        _appBarHideStatus = true;
+      }
+
+      setState(() {
+        _lastOffset = _scrollController.offset;
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,7 +44,11 @@ class _HomeScreenState extends State<HomeScreen> {
       body: DefaultTabController(
           length: 3,
           child: Column(
-            children: <Widget>[_appBar, _expandedListView, _tabBarItems],
+            children: <Widget>[
+              _containerAppBar,
+              _expandedListView,
+              _tabBarItems
+            ],
           )),
     );
   }
@@ -21,6 +56,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget get _fabButton => FloatingActionButton(
         onPressed: () {},
         child: Icon(Icons.add_box),
+      );
+
+  Widget get _containerAppBar => AnimatedContainer(
+        duration: Duration(milliseconds: 500),
+        height:
+            _appBarHideStatus ? 0 : MediaQuery.of(context).size.height * .12,
+        child: _appBar,
       );
 
   Widget get _appBar => AppBar(
@@ -56,7 +98,8 @@ class _HomeScreenState extends State<HomeScreen> {
       );
 
   Widget get _listView => ListView.builder(
-      itemCount: 20,
+      controller: _scrollController,
+      itemCount: 5,
       itemBuilder: (context, index) {
         return _listViewCard;
       });
