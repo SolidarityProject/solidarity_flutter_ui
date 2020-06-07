@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:solidarity_flutter_ui/models/post.dart';
+import 'package:solidarity_flutter_ui/services/solidarity_service.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -9,6 +11,9 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _appBarHideStatus = false;
   double _lastOffset = 0;
   ScrollController _scrollController;
+
+  Future<List<Post>> _futurePosts;
+  List<Post> _postList;
 
   @override
   void initState() {
@@ -29,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     });
     super.initState();
+    _futurePosts = getPostsByFullAddress("Ödemiş-İzmir-Türkiye");
   }
 
   @override
@@ -94,23 +100,36 @@ class _HomeScreenState extends State<HomeScreen> {
       ]);
 
   Widget get _expandedListView => Expanded(
-        child: _listView,
+        child: _futureBuilderPost,
+      );
+
+  Widget get _futureBuilderPost => FutureBuilder<List<Post>>(
+        future: _futurePosts,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            _postList = snapshot.data;
+            return _listView;
+          } else if (snapshot.error) {
+            return Text("${snapshot.error}");
+          }
+          return CircularProgressIndicator();
+        },
       );
 
   Widget get _listView => ListView.builder(
       controller: _scrollController,
-      itemCount: 5,
+      itemCount: _postList.length,
       itemBuilder: (context, index) {
-        return _listViewCard;
+        return _listViewCard(index);
       });
 
-  Widget get _listViewCard => Card(
+  Widget _listViewCard(int index) => Card(
         child: ListTile(
-          title: _cardTitleText,
+          title: _cardTitleText(index),
           subtitle: Wrap(
             runSpacing: 7,
             children: <Widget>[
-              Text("Post Desc"),
+              Text(_postList[index].description),
               _cardPlaceHolder,
               _cardPostItemsRowPadding,
             ],
@@ -118,8 +137,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
 
-  Widget get _cardTitleText => Text(
-        "Post Title",
+  Widget _cardTitleText(int index) => Text(
+        _postList[index].title,
         style: titleTextStyle,
       );
 
