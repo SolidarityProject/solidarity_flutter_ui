@@ -11,7 +11,7 @@ class SolidarityApp extends StatelessWidget {
       home: HomeScreen(),
       theme: ThemeData.light().copyWith(
           appBarTheme:
-              AppBarTheme(color: Theme.of(context).scaffoldBackgroundColor),
+              AppBarTheme(color:  Theme.of(context).scaffoldBackgroundColor),
           tabBarTheme: TabBarTheme(
             labelColor: Colors.blue,
             unselectedLabelColor: Colors.grey,

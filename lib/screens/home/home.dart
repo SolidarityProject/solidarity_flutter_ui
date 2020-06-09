@@ -8,38 +8,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool _appBarHideStatus = false;
-  double _lastOffset = 0;
-  ScrollController _scrollController;
-
   Future<List<Post>> _futurePosts;
   List<Post> _postList;
 
   @override
   void initState() {
-    _scrollController = ScrollController();
-
-    _scrollController.addListener(() {
-      if (_scrollController.offset >=
-          _scrollController.position.maxScrollExtent) {
-        _appBarHideStatus = false;
-      } else if (_scrollController.offset < _lastOffset) {
-        _appBarHideStatus = false;
-      } else {
-        _appBarHideStatus = true;
-      }
-
-      setState(() {
-        _lastOffset = _scrollController.offset;
-      });
-    });
+    //TODO: scroll controller -> appbar show/hide
     super.initState();
     _futurePosts = getPostsByFullAddress("Ödemiş-İzmir-Türkiye");
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
     super.dispose();
   }
 
@@ -47,14 +27,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: _fabButton,
+      appBar: _appBar,
       body: DefaultTabController(
-          length: 3,
+          length: 2,
           child: Column(
-            children: <Widget>[
-              _containerAppBar,
-              _expandedListView,
-              _tabBarItems
-            ],
+            children: <Widget>[_expandedListView, _tabBarItems],
           )),
     );
   }
@@ -62,13 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget get _fabButton => FloatingActionButton(
         onPressed: () {},
         child: Icon(Icons.add_box),
-      );
-
-  Widget get _containerAppBar => AnimatedContainer(
-        duration: Duration(milliseconds: 500),
-        height:
-            _appBarHideStatus ? 0 : MediaQuery.of(context).size.height * .12,
-        child: _appBar,
       );
 
   Widget get _appBar => AppBar(
@@ -83,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
           CircleAvatar(
             child: Text("MC"),
           ),
-          Text("Home", style: titleTextStyle)
+          Text("Solidarity Platform", style: titleTextStyle)
         ],
       );
 
@@ -94,16 +64,13 @@ class _HomeScreenState extends State<HomeScreen> {
         Tab(
           icon: Icon(Icons.search),
         ),
-        Tab(
-          icon: Icon(Icons.message),
-        )
       ]);
 
   Widget get _expandedListView => Expanded(
-        child: _futureBuilderPost,
+        child: _futureBuilderPostList,
       );
 
-  Widget get _futureBuilderPost => FutureBuilder<List<Post>>(
+  Widget get _futureBuilderPostList => FutureBuilder<List<Post>>(
         future: _futurePosts,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -117,45 +84,50 @@ class _HomeScreenState extends State<HomeScreen> {
       );
 
   Widget get _listView => ListView.builder(
-      controller: _scrollController,
       itemCount: _postList.length,
       itemBuilder: (context, index) {
-        return _listViewCard(index);
+        return _listViewCardPadding(index);
       });
+
+  Widget _listViewCardPadding(int index) => Padding(
+        padding: const EdgeInsets.only(left: 10, right: 10),
+        child: _listViewCard(index),
+      );
 
   Widget _listViewCard(int index) => Card(
         child: ListTile(
-          title: _cardTitleText(index),
+          title: _cardImage,
           subtitle: Wrap(
             runSpacing: 7,
             children: <Widget>[
-              Text(_postList[index].description),
-              _cardPlaceHolder,
-              _cardPostItemsRowPadding,
+              _cardTextsColoumn(index),
+              _cardPostItemsRow,
             ],
           ),
         ),
       );
 
-  Widget _cardTitleText(int index) => Text(
-        _postList[index].title,
-        style: titleTextStyle,
-      );
-
-  Widget get _cardPlaceHolder => Container(
-        height: 100,
-        child: Placeholder(
-          color: Colors.redAccent,
+  Widget get _cardImage => Container(
+        height: 200,
+        child: Image(
+          image: NetworkImage("http://192.168.42.94/iisstart.png"),
         ),
       );
 
-  Widget get _cardPostItemsRowPadding => Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10),
-        child: _postItemsRow,
+  Widget _cardTextsColoumn(int index) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(_postList[index].dateSolidarity.toLocal().toString()),
+          Text(
+            _postList[index].title,
+            style: titleTextStyle.copyWith(letterSpacing: 0, fontSize: 18),
+          ),
+          Text(_postList[index].description),
+        ],
       );
 
-  Widget get _postItemsRow =>
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+  Widget get _cardPostItemsRow =>
+      Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
         _iconLabelButton(_iconLabel("43", Icons.favorite_border)),
         _iconLabelButton(_iconLabel("", Icons.star_border)),
       ]);

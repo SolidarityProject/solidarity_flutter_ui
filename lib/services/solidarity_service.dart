@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'package:solidarity_flutter_ui/models/post.dart';
 
-final _apiUrl = "http://192.168.42.179:2020";
+final _apiUrl = "http://192.168.42.94:2020";
 
 Future<Post> getPostById(String id) async {
   final response = await http.get("$_apiUrl/posts/getbyid/$id");
