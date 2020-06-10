@@ -8,14 +8,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Future<List<Post>> _futurePosts;
   List<Post> _postList;
 
   @override
   void initState() {
     //TODO: scroll controller -> appbar show/hide
     super.initState();
-    _futurePosts = getPostsByFullAddress("Ödemiş-İzmir-Türkiye");
   }
 
   @override
@@ -72,15 +70,18 @@ class _HomeScreenState extends State<HomeScreen> {
       );
 
   Widget get _futureBuilderPostList => FutureBuilder<List<Post>>(
-        future: _futurePosts,
+        future: getPostsByFullAddress("Ödemiş-İzmir-Türkiye"),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             _postList = snapshot.data;
             return _listView;
-          } else if (snapshot.error) {
+          } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           }
-          return CircularProgressIndicator();
         },
       );
 
