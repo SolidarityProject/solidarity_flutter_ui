@@ -51,8 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
         spacing: 20,
         children: <Widget>[
           CircleAvatar(
-            child: Text("MC"),
-          ),
+              child: Image(
+                  image: NetworkImage(
+                      "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT312H_JteV3xrSnnTeZm3TFUPAaG85vKKTWmjIyEsohKA5SvEe&usqp=CAU"))),
           Text("Solidarity Platform", style: titleTextStyle)
         ],
       );
@@ -96,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _listViewCard(int index) => Card(
         child: ListTile(
-          title: _cardImage,
+          title: _cardImage(index),
           subtitle: Wrap(
             runSpacing: 7,
             children: <Widget>[
@@ -107,10 +108,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
 
-  Widget get _cardImage => Container(
+  Widget _cardImage(int index) => Container(
         height: 200,
         child: Image(
-          image: NetworkImage("http://192.168.42.94/iisstart.png"),
+          image: NetworkImage(_postList[index].pictureUrl),
         ),
       );
 

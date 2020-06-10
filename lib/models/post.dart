@@ -37,7 +37,7 @@ class Post {
       dateSolidarity: DateTime.parse(json["dateSolidarity"]),
       description: json["description"],
       fullAddress: json["fullAddress"],
-      pictureUrl: json["description"],
+      pictureUrl: json["pictureUrl"],
       provinceAddress: json["provinceAddress"],
       title: json["title"],
       userId: json["userId"],
