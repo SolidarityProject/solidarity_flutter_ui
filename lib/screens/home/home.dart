@@ -8,7 +8,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  double _width, _height;
+
   List<Post> _postList;
+  int _index;
 
   @override
   void initState() {
@@ -23,40 +26,42 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _width = MediaQuery.of(context).size.width;
+    _height = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      floatingActionButton: _fabButton,
-      appBar: _appBar,
+      floatingActionButton: _fabButton(),
+      appBar: _appBar(),
       body: DefaultTabController(
           length: 2,
           child: Column(
-            children: <Widget>[_expandedListView, _tabBarItems],
+            children: <Widget>[_expandedListView(), _tabBarItems()],
           )),
     );
   }
 
-  Widget get _fabButton => FloatingActionButton(
+  Widget _fabButton() => FloatingActionButton(
         onPressed: () {},
         child: Icon(Icons.add_box),
       );
 
-  Widget get _appBar => AppBar(
+  Widget _appBar() => AppBar(
         elevation: 0,
-        title: _appBarItems,
+        title: _appBarItems(),
       );
 
-  Widget get _appBarItems => Wrap(
+  Widget _appBarItems() => Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
         spacing: 20,
         children: <Widget>[
           CircleAvatar(
-              child: Image(
-                  image: NetworkImage(
-                      "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT312H_JteV3xrSnnTeZm3TFUPAaG85vKKTWmjIyEsohKA5SvEe&usqp=CAU"))),
+              backgroundImage: NetworkImage(
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT312H_JteV3xrSnnTeZm3TFUPAaG85vKKTWmjIyEsohKA5SvEe&usqp=CAU")),
           Text("Solidarity Platform", style: titleTextStyle)
         ],
       );
 
-  Widget get _tabBarItems => TabBar(tabs: <Widget>[
+  Widget _tabBarItems() => TabBar(tabs: <Widget>[
         Tab(
           icon: Icon(Icons.home),
         ),
@@ -65,16 +70,16 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ]);
 
-  Widget get _expandedListView => Expanded(
-        child: _futureBuilderPostList,
+  Widget _expandedListView() => Expanded(
+        child: _futureBuilderPostList(),
       );
 
-  Widget get _futureBuilderPostList => FutureBuilder<List<Post>>(
+  Widget _futureBuilderPostList() => FutureBuilder<List<Post>>(
         future: getPostsByFullAddress("Ödemiş-İzmir-Türkiye"),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             _postList = snapshot.data;
-            return _listView;
+            return _listView();
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           } else {
@@ -85,52 +90,63 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       );
 
-  Widget get _listView => ListView.builder(
+  Widget _listView() => ListView.builder(
       itemCount: _postList.length,
       itemBuilder: (context, index) {
-        return _listViewCardPadding(index);
+        _index = index;
+        return _listViewCard();
       });
 
-  Widget _listViewCardPadding(int index) => Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10),
-        child: _listViewCard(index),
-      );
-
-  Widget _listViewCard(int index) => Card(
-        child: ListTile(
-          title: _cardImage(index),
-          subtitle: Wrap(
-            runSpacing: 7,
-            children: <Widget>[
-              _cardTextsColoumn(index),
-              _cardPostItemsRow,
-            ],
-          ),
+  Widget _listViewCard() => Card(
+        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        elevation: 5,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _cardPostInkwell(),
+            _cardPostItemsRow(),
+          ],
         ),
       );
 
-  Widget _cardImage(int index) => Container(
-        height: 200,
-        child: Image(
-          image: NetworkImage(_postList[index].pictureUrl),
-        ),
+  Widget _cardPostInkwell() => InkWell(
+        child: _cardPostTouchableColumn(),
+        onTap: () {},
       );
 
-  Widget _cardTextsColoumn(int index) => Column(
+  Widget _cardPostTouchableColumn() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(_postList[index].dateSolidarity.toLocal().toString()),
-          Text(
-            _postList[index].title,
-            style: titleTextStyle.copyWith(letterSpacing: 0, fontSize: 18),
-          ),
-          Text(_postList[index].description),
-        ],
+        children: <Widget>[_cardImage(), _cardTextsColumn()],
       );
 
-  Widget get _cardPostItemsRow =>
+  Widget _cardImage() => Container(
+        height: 180,
+        width: _width,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: NetworkImage(_postList[_index].pictureUrl),
+                fit: BoxFit.cover)),
+      );
+
+  Widget _cardTextsColumn() => Padding(
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(_postList[_index].dateSolidarity.toLocal().toString()),
+            Text(
+              _postList[_index].title,
+              style: titleTextStyle.copyWith(letterSpacing: 0, fontSize: 18),
+            ),
+            Text(_postList[_index].description),
+          ],
+        ),
+      );
+
+  Widget _cardPostItemsRow() =>
       Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
         _iconLabelButton(_iconLabel("43", Icons.favorite_border)),
+        _iconLabelButton(_iconLabel("", Icons.share)),
         _iconLabelButton(_iconLabel("", Icons.star_border)),
       ]);
 
@@ -141,14 +157,18 @@ class _HomeScreenState extends State<HomeScreen> {
           Icon(
             icons,
             color: Colors.blueGrey,
+            size: 25,
           ),
           Text(text),
         ],
       );
 
-  Widget _iconLabelButton(Widget childWidget) => InkWell(
-        child: childWidget,
-        onTap: () {},
+  Widget _iconLabelButton(Widget childWidget) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+        child: InkWell(
+          child: childWidget,
+          onTap: () {},
+        ),
       );
 }
 
