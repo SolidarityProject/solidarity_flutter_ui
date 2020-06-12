@@ -57,7 +57,8 @@ class _HomeScreenState extends State<HomeScreen> {
           CircleAvatar(
               backgroundImage: NetworkImage(
                   "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT312H_JteV3xrSnnTeZm3TFUPAaG85vKKTWmjIyEsohKA5SvEe&usqp=CAU")),
-          Text("Solidarity Platform", style: titleTextStyle)
+          Text("Solidarity Platform",
+              style: Theme.of(context).textTheme.headline1)
         ],
       );
 
@@ -116,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _cardPostTouchableColumn() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[_cardImage(), _cardTextsColumn()],
+        children: <Widget>[_cardImage(), _cardTextsWrap()],
       );
 
   Widget _cardImage() => Container(
@@ -128,15 +129,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 fit: BoxFit.cover)),
       );
 
-  Widget _cardTextsColumn() => Padding(
+  Widget _cardTextsWrap() => Padding(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Wrap(
+          spacing: 10,
+          direction: Axis.vertical,
+          crossAxisAlignment: WrapCrossAlignment.start,
           children: <Widget>[
-            Text(_postList[_index].dateSolidarity.toLocal().toString()),
+            Expanded(
+                child: Text(
+                    _postList[_index].dateSolidarity.toLocal().toString())),
             Text(
               _postList[_index].title,
-              style: titleTextStyle.copyWith(letterSpacing: 0, fontSize: 18),
+              style: Theme.of(context).textTheme.bodyText1,
             ),
             Text(_postList[_index].description),
           ],
@@ -171,9 +176,3 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
 }
-
-final titleTextStyle = TextStyle(
-    letterSpacing: 1,
-    fontSize: 20,
-    fontWeight: FontWeight.w700,
-    color: Colors.black);
