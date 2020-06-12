@@ -31,48 +31,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       floatingActionButton: _fabButton(),
-      appBar: _appBar(),
-      body: DefaultTabController(
-          length: 2,
-          child: Column(
-            children: <Widget>[_expandedListView(), _tabBarItems()],
-          )),
+      body: _futureBuilderPostList(),
     );
   }
 
   Widget _fabButton() => FloatingActionButton(
         onPressed: () {},
         child: Icon(Icons.add_box),
-      );
-
-  Widget _appBar() => AppBar(
-        elevation: 0,
-        title: _appBarItems(),
-      );
-
-  Widget _appBarItems() => Wrap(
-        crossAxisAlignment: WrapCrossAlignment.center,
-        spacing: 20,
-        children: <Widget>[
-          CircleAvatar(
-              backgroundImage: NetworkImage(
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT312H_JteV3xrSnnTeZm3TFUPAaG85vKKTWmjIyEsohKA5SvEe&usqp=CAU")),
-          Text("Solidarity Platform",
-              style: Theme.of(context).textTheme.headline1)
-        ],
-      );
-
-  Widget _tabBarItems() => TabBar(tabs: <Widget>[
-        Tab(
-          icon: Icon(Icons.home),
-        ),
-        Tab(
-          icon: Icon(Icons.search),
-        ),
-      ]);
-
-  Widget _expandedListView() => Expanded(
-        child: _futureBuilderPostList(),
       );
 
   Widget _futureBuilderPostList() => FutureBuilder<List<Post>>(

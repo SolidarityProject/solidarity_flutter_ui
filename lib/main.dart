@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:solidarity_flutter_ui/screens/home/home.dart';
+import 'package:solidarity_flutter_ui/screens/main_tabbar.dart';
 
 void main() => runApp(SolidarityApp());
 
@@ -8,7 +8,7 @@ class SolidarityApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Solidarity App',
-        home: HomeScreen(),
+        home: MainTabBar(),
         theme: ThemeData(
             // colors
             brightness: Brightness.light,
