@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solidarity_flutter_ui/models/post.dart';
-import 'package:solidarity_flutter_ui/services/solidarity_service.dart';
+import 'package:solidarity_flutter_ui/screens/main_tabbar.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -13,16 +13,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Post> _postList;
   int _index;
 
-  @override
-  void initState() {
-    //TODO: scroll controller -> appbar show/hide
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  //TODO: scroll controller -> appbar show/hide
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
       );
 
   Widget _futureBuilderPostList() => FutureBuilder<List<Post>>(
-        future: getPostsByFullAddress("Ödemiş-İzmir-Türkiye"),
+        future: futurePostList,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             _postList = snapshot.data;

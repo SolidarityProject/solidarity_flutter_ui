@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:solidarity_flutter_ui/models/post.dart';
 import 'package:solidarity_flutter_ui/screens/home/home.dart';
+import 'package:solidarity_flutter_ui/services/solidarity_service.dart';
 
 class MainTabBar extends StatefulWidget {
   @override
   _MainTabBarState createState() => _MainTabBarState();
 }
 
+Future<List<Post>> futurePostList;
+
 class _MainTabBarState extends State<MainTabBar> {
+  @override
+  void initState() {
+    // TODO: constructor - address detail -> get user info
+    futurePostList = getPostsByFullAddress("Ödemiş-İzmir-Türkiye");
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
