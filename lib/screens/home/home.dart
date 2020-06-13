@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:solidarity_flutter_ui/models/post.dart';
 import 'package:solidarity_flutter_ui/screens/main_tabbar.dart';
 
@@ -17,6 +19,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    initializeDateFormatting();
+
     _width = MediaQuery.of(context).size.width;
     _height = MediaQuery.of(context).size.height;
 
@@ -87,22 +91,33 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _cardTextsWrap() => Padding(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
-        child: Wrap(
-          spacing: 10,
-          direction: Axis.vertical,
-          crossAxisAlignment: WrapCrossAlignment.start,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Expanded(
-                child: Text(
-                    _postList[_index].dateSolidarity.toLocal().toString())),
+            Text(
+              _localDateFormat(
+                  "tr_TR", _postList[_index].dateSolidarity.toLocal()),
+              style: Theme.of(context).textTheme.overline,
+            ),
+            SizedBox(
+              height: 8,
+            ),
             Text(
               _postList[_index].title,
               style: Theme.of(context).textTheme.bodyText1,
+            ),
+            SizedBox(
+              height: 8,
             ),
             Text(_postList[_index].description),
           ],
         ),
       );
+
+  String _localDateFormat(String locale, DateTime date) =>
+      DateFormat.yMMMMEEEEd(locale).format(date) +
+      " - " +
+      DateFormat.Hm(locale).format(date);
 
   Widget _cardPostItemsRow() =>
       Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[

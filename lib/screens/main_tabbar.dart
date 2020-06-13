@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:solidarity_flutter_ui/models/post.dart';
 import 'package:solidarity_flutter_ui/screens/home/home.dart';
+import 'package:solidarity_flutter_ui/screens/search/search.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service.dart';
 
 class MainTabBar extends StatefulWidget {
@@ -49,7 +50,7 @@ class _MainTabBarState extends State<MainTabBar> {
 
   Widget _expandedTabBarView() => Expanded(
           child: TabBarView(
-        children: <Widget>[HomeScreen(), Center(child: Text("Search Screen"))],
+        children: <Widget>[HomeScreen(), SearchScreen()],
       ));
 
   Widget _tabBarItems() => TabBar(tabs: <Widget>[
