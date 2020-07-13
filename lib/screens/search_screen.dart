@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solidarity_flutter_ui/screens/main_tabbar.dart';
-import 'package:solidarity_flutter_ui/services/solidarity_service.dart';
+import 'package:solidarity_flutter_ui/services/solidarity_service/solidarity_service.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
