@@ -10,7 +10,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  double _width, _height;
+  double _width;
 
   List<Post> _postList;
   int _index;
@@ -22,7 +22,6 @@ class _HomeScreenState extends State<HomeScreen> {
     initializeDateFormatting();
 
     _width = MediaQuery.of(context).size.width;
-    _height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       floatingActionButton: _fabButton(),

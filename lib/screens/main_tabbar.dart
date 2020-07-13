@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:solidarity_flutter_ui/models/post.dart';
-import 'package:solidarity_flutter_ui/screens/home/home.dart';
-import 'package:solidarity_flutter_ui/screens/search/search.dart';
+import 'package:solidarity_flutter_ui/screens/home_screen.dart';
+import 'package:solidarity_flutter_ui/screens/search_screen.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service.dart';
 
 class MainTabBar extends StatefulWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:solidarity_flutter_ui/screens/login/login.dart';
+import 'package:solidarity_flutter_ui/screens/login_screen.dart';
 //import 'package:solidarity_flutter_ui/screens/main_tabbar.dart';
 
 void main() => runApp(SolidarityApp());
