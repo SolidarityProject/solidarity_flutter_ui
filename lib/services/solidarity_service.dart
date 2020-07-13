@@ -1,5 +1,5 @@
 import 'package:http/http.dart' as http;
-import 'package:solidarity_flutter_ui/models/post.dart';
+import 'package:solidarity_flutter_ui/models/post_model.dart';
 
 final _apiUrl = "http://solidarity-backend.herokuapp.com";
 

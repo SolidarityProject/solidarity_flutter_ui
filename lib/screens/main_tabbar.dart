@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:solidarity_flutter_ui/models/post.dart';
+import 'package:solidarity_flutter_ui/models/post_model.dart';
 import 'package:solidarity_flutter_ui/screens/home_screen.dart';
 import 'package:solidarity_flutter_ui/screens/search_screen.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service.dart';

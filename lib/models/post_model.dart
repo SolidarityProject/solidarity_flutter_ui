@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:solidarity_flutter_ui/models/address.dart';
+import 'package:solidarity_flutter_ui/models/address_model.dart';
 
 class Post {
   String id;
