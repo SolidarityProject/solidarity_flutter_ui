@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solidarity_flutter_ui/screens/login_screen.dart';
-//import 'package:solidarity_flutter_ui/screens/main_tabbar.dart';
+import 'package:solidarity_flutter_ui/utils/routes.dart';
 
 void main() => runApp(SolidarityApp());
 
@@ -10,6 +10,7 @@ class SolidarityApp extends StatelessWidget {
     return MaterialApp(
       title: 'Solidarity App',
       home: LoginScreen(),
+      routes: Routes.routes,
       theme: ThemeData(
         // colors
         brightness: Brightness.light,
