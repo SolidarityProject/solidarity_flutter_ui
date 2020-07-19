@@ -15,14 +15,13 @@ class SharedPrefs {
     return _prefsInstance.setString("token", token);
   }
 
-  static Future<void> sharedClear() async {
-    return _prefsInstance.clear();
-  }
-
   static Future<void> login() async {
     return _prefsInstance.setBool('login', true);
   }
 
+  static Future<void> sharedClear() async {
+    return _prefsInstance.clear();
+  }
   static String get getToken => _prefsInstance.getString("token") ?? null;
   static bool get getLogin => _prefsInstance.getBool('login') ?? false;
 }

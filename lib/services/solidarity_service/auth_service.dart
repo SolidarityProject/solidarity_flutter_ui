@@ -18,6 +18,7 @@ Future<bool> login(Login login) async {
     final resJsonData = json.decode(response.body);
     final token = resJsonData["token"];
     SharedPrefs.saveToken(token);
+    SharedPrefs.login();
     return true;
   } else {
     return false;
