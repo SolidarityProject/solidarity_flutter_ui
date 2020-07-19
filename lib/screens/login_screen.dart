@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:solidarity_flutter_ui/models/dtos/login_dto.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/auth_service.dart';
 import 'package:solidarity_flutter_ui/utils/constants.dart';
+import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -100,6 +101,9 @@ class _LoginScreenState extends State<LoginScreen> {
             if (result) {
               Navigator.of(context)
                   .pushReplacementNamed(Constants.ROUTE_TABBAR);
+            } else {
+              showAlertDialogWithOK(
+                  context, "OOPS!", "Check your email or password.");
             }
           });
         },
