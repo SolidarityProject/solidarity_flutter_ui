@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:solidarity_flutter_ui/models/post_model.dart';
 import 'package:solidarity_flutter_ui/screens/home_screen.dart';
 import 'package:solidarity_flutter_ui/screens/search_screen.dart';
-import 'package:solidarity_flutter_ui/services/solidarity_service/solidarity_service.dart';
+import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 
 class MainTabBar extends StatefulWidget {
   @override
@@ -10,12 +10,15 @@ class MainTabBar extends StatefulWidget {
 }
 
 Future<List<Post>> futurePostList;
+String token;
 
 class _MainTabBarState extends State<MainTabBar> {
   @override
   void initState() {
+    token = SharedPrefs.getToken;
+    print(token);
     // TODO: constructor - address detail -> get user info
-    futurePostList = getPostsByFullAddress("Ödemiş-İzmir-Türkiye");
+    //futurePostList = getPostsByFullAddress("Ödemiş-İzmir-Türkiye");
     super.initState();
   }
 

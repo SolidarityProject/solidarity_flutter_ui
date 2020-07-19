@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:solidarity_flutter_ui/models/dtos/login_dto.dart';
+import 'package:solidarity_flutter_ui/services/solidarity_service/auth_service.dart';
+import 'package:solidarity_flutter_ui/utils/constants.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -7,6 +10,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
   Widget _buildEmailTextField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -21,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextField(
+            controller: _emailController,
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(
               color: Colors.white,
@@ -56,6 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextField(
+            controller: _passwordController,
             obscureText: true,
             style: TextStyle(
               color: Colors.white,
@@ -83,7 +91,18 @@ class _LoginScreenState extends State<LoginScreen> {
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () => print('Login Button Pressed'),
+        onPressed: () {
+          login(
+            Login(
+                email: _emailController.text,
+                password: _passwordController.text),
+          ).then((result) {
+            if (result) {
+              Navigator.of(context)
+                  .pushReplacementNamed(Constants.ROUTE_TABBAR);
+            }
+          });
+        },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),

@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:solidarity_flutter_ui/screens/login_screen.dart';
 import 'package:solidarity_flutter_ui/utils/routes.dart';
+import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 
-void main() => runApp(SolidarityApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SharedPrefs.init();
+
+  runApp(SolidarityApp());
+}
 
 class SolidarityApp extends StatelessWidget {
   @override
