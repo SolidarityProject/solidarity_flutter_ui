@@ -4,7 +4,7 @@ import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 
 final _apiUrl = "http://solidarity-backend.herokuapp.com/posts";
 
-Future<Post> getById(String postId) async {
+Future<Post> getPostById(String postId) async {
   final response = await http.get("$_apiUrl/getbyid/$postId",
       headers: {"token": SharedPrefs.getToken});
 
@@ -15,7 +15,7 @@ Future<Post> getById(String postId) async {
   }
 }
 
-Future<List<Post>> getByUserId(String userId) async {
+Future<List<Post>> getPostsByUserId(String userId) async {
   final response = await http.get("$_apiUrl/getbyuserid/$userId",
       headers: {"token": SharedPrefs.getToken});
 
@@ -26,7 +26,7 @@ Future<List<Post>> getByUserId(String userId) async {
   }
 }
 
-Future<List<Post>> getByFullAddress(String districtId) async {
+Future<List<Post>> getPostsByFullAddress(String districtId) async {
   final response = await http.get("$_apiUrl/getbyfulladdress/$districtId",
       headers: {"token": SharedPrefs.getToken});
 
@@ -37,7 +37,7 @@ Future<List<Post>> getByFullAddress(String districtId) async {
   }
 }
 
-Future<List<Post>> getByProvinceAddress(String provinceId) async {
+Future<List<Post>> getPostsByProvinceAddress(String provinceId) async {
   final response = await http.get("$_apiUrl/getbyprovinceaddress/$provinceId",
       headers: {"token": SharedPrefs.getToken});
 
@@ -48,7 +48,7 @@ Future<List<Post>> getByProvinceAddress(String provinceId) async {
   }
 }
 
-Future<List<Post>> getByProvinceAddressForFree(String provinceId) async {
+Future<List<Post>> getPostsByProvinceAddressForFree(String provinceId) async {
   final response =
       await http.get("$_apiUrl/free/getbyprovinceaddress/$provinceId");
 

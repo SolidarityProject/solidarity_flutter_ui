@@ -94,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
         elevation: 5.0,
         onPressed: () {
           login(
-            Login(
+            LoginDTO(
                 email: _emailController.text,
                 password: _passwordController.text),
           ).then((result) {

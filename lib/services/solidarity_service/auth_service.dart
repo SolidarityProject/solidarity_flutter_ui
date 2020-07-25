@@ -7,7 +7,7 @@ import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 
 final _apiUrl = "http://solidarity-backend.herokuapp.com/auth";
 
-Future<bool> login(Login login) async {
+Future<bool> login(LoginDTO login) async {
   final response = await http.post(
     "$_apiUrl/login",
     headers: {HttpHeaders.contentTypeHeader: "application/json"},
