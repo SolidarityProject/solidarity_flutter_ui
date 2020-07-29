@@ -3,6 +3,8 @@ import 'package:solidarity_flutter_ui/models/post_model.dart';
 import 'package:solidarity_flutter_ui/models/user_model.dart';
 import 'package:solidarity_flutter_ui/screens/home_screen.dart';
 import 'package:solidarity_flutter_ui/screens/search_screen.dart';
+import 'package:solidarity_flutter_ui/services/solidarity_service/post_service.dart';
+import 'package:solidarity_flutter_ui/utils/constants.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 
 class MainTabBar extends StatefulWidget {
@@ -19,8 +21,7 @@ class _MainTabBarState extends State<MainTabBar> {
   void initState() {
     token = SharedPrefs.getToken;
     user = SharedPrefs.getUser;
-    // TODO: constructor - address detail -> get user info
-    //futurePostList = getPostsByFullAddress("Ödemiş-İzmir-Türkiye");
+    futurePostList = getPostsByFullAddress(user.address.districtId);
     super.initState();
   }
 
@@ -38,16 +39,20 @@ class _MainTabBarState extends State<MainTabBar> {
 
   Widget _appBar() => AppBar(
         elevation: 0,
-        title: _appBarItems(),
-      );
-
-  Widget _appBarItems() => Wrap(
-        crossAxisAlignment: WrapCrossAlignment.center,
-        spacing: 20,
-        children: <Widget>[
-          CircleAvatar(backgroundImage: NetworkImage(user.pictureUrl)),
-          Text("Solidarity Platform",
-              style: Theme.of(context).textTheme.headline1)
+        title: Text("Solidarity Platform",
+            style: Theme.of(context).textTheme.headline1),
+        leading: Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: CircleAvatar(backgroundImage: NetworkImage(user.pictureUrl)),
+        ),
+        actions: <Widget>[
+          FlatButton( 
+              onPressed: () { // TODO : comfirm dialog
+                SharedPrefs.sharedClear();
+                Navigator.of(context)
+                    .pushReplacementNamed(Constants.ROUTE_LOGIN);
+              },
+              child: Icon(Icons.power_settings_new))
         ],
       );
 
