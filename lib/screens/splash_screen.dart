@@ -3,7 +3,7 @@ import 'package:solidarity_flutter_ui/screens/login_screen.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/user_service.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 
-import 'main_tabbar.dart';
+import 'tab_controller_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   SplashScreen({Key key}) : super(key: key);
@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(Duration(seconds: 2), () {
       if (SharedPrefs.getLogin) {
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => MainTabBar()));
+            context, MaterialPageRoute(builder: (context) => TabControllerScreen()));
       } else {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => LoginScreen()));

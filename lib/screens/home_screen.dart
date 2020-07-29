@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:solidarity_flutter_ui/models/post_model.dart';
-import 'package:solidarity_flutter_ui/screens/main_tabbar.dart';
+import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
