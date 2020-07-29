@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:solidarity_flutter_ui/models/dtos/login_dto.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/auth_service.dart';
+import 'package:solidarity_flutter_ui/services/solidarity_service/user_service.dart';
 import 'package:solidarity_flutter_ui/utils/constants.dart';
 import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';
 
@@ -97,8 +98,9 @@ class _LoginScreenState extends State<LoginScreen> {
             LoginDTO(
                 email: _emailController.text,
                 password: _passwordController.text),
-          ).then((result) {
+          ).then((result) async {
             if (result) {
+              await getUserMe();
               Navigator.of(context)
                   .pushReplacementNamed(Constants.ROUTE_TABBAR);
             } else {

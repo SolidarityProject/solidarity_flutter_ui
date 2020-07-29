@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solidarity_flutter_ui/models/post_model.dart';
+import 'package:solidarity_flutter_ui/models/user_model.dart';
 import 'package:solidarity_flutter_ui/screens/home_screen.dart';
 import 'package:solidarity_flutter_ui/screens/search_screen.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
@@ -11,12 +12,13 @@ class MainTabBar extends StatefulWidget {
 
 Future<List<Post>> futurePostList;
 String token;
+User user;
 
 class _MainTabBarState extends State<MainTabBar> {
   @override
   void initState() {
     token = SharedPrefs.getToken;
-    print(token);
+    user = SharedPrefs.getUser;
     // TODO: constructor - address detail -> get user info
     //futurePostList = getPostsByFullAddress("Ödemiş-İzmir-Türkiye");
     super.initState();
@@ -43,9 +45,7 @@ class _MainTabBarState extends State<MainTabBar> {
         crossAxisAlignment: WrapCrossAlignment.center,
         spacing: 20,
         children: <Widget>[
-          CircleAvatar(
-              backgroundImage: NetworkImage(
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT312H_JteV3xrSnnTeZm3TFUPAaG85vKKTWmjIyEsohKA5SvEe&usqp=CAU")),
+          CircleAvatar(backgroundImage: NetworkImage(user.pictureUrl)),
           Text("Solidarity Platform",
               style: Theme.of(context).textTheme.headline1)
         ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solidarity_flutter_ui/screens/login_screen.dart';
+import 'package:solidarity_flutter_ui/services/solidarity_service/user_service.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 
 import 'main_tabbar.dart';
@@ -14,6 +15,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
+    getUserMe();
     pageRotate();
     super.initState();
   }

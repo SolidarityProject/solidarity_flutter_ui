@@ -9,9 +9,12 @@ Future<User> getUserMe() async {
       await http.get("$_apiUrl/me", headers: {"token": SharedPrefs.getToken});
 
   if (response.statusCode == 200) {
+    SharedPrefs.saveUser(response.body);
+    SharedPrefs.login();
     return userFromJson(response.body);
   } else {
-    throw Exception("Failed to load posts.");
+    SharedPrefs.sharedClear();
+    throw Exception("Failed to load your profile.");
   }
 }
 
@@ -22,7 +25,7 @@ Future<User> getUserById(String userId) async {
   if (response.statusCode == 200) {
     return userFromJson(response.body);
   } else {
-    throw Exception("Failed to load posts.");
+    throw Exception("Failed to load user.");
   }
 }
 
@@ -33,6 +36,6 @@ Future<User> getUserByUsername(String username) async {
   if (response.statusCode == 200) {
     return userFromJson(response.body);
   } else {
-    throw Exception("Failed to load posts.");
+    throw Exception("Failed to load user.");
   }
 }
