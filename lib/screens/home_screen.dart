@@ -24,15 +24,9 @@ class _HomeScreenState extends State<HomeScreen> {
     _width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      floatingActionButton: _fabButton(),
       body: _futureBuilderPostList(),
     );
   }
-
-  Widget _fabButton() => FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.add_box),
-      );
 
   Widget _futureBuilderPostList() => FutureBuilder<List<Post>>(
         future: futurePostList,
