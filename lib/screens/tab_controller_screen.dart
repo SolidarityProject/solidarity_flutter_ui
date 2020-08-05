@@ -3,6 +3,7 @@ import 'package:solidarity_flutter_ui/models/post_model.dart';
 import 'package:solidarity_flutter_ui/models/user_model.dart';
 import 'package:solidarity_flutter_ui/screens/home_screen.dart';
 import 'package:solidarity_flutter_ui/screens/search_screen.dart';
+import 'package:solidarity_flutter_ui/screens/starred_screen.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/post_service.dart';
 import 'package:solidarity_flutter_ui/utils/constants.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
@@ -13,6 +14,7 @@ class TabControllerScreen extends StatefulWidget {
 }
 
 Future<List<Post>> futurePostList;
+Future<List<Post>> futureStarredPostList;
 String token;
 User user;
 
@@ -22,6 +24,7 @@ class _TabControllerScreenState extends State<TabControllerScreen> {
     token = SharedPrefs.getToken;
     user = SharedPrefs.getUser;
     futurePostList = getPostsByFullAddress(user.address.districtId);
+    futureStarredPostList = futurePostList; // TODO : service
     super.initState();
   }
 
@@ -68,7 +71,7 @@ class _TabControllerScreenState extends State<TabControllerScreen> {
         children: <Widget>[
           HomeScreen(),
           SearchScreen(),
-          SearchScreen(), // TODO : stared & details screen
+          StarredScreen(), // TODO : stared & details screen
           SearchScreen()
         ],
       );
