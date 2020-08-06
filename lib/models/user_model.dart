@@ -54,3 +54,8 @@ User userFromJson(String str) {
   final jsonData = json.decode(str);
   return User.fromJson(jsonData);
 }
+
+List<User> userListFromJson(String str) {
+  final jsonData = json.decode(str);
+  return new List<User>.from(jsonData.map((x) => User.fromJson(x)));
+}
