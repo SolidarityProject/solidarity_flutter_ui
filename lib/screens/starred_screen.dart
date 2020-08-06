@@ -3,6 +3,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:solidarity_flutter_ui/models/post_model.dart';
 import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
+import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';
 
 class StarredScreen extends StatefulWidget {
   StarredScreen({Key key}) : super(key: key);
@@ -112,29 +113,36 @@ class _StarredScreenState extends State<StarredScreen> {
 
   Widget _cardPostItemsRow() =>
       Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-        _iconLabelButton(_iconLabel("43", Icons.delete_forever)),
-        _iconLabelButton(_iconLabel("", Icons.share)),
-        _iconLabelButton(_iconLabel("", Icons.star_border)),
+        _iconLabelButton(_iconLabel("Delete Post", Icons.delete_forever)),
       ]);
 
-  Widget _iconLabel(String text, IconData icons) => Wrap(
-        crossAxisAlignment: WrapCrossAlignment.center,
-        spacing: 3,
-        children: <Widget>[
-          Icon(
-            icons,
-            color: Colors.blueGrey,
-            size: 25,
-          ),
-          Text(text),
-        ],
+  Widget _iconLabel(String text, IconData icons) => Padding(
+        padding: const EdgeInsets.only(bottom: 2.0, right: 8.0),
+        child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 3,
+          children: <Widget>[
+            Text(text),
+            Icon(
+              icons,
+              color: Colors.blueGrey,
+              size: 25,
+            ),
+          ],
+        ),
       );
 
   Widget _iconLabelButton(Widget childWidget) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
         child: InkWell(
           child: childWidget,
-          onTap: () {},
+          onTap: () {
+            showAlertDialogWithCancel(
+              context,
+              "Are you sure?",
+              "This post delete from your starred posts.",
+            );
+          },
         ),
       );
 }
