@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solidarity_flutter_ui/models/user_model.dart';
 
@@ -20,8 +22,12 @@ class SharedPrefs {
     return _prefsInstance.setString("user", user);
   }
 
+  static Future<void> saveStarredPosts(String starredPost) async {
+    return _prefsInstance.setString("starredposts", starredPost);
+  }
+
   static Future<void> login() async {
-    return _prefsInstance.setBool('login', true);
+    return _prefsInstance.setBool("login", true);
   }
 
   static Future<void> sharedClear() async {
@@ -29,7 +35,11 @@ class SharedPrefs {
   }
 
   static String get getToken => _prefsInstance.getString("token") ?? null;
-  static bool get getLogin => _prefsInstance.getBool('login') ?? false;
-  static User get getUser =>
-      userFromJson(_prefsInstance.getString("user") ?? null);
+  static bool get getLogin => _prefsInstance.getBool("login") ?? false;
+  static User get getUser => userFromJson(
+        _prefsInstance.getString("user") ?? null,
+      );
+  static List<dynamic> get getStarredPosts => json.decode(
+        _prefsInstance.getString("starredposts") ?? null,
+      );
 }

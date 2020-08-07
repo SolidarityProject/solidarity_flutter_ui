@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
@@ -10,12 +9,13 @@ import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 
 final _apiUrl = "http://solidarity-backend.herokuapp.com/starredposts";
 
-Future<List<dynamic>> getStarredPostMyPosts() async {
+Future<bool> getStarredPostMyPosts() async {
   final response = await http.get("$_apiUrl/getmystarredposts",
       headers: {"token": SharedPrefs.getToken});
 
   if (response.statusCode == 200) {
-    return json.decode(response.body);
+    SharedPrefs.saveStarredPosts(response.body);
+    return true;
   } else {
     throw Exception("Failed to load starred posts.");
   }

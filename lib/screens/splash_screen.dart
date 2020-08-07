@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solidarity_flutter_ui/screens/login_screen.dart';
+import 'package:solidarity_flutter_ui/services/solidarity_service/starred_post_service.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/user_service.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 
@@ -15,16 +16,21 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    getUserMe();
-    pageRotate();
+    initStateAsyncFunctions().then((_) {});
     super.initState();
   }
 
+  Future<void> initStateAsyncFunctions() async {
+    await getUserMe();
+    await pageRotate();
+  }
+
   Future pageRotate() async {
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(Duration(seconds: 2), () async {
       if (SharedPrefs.getLogin) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => TabControllerScreen()));
+        await getStarredPostMyPosts();
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => TabControllerScreen()));
       } else {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => LoginScreen()));

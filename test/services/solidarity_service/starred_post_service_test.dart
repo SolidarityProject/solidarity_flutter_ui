@@ -30,7 +30,7 @@ void main() async {
 
     test("GET: getStarredPostMyPosts", () async {
       var result = await getStarredPostMyPosts();
-      expect(result[0].runtimeType, String);
+      expect(result, true);
     });
 
     test("GET: getStarredPostById", () async {
