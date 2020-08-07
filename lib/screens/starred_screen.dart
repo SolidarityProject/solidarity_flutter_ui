@@ -30,7 +30,7 @@ class _StarredScreenState extends State<StarredScreen> {
   }
 
   Widget _futureBuilderPostList() => FutureBuilder<List<Post>>(
-        future: futurePostList,
+        future: futureStarredPostList,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             _starredPostList = snapshot.data;

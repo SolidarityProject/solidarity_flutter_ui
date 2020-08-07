@@ -5,6 +5,7 @@ import 'package:solidarity_flutter_ui/screens/home_screen.dart';
 import 'package:solidarity_flutter_ui/screens/search_screen.dart';
 import 'package:solidarity_flutter_ui/screens/starred_screen.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/post_service.dart';
+import 'package:solidarity_flutter_ui/services/solidarity_service/starred_post_service.dart';
 import 'package:solidarity_flutter_ui/utils/constants.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 
@@ -24,7 +25,7 @@ class _TabControllerScreenState extends State<TabControllerScreen> {
     token = SharedPrefs.getToken;
     user = SharedPrefs.getUser;
     futurePostList = getPostsByFullAddress(user.address.districtId);
-    futureStarredPostList = futurePostList; // TODO : service
+    futureStarredPostList = getStarredPostsByUserId(user.id);
     super.initState();
   }
 
