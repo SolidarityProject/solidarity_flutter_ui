@@ -112,27 +112,53 @@ class _HomeScreenState extends State<HomeScreen> {
       " - " +
       DateFormat.Hm(locale).format(date);
 
-  Widget _cardPostItemsRow() =>
-      Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-        _iconLabelButton(_iconLabel("43", Icons.favorite_border)),
-        _iconLabelButton(_iconLabel("", Icons.share)),
-        _iconLabelButton(_iconLabel("", Icons.star_border)),
-      ]);
+  Widget _cardPostItemsRow() => Padding(
+        padding: const EdgeInsets.only(bottom: 2.0, right: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            _iconLabelButton(_starIconSelection()),
+          ],
+        ),
+      );
 
-  Widget _iconLabel(String text, IconData icons) => Wrap(
+  Widget _starIconSelection() {
+    var _text = Text(
+      "Add to your starred posts ",
+      style: TextStyle(
+        fontStyle: FontStyle.italic,
+        color: Colors.blueGrey,
+      ),
+    );
+    var _icon = Icon(
+      Icons.star_border,
+      color: Colors.blueGrey,
+      size: 25,
+    );
+    for (var myPost in myStarredPosts) {
+      if (myPost.toString() == _postList[_index].id) {
+        _text = Text("");
+        _icon = Icon(
+          Icons.star,
+          color: Theme.of(context).primaryColor,
+          size: 28,
+        );
+        break;
+      }
+    }
+    return _iconLabel(_text, _icon);
+  }
+
+  Widget _iconLabel(Text text, Icon icon) => Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
         spacing: 3,
         children: <Widget>[
-          Icon(
-            icons,
-            color: Colors.blueGrey,
-            size: 25,
-          ),
-          Text(text),
+          text,
+          icon,
         ],
       );
 
-  Widget _iconLabelButton(Widget childWidget) => Padding(
+  Widget _iconLabelButton(Widget childWidget) => Padding( // TODO : padding fix
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
         child: InkWell(
           child: childWidget,

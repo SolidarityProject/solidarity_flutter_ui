@@ -16,6 +16,7 @@ class TabControllerScreen extends StatefulWidget {
 
 Future<List<Post>> futurePostList;
 Future<List<Post>> futureStarredPostList;
+List<dynamic> myStarredPosts;
 String token;
 User user;
 
@@ -24,6 +25,7 @@ class _TabControllerScreenState extends State<TabControllerScreen> {
   void initState() {
     token = SharedPrefs.getToken;
     user = SharedPrefs.getUser;
+    myStarredPosts = SharedPrefs.getStarredPosts;
     futurePostList = getPostsByFullAddress(user.address.districtId);
     futureStarredPostList = getStarredPostsByUserId(user.id);
     super.initState();
