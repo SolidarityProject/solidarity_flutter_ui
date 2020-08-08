@@ -117,12 +117,13 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            _iconLabelButton(_starIconSelection()),
+            _starIconSelection(),
           ],
         ),
       );
 
   Widget _starIconSelection() {
+    var _starredStatus = false;
     var _text = Text(
       "Add to your starred posts ",
       style: TextStyle(
@@ -137,6 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
     for (var myPost in myStarredPosts) {
       if (myPost.toString() == _postList[_index].id) {
+        _starredStatus = true;
         _text = Text("");
         _icon = Icon(
           Icons.star,
@@ -146,7 +148,11 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
       }
     }
-    return _iconLabel(_text, _icon);
+    return _starIconLabelButton(
+      _iconLabel(_text, _icon),
+      _starredStatus,
+      _postList[_index].id,
+    );
   }
 
   Widget _iconLabel(Text text, Icon icon) => Wrap(
@@ -158,11 +164,27 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       );
 
-  Widget _iconLabelButton(Widget childWidget) => Padding( // TODO : padding fix
+  Widget _starIconLabelButton(
+    Widget childWidget,
+    bool starredStatus,
+    String postId,
+  ) =>
+      Padding(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
         child: InkWell(
           child: childWidget,
-          onTap: () {},
+          onTap: () async {
+            if (starredStatus) {
+              setState(() {
+                myStarredPosts.removeWhere(
+                    (element) => element.toString().contains(postId));
+              });
+            } else {
+              setState(() {
+                myStarredPosts.add(postId);
+              });
+            }
+          },
         ),
       );
 }
