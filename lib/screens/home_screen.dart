@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:solidarity_flutter_ui/models/dtos/add_starred_post_dto.dart';
 import 'package:solidarity_flutter_ui/models/post_model.dart';
 import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
+import 'package:solidarity_flutter_ui/services/solidarity_service/starred_post_service.dart';
+import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -70,16 +73,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _cardPostTouchableColumn() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[_cardImage(), _cardTextsWrap()],
+        children: <Widget>[
+          _cardImage(),
+          _cardTextsWrap(),
+        ],
       );
 
   Widget _cardImage() => Container(
         height: 180,
         width: _width,
         decoration: BoxDecoration(
-            image: DecorationImage(
-                image: NetworkImage(_postList[_index].pictureUrl),
-                fit: BoxFit.cover)),
+          image: DecorationImage(
+              image: NetworkImage(_postList[_index].pictureUrl),
+              fit: BoxFit.cover),
+        ),
       );
 
   Widget _cardTextsWrap() => Padding(
@@ -89,7 +96,9 @@ class _HomeScreenState extends State<HomeScreen> {
           children: <Widget>[
             Text(
               _localDateFormat(
-                  "tr_TR", _postList[_index].dateSolidarity.toLocal()),
+                "tr_TR",
+                _postList[_index].dateSolidarity.toLocal(),
+              ),
               style: Theme.of(context).textTheme.overline,
             ),
             SizedBox(
@@ -102,7 +111,9 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: 8,
             ),
-            Text(_postList[_index].description),
+            Text(
+              _postList[_index].description,
+            ),
           ],
         ),
       );
@@ -124,6 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _starIconSelection() {
     var _starredStatus = false;
+
     var _text = Text(
       "Add to your starred posts ",
       style: TextStyle(
@@ -131,11 +143,13 @@ class _HomeScreenState extends State<HomeScreen> {
         color: Colors.blueGrey,
       ),
     );
+
     var _icon = Icon(
       Icons.star_border,
       color: Colors.blueGrey,
       size: 25,
     );
+
     for (var myPost in myStarredPosts) {
       if (myPost.toString() == _postList[_index].id) {
         _starredStatus = true;
@@ -143,16 +157,13 @@ class _HomeScreenState extends State<HomeScreen> {
         _icon = Icon(
           Icons.star,
           color: Theme.of(context).primaryColor,
-          size: 28,
+          size: 25,
         );
         break;
       }
     }
     return _starIconLabelButton(
-      _iconLabel(_text, _icon),
-      _starredStatus,
-      _postList[_index].id,
-    );
+        _iconLabel(_text, _icon), _starredStatus, _postList[_index].id);
   }
 
   Widget _iconLabel(Text text, Icon icon) => Wrap(
@@ -165,25 +176,24 @@ class _HomeScreenState extends State<HomeScreen> {
       );
 
   Widget _starIconLabelButton(
-    Widget childWidget,
-    bool starredStatus,
-    String postId,
-  ) =>
+          Widget childWidget, bool starredStatus, String postId) =>
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
         child: InkWell(
           child: childWidget,
           onTap: () async {
             if (starredStatus) {
-              setState(() {
-                myStarredPosts.removeWhere(
-                    (element) => element.toString().contains(postId));
-              });
+              await deleleStarredPost(postId);
             } else {
-              setState(() {
-                myStarredPosts.add(postId);
-              });
+              await addStarredPost(
+                AddStarredPostDTO(postId: postId),
+              );
             }
+            await getStarredPostMyPosts();
+            setState(() {
+              myStarredPosts = SharedPrefs.getStarredPosts;
+              futureStarredPostList = getStarredPostsByUserId(user.id);
+            });
           },
         ),
       );
