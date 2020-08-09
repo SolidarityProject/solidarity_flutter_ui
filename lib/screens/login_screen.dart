@@ -102,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ).then((result) async {
             if (result) {
               await getUserMe();
-              await getStarredPostMyPosts();
+              await getMyStarredPosts();
               Navigator.of(context)
                   .pushReplacementNamed(Constants.ROUTE_TABCONTROLLER);
             } else {

@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future pageRotate() async {
     Future.delayed(Duration(seconds: 2), () async {
       if (SharedPrefs.getLogin) {
-        await getStarredPostMyPosts();
+        await getMyStarredPosts();
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => TabControllerScreen()));
       } else {

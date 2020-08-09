@@ -189,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 AddStarredPostDTO(postId: postId),
               );
             }
-            await getStarredPostMyPosts();
+            await getMyStarredPosts();
             setState(() {
               myStarredPosts = SharedPrefs.getStarredPosts;
               futureStarredPostList = getStarredPostsByUserId(user.id);
