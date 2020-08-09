@@ -50,7 +50,7 @@ void main() async {
     });
 
     test("DEL: deleleStarredPost", () async {
-      var result = await deleleStarredPost(_newPostId);
+      var result = await deleteStarredPost(_newPostId);
       expect(result, true);
     });
   });

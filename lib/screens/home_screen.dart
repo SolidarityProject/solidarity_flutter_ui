@@ -183,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: childWidget,
           onTap: () async {
             if (starredStatus) {
-              await deleleStarredPost(postId);
+              await deleteStarredPost(postId);
             } else {
               await addStarredPost(
                 AddStarredPostDTO(postId: postId),

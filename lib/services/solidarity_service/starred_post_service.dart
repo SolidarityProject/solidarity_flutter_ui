@@ -71,7 +71,7 @@ Future<bool> addStarredPost(AddStarredPostDTO addStarredPostDTO) async {
   }
 }
 
-Future<bool> deleleStarredPost(String deleteStarredPostId) async {
+Future<bool> deleteStarredPost(String deleteStarredPostId) async {
   final response = await http.delete(
     "$_apiUrl/delete/$deleteStarredPostId",
     headers: {
