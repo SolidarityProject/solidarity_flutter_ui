@@ -13,7 +13,7 @@ class User {
   int gender;
   DateTime birthdate;
   Address address;
-  List<String> starredPosts;
+  List<dynamic> starredPosts;
   bool activeStatus;
   bool verifiedStatus;
   DateTime dateCreated;

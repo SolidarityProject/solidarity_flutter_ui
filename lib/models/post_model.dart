@@ -8,7 +8,7 @@ class Post {
   String description;
   String pictureUrl;
   Address address;
-  List<String> starredUsers;
+  List<dynamic> starredUsers;
   bool activeStatus;
   DateTime dateSolidarity;
   DateTime dateCreated;
