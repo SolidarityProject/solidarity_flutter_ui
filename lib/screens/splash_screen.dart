@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solidarity_flutter_ui/screens/login_screen.dart';
-import 'package:solidarity_flutter_ui/services/solidarity_service/starred_post_service.dart';
+import 'package:solidarity_flutter_ui/services/solidarity_service/starred_service.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/user_service.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 

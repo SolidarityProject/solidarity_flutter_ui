@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:solidarity_flutter_ui/models/dtos/login_dto.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/auth_service.dart';
-import 'package:solidarity_flutter_ui/services/solidarity_service/starred_post_service.dart';
+import 'package:solidarity_flutter_ui/services/solidarity_service/starred_service.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/user_service.dart';
 import 'package:solidarity_flutter_ui/utils/constants.dart';
 import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';

@@ -7,7 +7,7 @@ import 'package:solidarity_flutter_ui/models/starred_post_model.dart';
 import 'package:solidarity_flutter_ui/models/user_model.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 
-final _apiUrl = "http://solidarity-backend.herokuapp.com/starredposts";
+final _apiUrl = "http://solidarity-backend.herokuapp.com/starred";
 
 Future<bool> getStarredPostMyPosts() async {
   final response = await http.get("$_apiUrl/getmystarredposts",
