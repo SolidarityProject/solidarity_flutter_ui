@@ -13,6 +13,7 @@ class User {
   int gender;
   DateTime birthdate;
   Address address;
+  List<String> starredPosts;
   bool activeStatus;
   bool verifiedStatus;
   DateTime dateCreated;
@@ -29,6 +30,7 @@ class User {
       this.name,
       this.password,
       this.pictureUrl,
+      this.starredPosts,
       this.username,
       this.verifiedStatus});
 
@@ -45,6 +47,7 @@ class User {
         name: json["name"],
         password: json["password"],
         pictureUrl: json["pictureUrl"],
+        starredPosts: json["starredPosts"],
         username: json["username"],
         verifiedStatus: json["verifiedStatus"]);
   }

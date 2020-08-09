@@ -8,6 +8,7 @@ class Post {
   String description;
   String pictureUrl;
   Address address;
+  List<String> starredUsers;
   bool activeStatus;
   DateTime dateSolidarity;
   DateTime dateCreated;
@@ -21,6 +22,7 @@ class Post {
       this.dateSolidarity,
       this.description,
       this.pictureUrl,
+      this.starredUsers,
       this.title,
       this.userId});
 
@@ -33,6 +35,7 @@ class Post {
       dateSolidarity: DateTime.parse(json["dateSolidarity"]),
       description: json["description"],
       pictureUrl: json["pictureUrl"],
+      starredUsers: json["starredUsers"],
       title: json["title"],
       userId: json["userId"],
     );
