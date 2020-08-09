@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
@@ -22,14 +23,14 @@ Future<bool> getMyStarredPosts() async {
   }
 }
 
-Future<String> getStarredUsersByPostId(String postId) async {
+Future<List<dynamic>> getStarredUsersByPostId(String postId) async {
   final response = await http.get(
     "$_apiUrl/getusersbypostid/$postId",
     headers: {"token": SharedPrefs.getToken},
   );
 
   if (response.statusCode == 200) {
-    return response.body;
+    return json.decode(response.body);
   } else {
     throw Exception("Failed to load starred posts.");
   }
