@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'package:solidarity_flutter_ui/models/post_model.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 
-final _apiUrl = "http://solidarity-backend.herokuapp.com/posts";
+final _apiUrl = "https://solidarity-backend.herokuapp.com/posts";
 
 Future<Post> getPostById(String postId) async {
   final response = await http.get("$_apiUrl/getbyid/$postId",

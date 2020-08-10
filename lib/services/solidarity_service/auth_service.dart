@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:solidarity_flutter_ui/models/dtos/login_dto.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 
-final _apiUrl = "http://solidarity-backend.herokuapp.com/auth";
+final _apiUrl = "https://solidarity-backend.herokuapp.com/auth";
 
 Future<bool> login(LoginDTO login) async {
   final response = await http.post(
