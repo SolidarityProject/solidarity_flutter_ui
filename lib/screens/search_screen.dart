@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
-import 'package:solidarity_flutter_ui/services/solidarity_service/solidarity_service.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -42,7 +40,7 @@ class _SearchScreenState extends State<SearchScreen> {
       FlatButton(
         onPressed: () {
           _controller.clear();
-          futurePostList = getPostsByFullAddress(_address);
+          //futurePostList = getPostsByFullAddress(_address);
 
           showDialog(
             context: context,
