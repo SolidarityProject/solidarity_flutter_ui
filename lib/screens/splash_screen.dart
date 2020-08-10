@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solidarity_flutter_ui/screens/login_screen.dart';
-import 'package:solidarity_flutter_ui/services/solidarity_service/starred_service.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/user_service.dart';
-import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 
 import 'tab_controller_screen.dart';
 
@@ -16,25 +14,26 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    initStateAsyncFunctions().then((_) {});
+    pageRotate();
     super.initState();
   }
 
-  Future<void> initStateAsyncFunctions() async {
-    await getUserMe();
-    await pageRotate();
-  }
-
-  Future pageRotate() async {
-    Future.delayed(Duration(seconds: 2), () async {
-      if (SharedPrefs.getLogin) {
-        await getMyStarredPosts();
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => TabControllerScreen()));
-      } else {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => LoginScreen()));
-      }
+  void pageRotate() {
+    getUserMe().then((_) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TabControllerScreen(),
+        ),
+      );
+    }).catchError((onError) {
+      print(onError);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginScreen(),
+        ),
+      );
     });
   }
 
