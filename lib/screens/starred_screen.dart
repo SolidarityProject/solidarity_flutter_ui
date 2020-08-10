@@ -3,6 +3,8 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:solidarity_flutter_ui/models/post_model.dart';
 import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
+import 'package:solidarity_flutter_ui/services/solidarity_service/starred_service.dart';
+import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';
 
 class StarredScreen extends StatefulWidget {
@@ -71,7 +73,10 @@ class _StarredScreenState extends State<StarredScreen> {
 
   Widget _cardPostTouchableColumn() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[_cardImage(), _cardTextsWrap()],
+        children: <Widget>[
+          _cardImage(),
+          _cardTextsWrap(),
+        ],
       );
 
   Widget _cardImage() => Container(
@@ -79,7 +84,9 @@ class _StarredScreenState extends State<StarredScreen> {
         width: _width,
         decoration: BoxDecoration(
             image: DecorationImage(
-                image: NetworkImage(_starredPostList[_index].pictureUrl),
+                image: NetworkImage(
+                  _starredPostList[_index].pictureUrl,
+                ),
                 fit: BoxFit.cover)),
       );
 
@@ -90,7 +97,9 @@ class _StarredScreenState extends State<StarredScreen> {
           children: <Widget>[
             Text(
               _localDateFormat(
-                  "tr_TR", _starredPostList[_index].dateSolidarity.toLocal()),
+                "tr_TR",
+                _starredPostList[_index].dateSolidarity.toLocal(),
+              ),
               style: Theme.of(context).textTheme.overline,
             ),
             SizedBox(
@@ -111,18 +120,35 @@ class _StarredScreenState extends State<StarredScreen> {
       " - " +
       DateFormat.Hm(locale).format(date);
 
-  Widget _cardPostItemsRow() =>
-      Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-        _iconLabelButton(_iconLabel("Delete Post", Icons.delete_forever)),
-      ]);
+  Widget _cardPostItemsRow() => Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          _iconLabelButton(
+            _iconLabel(
+              "Delete from your starred posts ",
+              Icons.delete_forever,
+            ),
+            _starredPostList[_index].id,
+          ),
+        ],
+      );
 
   Widget _iconLabel(String text, IconData icons) => Padding(
-        padding: const EdgeInsets.only(bottom: 2.0, right: 8.0),
+        padding: const EdgeInsets.only(
+          bottom: 2.0,
+          right: 8.0,
+        ),
         child: Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
           spacing: 3,
           children: <Widget>[
-            Text(text),
+            Text(
+              text,
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+                color: Colors.blueGrey,
+              ),
+            ),
             Icon(
               icons,
               color: Colors.blueGrey,
@@ -132,7 +158,7 @@ class _StarredScreenState extends State<StarredScreen> {
         ),
       );
 
-  Widget _iconLabelButton(Widget childWidget) => Padding(
+  Widget _iconLabelButton(Widget childWidget, String postId) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
         child: InkWell(
           child: childWidget,
@@ -141,11 +167,18 @@ class _StarredScreenState extends State<StarredScreen> {
               context,
               "Are you sure?",
               "This post delete from your starred posts.",
-              () => printHello(),
+              () => _deleteFromStarredPosts(postId),
             );
           },
         ),
       );
 
-  printHello() => print("Hello");
+  Future<void> _deleteFromStarredPosts(String postId) async {
+    await deleteStarredPost(postId);
+    await getMyStarredPosts();
+    setState(() {
+      myStarredPosts = SharedPrefs.getStarredPosts;
+      futureStarredPostList = getStarredPostsByUserId(user.id);
+    });
+  }
 }
