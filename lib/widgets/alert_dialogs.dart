@@ -28,7 +28,11 @@ showAlertDialogWithOK(BuildContext context, String title, String content) {
 }
 
 showAlertDialogWithCancel(
-    BuildContext context, String title, String content) {
+  BuildContext context,
+  String title,
+  String content,
+  Function continueFunc,
+) {
   // set up the buttons
   Widget cancelButton = FlatButton(
     child: Text("Cancel"),
@@ -38,8 +42,9 @@ showAlertDialogWithCancel(
   );
   Widget continueButton = FlatButton(
     child: Text("Continue"),
-    onPressed: () {
-      // TODO : continue func
+    onPressed: () async {
+      await continueFunc();
+      Navigator.of(context).pop();
     },
   );
 

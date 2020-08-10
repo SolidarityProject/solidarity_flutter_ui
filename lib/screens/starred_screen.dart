@@ -141,8 +141,11 @@ class _StarredScreenState extends State<StarredScreen> {
               context,
               "Are you sure?",
               "This post delete from your starred posts.",
+              () => printHello(),
             );
           },
         ),
       );
+
+  printHello() => print("Hello");
 }
