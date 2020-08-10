@@ -25,7 +25,7 @@ class _TabControllerScreenState extends State<TabControllerScreen> {
   void initState() {
     token = SharedPrefs.getToken;
     user = SharedPrefs.getUser;
-    myStarredPosts = SharedPrefs.getStarredPosts;
+    myStarredPosts = user.starredPosts;
     futurePostList = getPostsByFullAddress(user.address.districtId);
     futureStarredPostList = getStarredPostsByUserId(user.id);
     super.initState();
@@ -44,7 +44,7 @@ class _TabControllerScreenState extends State<TabControllerScreen> {
   }
 
   Widget _appBar() => AppBar(
-        elevation: 0,
+        elevation: 2,
         centerTitle: true,
         title: SizedBox(
           height: 40,
