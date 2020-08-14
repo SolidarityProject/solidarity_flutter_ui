@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
 import 'package:solidarity_flutter_ui/utils/constants.dart';
+import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
+import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';
 
 class AccountScreen extends StatefulWidget {
   AccountScreen({Key key}) : super(key: key);
@@ -27,8 +29,8 @@ class _AccountScreenState extends State<AccountScreen> {
           ),
           _listViewCard(
             Icons.power_settings_new,
-            "Log out",
-            _logoutFunc,
+            "Log Out",
+            _logOutFunc,
           ),
         ],
       );
@@ -46,8 +48,8 @@ class _AccountScreenState extends State<AccountScreen> {
             isThreeLine: true,
           ),
         ),
-        onTap: () {
-          _myProfileFunc();
+        onTap: () async {
+          await _myProfileFunc();
         },
       );
 
@@ -71,15 +73,25 @@ class _AccountScreenState extends State<AccountScreen> {
         title: Text(title),
       );
 
-  void _myProfileFunc() {
-    Navigator.pushNamed(context, Constants.ROUTE_PROFILE);
+  Future<void> _myProfileFunc() async {
+    await Navigator.pushNamed(context, Constants.ROUTE_PROFILE);
   }
 
   void _changePasswordFunc() {
     print("tap -> change password");
   }
 
-  void _logoutFunc() {
-    print("tap -> log out");
+  void _logOutFunc() {
+    showAlertDialogWithCancel(
+      context,
+      "Are you sure?",
+      "You will log out of your account.",
+      _logOutContuniueFunc,
+    );
+  }
+
+  Future<void> _logOutContuniueFunc() async {
+    await SharedPrefs.sharedClear();
+    await Navigator.pushReplacementNamed(context, Constants.ROUTE_LOGIN);
   }
 }

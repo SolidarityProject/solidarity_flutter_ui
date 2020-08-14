@@ -7,7 +7,6 @@ import 'package:solidarity_flutter_ui/screens/search_screen.dart';
 import 'package:solidarity_flutter_ui/screens/starred_screen.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/post_service.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/starred_service.dart';
-import 'package:solidarity_flutter_ui/utils/constants.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 
 class TabControllerScreen extends StatefulWidget {
@@ -61,12 +60,9 @@ class _TabControllerScreenState extends State<TabControllerScreen> {
         actions: <Widget>[
           FlatButton(
               onPressed: () {
-                // TODO : comfirm dialog
-                SharedPrefs.sharedClear();
-                Navigator.of(context)
-                    .pushReplacementNamed(Constants.ROUTE_LOGIN);
+                // TODO : district or city diaolog
               },
-              child: Icon(Icons.power_settings_new))
+              child: Icon(Icons.settings))
         ],
       );
 
