@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
+import 'package:solidarity_flutter_ui/utils/constants.dart';
 
 class AccountScreen extends StatefulWidget {
   AccountScreen({Key key}) : super(key: key);
@@ -71,7 +72,7 @@ class _AccountScreenState extends State<AccountScreen> {
       );
 
   void _myProfileFunc() {
-    print("tap -> my profile");
+    Navigator.pushNamed(context, Constants.ROUTE_PROFILE);
   }
 
   void _changePasswordFunc() {
