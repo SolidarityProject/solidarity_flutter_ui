@@ -11,41 +11,74 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListView(
+    return Scaffold(
+      body: _listView(),
+    );
+  }
+
+  Widget _listView() => ListView(
         children: <Widget>[
-          Card(
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Theme.of(context).primaryColor,
-                backgroundImage: NetworkImage(user.pictureUrl),
-              ),
-              title: Text("My Profile"),
-              subtitle: Text(
-                  "${user.name + " " + user.lastname}  \n${user.address.district + " / " + user.address.province}"),
-              isThreeLine: true,
-            ),
+          _listViewProfileCard(),
+          _listViewCard(
+            Icons.lock_outline,
+            "Change Password",
+            _changePasswordFunc,
           ),
-          Card(
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Theme.of(context).primaryColor,
-                child: Icon(Icons.lock_outline),
-              ),
-              title: Text("Change Password"),
-            ),
-          ),
-          Card(
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Theme.of(context).primaryColor,
-                child: Icon(Icons.power_settings_new),
-              ),
-              title: Text("Log Out"),
-            ),
+          _listViewCard(
+            Icons.power_settings_new,
+            "Log out",
+            _logoutFunc,
           ),
         ],
-      ),
-    );
+      );
+
+  Widget _listViewProfileCard() => InkWell(
+        child: Card(
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: Theme.of(context).primaryColor,
+              backgroundImage: NetworkImage(user.pictureUrl),
+            ),
+            title: Text("My Profile"),
+            subtitle: Text(
+                "${user.name + " " + user.lastname}  \n${user.address.district + " / " + user.address.province}"),
+            isThreeLine: true,
+          ),
+        ),
+        onTap: () {
+          _myProfileFunc();
+        },
+      );
+
+  Widget _listViewCard(IconData icon, String title, Function onTapFunc) => Card(
+        child: _cardInkwell(icon, title, onTapFunc),
+      );
+
+  Widget _cardInkwell(IconData icon, String title, Function onTapFunc) =>
+      InkWell(
+        child: _cardTouchableListTile(icon, title),
+        onTap: () {
+          onTapFunc();
+        },
+      );
+
+  Widget _cardTouchableListTile(IconData icon, String title) => ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Theme.of(context).primaryColor,
+          child: Icon(icon),
+        ),
+        title: Text(title),
+      );
+
+  void _myProfileFunc() {
+    print("tap -> my profile");
+  }
+
+  void _changePasswordFunc() {
+    print("tap -> change password");
+  }
+
+  void _logoutFunc() {
+    print("tap -> log out");
   }
 }
