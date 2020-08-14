@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:solidarity_flutter_ui/models/post_model.dart';
 import 'package:solidarity_flutter_ui/models/user_model.dart';
+import 'package:solidarity_flutter_ui/screens/account_screen.dart';
 import 'package:solidarity_flutter_ui/screens/home_screen.dart';
 import 'package:solidarity_flutter_ui/screens/search_screen.dart';
 import 'package:solidarity_flutter_ui/screens/starred_screen.dart';
@@ -75,7 +76,7 @@ class _TabControllerScreenState extends State<TabControllerScreen> {
           HomeScreen(),
           SearchScreen(),
           StarredScreen(), // TODO : stared & details screen
-          SearchScreen()
+          AccountScreen()
         ],
       );
 
