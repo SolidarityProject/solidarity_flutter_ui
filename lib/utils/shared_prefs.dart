@@ -15,23 +15,23 @@ class SharedPrefs {
   }
 
   static Future<void> saveToken(String token) async {
-    return _prefsInstance.setString("token", token);
+    return await _prefsInstance.setString("token", token);
   }
 
   static Future<void> saveUser(String user) async {
-    return _prefsInstance.setString("user", user);
+    return await _prefsInstance.setString("user", user);
   }
 
   static Future<void> saveStarredPosts(String starredPost) async {
-    return _prefsInstance.setString("starredposts", starredPost);
+    return await _prefsInstance.setString("starredposts", starredPost);
   }
 
   static Future<void> login() async {
-    return _prefsInstance.setBool("login", true);
+    return await _prefsInstance.setBool("login", true);
   }
 
   static Future<void> sharedClear() async {
-    return _prefsInstance.clear();
+    return await _prefsInstance.clear();
   }
 
   static String get getToken => _prefsInstance.getString("token") ?? null;
