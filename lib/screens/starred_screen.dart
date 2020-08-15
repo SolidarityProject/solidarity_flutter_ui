@@ -163,11 +163,19 @@ class _StarredScreenState extends State<StarredScreen> {
         child: InkWell(
           child: childWidget,
           onTap: () {
-            showAlertDialogWithCancel(
-              context,
-              "Are you sure?",
-              "This post delete from your starred posts.",
-              () => _deleteFromStarredPosts(postId),
+            var alertDiaologTwoButtons = AlertDialogTwoButtons(
+              title: "Are you sure?",
+              content: "This post will delete from your starred posts.",
+              noText: "Cancel",
+              yesText: "Delete",
+              noOnPressed: () {},
+              yesOnPressed: () async {
+                await _deleteFromStarredPosts(postId);
+              },
+            );
+            showDialog(
+              context: context,
+              builder: (context) => alertDiaologTwoButtons,
             );
           },
         ),

@@ -44,7 +44,8 @@ class _AccountScreenState extends State<AccountScreen> {
             ),
             title: Text("My Profile"),
             subtitle: Text(
-                "${user.name + " " + user.lastname}  \n${user.address.district + " / " + user.address.province}"),
+              _myProfileInfoText(),
+            ),
             isThreeLine: true,
           ),
         ),
@@ -53,6 +54,9 @@ class _AccountScreenState extends State<AccountScreen> {
         },
       );
 
+  String _myProfileInfoText() =>
+      "${user.name + " " + user.lastname}\n${user.address.district + " / " + user.address.province}";
+
   Widget _listViewCard(IconData icon, String title, Function onTapFunc) => Card(
         child: _cardInkwell(icon, title, onTapFunc),
       );
@@ -60,8 +64,8 @@ class _AccountScreenState extends State<AccountScreen> {
   Widget _cardInkwell(IconData icon, String title, Function onTapFunc) =>
       InkWell(
         child: _cardTouchableListTile(icon, title),
-        onTap: () {
-          onTapFunc();
+        onTap: () async {
+          await onTapFunc();
         },
       );
 
@@ -81,17 +85,21 @@ class _AccountScreenState extends State<AccountScreen> {
     print("tap -> change password");
   }
 
-  void _logOutFunc() {
-    showAlertDialogWithCancel(
-      context,
-      "Are you sure?",
-      "You will log out of your account.",
-      _logOutContuniueFunc,
+  Future<void> _logOutFunc() async {
+    var alertDialogTwoButtons = AlertDialogTwoButtons(
+      title: "Are you sure?",
+      content: "You will log out of your account.",
+      noText: "Cancel",
+      yesText: "Log out",
+      noOnPressed: () {},
+      yesOnPressed: () async {
+        await SharedPrefs.sharedClear();
+        await Navigator.pushReplacementNamed(context, Constants.ROUTE_LOGIN);
+      },
     );
-  }
-
-  Future<void> _logOutContuniueFunc() async {
-    await SharedPrefs.sharedClear();
-    await Navigator.pushReplacementNamed(context, Constants.ROUTE_LOGIN);
+    await showDialog(
+      context: context,
+      builder: (context) => alertDialogTwoButtons,
+    );
   }
 }

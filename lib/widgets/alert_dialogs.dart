@@ -1,68 +1,69 @@
 import 'package:flutter/material.dart';
 
-showAlertDialogWithOK(BuildContext context, String title, String content) {
-  // set up the OK button
-  Widget okButton = FlatButton(
-    child: Text("OK"),
-    onPressed: () {
-      Navigator.of(context).pop();
-    },
-  );
+class AlertDialogOneButton extends StatelessWidget {
+  final String title;
+  final String content;
+  final String okText;
+  final Function okOnPressed;
 
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: Text(title),
-    content: Text(content),
-    actions: [
-      okButton,
-    ],
-  );
+  AlertDialogOneButton({
+    this.title,
+    this.content,
+    this.okText,
+    this.okOnPressed,
+  });
 
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(title),
+      content: Text(content),
+      actions: <Widget>[
+        _alertDiaologFlatButton(context, okText, okOnPressed),
+      ],
+    );
+  }
 }
 
-showAlertDialogWithCancel(
+class AlertDialogTwoButtons extends StatelessWidget {
+  final String title;
+  final String content;
+  final String yesText;
+  final String noText;
+  final Function yesOnPressed;
+  final Function noOnPressed;
+
+  AlertDialogTwoButtons({
+    this.title,
+    this.content,
+    this.yesText,
+    this.noText,
+    this.yesOnPressed,
+    this.noOnPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(title),
+      content: Text(content),
+      actions: <Widget>[
+        _alertDiaologFlatButton(context, noText, noOnPressed),
+        _alertDiaologFlatButton(context, yesText, yesOnPressed),
+      ],
+    );
+  }
+}
+
+Widget _alertDiaologFlatButton(
   BuildContext context,
-  String title,
-  String content,
-  Function continueFunc,
-) {
-  // set up the buttons
-  Widget cancelButton = FlatButton(
-    child: Text("Cancel"),
-    onPressed: () {
-      Navigator.of(context).pop();
-    },
-  );
-  Widget continueButton = FlatButton(
-    child: Text("Continue"),
-    onPressed: () async {
-      await continueFunc();
-      Navigator.of(context).pop();
-    },
-  );
-
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: Text(title),
-    content: Text(content),
-    actions: [
-      cancelButton,
-      continueButton,
-    ],
-  );
-
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-}
+  String text,
+  Function onPressedFunc,
+) =>
+    FlatButton(
+      child: Text(text),
+      onPressed: () async {
+        await onPressedFunc();
+        Navigator.pop(context);
+      },
+    );

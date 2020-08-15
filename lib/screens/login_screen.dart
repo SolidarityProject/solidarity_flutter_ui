@@ -106,8 +106,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 (Route<dynamic> route) => false,
               );
             } else {
-              showAlertDialogWithOK(
-                  context, "OOPS!", "Check your email or password.");
+              var alertDiaologOneButton = AlertDialogOneButton(
+                title: "OOPS!",
+                content: "Check your email or password.",
+                okText: "OK",
+                okOnPressed: () {},
+              );
+              showDialog(
+                context: context,
+                builder: (context) => alertDiaologOneButton,
+              );
             }
           });
         },
