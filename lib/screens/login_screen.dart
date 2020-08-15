@@ -101,8 +101,10 @@ class _LoginScreenState extends State<LoginScreen> {
           ).then((result) async {
             if (result) {
               await getUserMe();
-              Navigator.of(context)
-                  .pushReplacementNamed(Constants.ROUTE_TABCONTROLLER);
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                Constants.ROUTE_TABCONTROLLER,
+                (Route<dynamic> route) => false,
+              );
             } else {
               showAlertDialogWithOK(
                   context, "OOPS!", "Check your email or password.");
