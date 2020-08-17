@@ -21,6 +21,8 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  // TODO: LOGIN DESIGN
+
   Widget _buildEmailTextField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

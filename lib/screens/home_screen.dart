@@ -6,6 +6,7 @@ import 'package:solidarity_flutter_ui/models/post_model.dart';
 import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/starred_service.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
+import 'package:solidarity_flutter_ui/utils/styles.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -101,18 +102,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 "tr_TR",
                 _postList[_index].dateSolidarity.toLocal(),
               ),
-              style: TextStyle(
-                color: _themeData.accentColor,
-                fontWeight: FontWeight.w700,
-              ),
+              style: Styles.POST_DATE,
             ),
             SizedBox(height: 8),
             Text(
               _postList[_index].title,
-              style: TextStyle(
-                fontSize: 22.0,
-                fontWeight: FontWeight.w800,
-              ),
+              style: Styles.POST_TITLE,
             ),
             SizedBox(height: 8),
             Text(
@@ -142,10 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     var _text = Text(
       "Add to your starred posts ",
-      style: TextStyle(
-        fontStyle: FontStyle.italic,
-        color: Colors.blueGrey,
-      ),
+      style: Styles.POST_STAR_DESC,
     );
 
     var _icon = Icon(

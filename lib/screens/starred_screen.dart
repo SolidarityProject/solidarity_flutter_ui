@@ -5,6 +5,7 @@ import 'package:solidarity_flutter_ui/models/post_model.dart';
 import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/starred_service.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
+import 'package:solidarity_flutter_ui/utils/styles.dart';
 import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';
 
 class StarredScreen extends StatefulWidget {
@@ -15,7 +16,6 @@ class StarredScreen extends StatefulWidget {
 }
 
 class _StarredScreenState extends State<StarredScreen> {
-  ThemeData _themeData;
   double _width;
 
   List<Post> _starredPostList;
@@ -25,7 +25,6 @@ class _StarredScreenState extends State<StarredScreen> {
   Widget build(BuildContext context) {
     initializeDateFormatting();
 
-    _themeData = Theme.of(context);
     _width = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -102,18 +101,12 @@ class _StarredScreenState extends State<StarredScreen> {
                 "tr_TR",
                 _starredPostList[_index].dateSolidarity.toLocal(),
               ),
-              style: TextStyle(
-                color: _themeData.accentColor,
-                fontWeight: FontWeight.w700,
-              ),
+              style: Styles.POST_DATE,
             ),
             SizedBox(height: 8),
             Text(
               _starredPostList[_index].title,
-              style: TextStyle(
-                fontSize: 22.0,
-                fontWeight: FontWeight.w800,
-              ),
+              style: Styles.POST_TITLE,
             ),
             SizedBox(height: 8),
             Text(_starredPostList[_index].description),
@@ -150,10 +143,7 @@ class _StarredScreenState extends State<StarredScreen> {
           children: <Widget>[
             Text(
               text,
-              style: TextStyle(
-                fontStyle: FontStyle.italic,
-                color: Colors.blueGrey,
-              ),
+              style: Styles.POST_STAR_DESC,
             ),
             Icon(
               icons,

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
+import 'package:solidarity_flutter_ui/utils/styles.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
+
+ThemeData _themeData;
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final _nameController = TextEditingController();
@@ -34,13 +37,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _themeData = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 2,
         centerTitle: true,
         title: Text(
-          "Profile Screen",
-          style: kLabelStyle,
+          "My Profile",
+          style: Styles.BLACK_TEXT,
         ),
       ),
       body: AnnotatedRegion<SystemUiOverlayStyle>(
@@ -124,7 +129,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: <Widget>[
         Text(
           "Personal Information",
-          style: kLabelStyle,
+          style: Styles.TF_LABEL,
         ),
       ],
     );
@@ -142,60 +147,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: <Widget>[
         Text(
           labelText,
-          style: kLabelStyle,
+          style: Styles.TF_LABEL,
         ),
         SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
-          decoration: kBoxDecorationStyle,
+          decoration: Styles.TF_BOXDEC,
           height: 50.0,
           child: TextField(
-            //textAlign: TextAlign.center,
-            //textAlignVertical: TextAlignVertical.center,
             enabled: _editStatus ? true : false,
             controller: controller,
             keyboardType: inputType,
-            style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'OpenSans',
-            ),
+            style: Styles.BLACK_TEXT,
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.all(15.0),
-              prefixIcon:  CircleAvatar(
-                  child: Text(iconText[0].toUpperCase()),
-                  backgroundColor: Colors.transparent,
-                  foregroundColor: Colors.blue,
+              prefixIcon: CircleAvatar(
+                child: Text(
+                  iconText[0].toUpperCase(),
+                  style: TextStyle(fontWeight: FontWeight.w600),
                 ),
+                backgroundColor: Colors.transparent,
+                foregroundColor: _themeData.accentColor,
+              ),
               hintText: hintText,
-              hintStyle: kHintTextStyle,
+              hintStyle: Styles.TF_HINT,
             ),
           ),
         ),
       ],
     );
   }
-
-  final kHintTextStyle = TextStyle(
-    color: Colors.black,
-    fontFamily: 'OpenSans',
-  );
-
-  final kLabelStyle = TextStyle(
-    color: Colors.black,
-    fontWeight: FontWeight.bold,
-    fontFamily: 'OpenSans',
-  );
-
-  final kBoxDecorationStyle = BoxDecoration(
-    color: Colors.white,
-    borderRadius: BorderRadius.circular(10.0),
-    boxShadow: [
-      BoxShadow(
-        color: Colors.black12,
-        blurRadius: 6.0,
-        offset: Offset(0, 2),
-      ),
-    ],
-  );
 }
