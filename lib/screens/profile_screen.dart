@@ -79,7 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       SizedBox(height: 30.0),
-                      _buildInfoLabel(),
+                      _buildInfoRow(),
                       SizedBox(height: 20.0),
                       _buildTextField(
                         "Name",
@@ -90,11 +90,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       SizedBox(height: 20.0),
                       _buildTextField(
-                        "Lastname",
+                        "Last Name",
                         _lastnameController,
                         TextInputType.text,
                         user.lastname,
-                        "Enter your lastname",
+                        "Enter your last name",
                       ),
                       SizedBox(height: 20.0),
                       _buildTextField(
@@ -123,13 +123,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildInfoLabel() {
+  Widget _buildInfoRow() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Text(
           "Personal Information",
           style: Styles.TF_LABEL,
+        ),
+        InkWell(
+          onTap: () => setState(() {
+            _editStatus = !_editStatus;
+            print(_editStatus);
+          }),
+          child: _editStatus
+              ? Text(
+                  "Save",
+                  style: TextStyle(
+                      color: _themeData.accentColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
+                )
+              : Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 5,
+                  children: <Widget>[
+                    Text(
+                      "Edit your information",
+                      style: Styles.BLACK_TEXT.copyWith(
+                        fontStyle: FontStyle.italic,
+                        fontSize: 12,
+                      ),
+                    ),
+                    Icon(
+                      Icons.edit,
+                      color: _themeData.accentColor,
+                      size: 20,
+                    ),
+                  ],
+                ),
         ),
       ],
     );
