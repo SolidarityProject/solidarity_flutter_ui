@@ -15,6 +15,7 @@ class StarredScreen extends StatefulWidget {
 }
 
 class _StarredScreenState extends State<StarredScreen> {
+  ThemeData _themeData;
   double _width;
 
   List<Post> _starredPostList;
@@ -24,6 +25,7 @@ class _StarredScreenState extends State<StarredScreen> {
   Widget build(BuildContext context) {
     initializeDateFormatting();
 
+    _themeData = Theme.of(context);
     _width = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -100,14 +102,18 @@ class _StarredScreenState extends State<StarredScreen> {
                 "tr_TR",
                 _starredPostList[_index].dateSolidarity.toLocal(),
               ),
-              style: Theme.of(context).textTheme.overline,
+              style: TextStyle(
+                color: _themeData.accentColor,
+                fontWeight: FontWeight.w700,
+              ),
             ),
-            SizedBox(
-              height: 8,
-            ),
+            SizedBox(height: 8),
             Text(
               _starredPostList[_index].title,
-              style: Theme.of(context).textTheme.bodyText1,
+              style: TextStyle(
+                fontSize: 22.0,
+                fontWeight: FontWeight.w800,
+              ),
             ),
             SizedBox(height: 8),
             Text(_starredPostList[_index].description),

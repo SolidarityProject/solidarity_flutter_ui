@@ -13,6 +13,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  ThemeData _themeData;
   double _width;
 
   List<Post> _postList;
@@ -24,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     initializeDateFormatting();
 
+    _themeData = Theme.of(context);
     _width = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -99,18 +101,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 "tr_TR",
                 _postList[_index].dateSolidarity.toLocal(),
               ),
-              style: Theme.of(context).textTheme.overline,
+              style: TextStyle(
+                color: _themeData.accentColor,
+                fontWeight: FontWeight.w700,
+              ),
             ),
-            SizedBox(
-              height: 8,
-            ),
+            SizedBox(height: 8),
             Text(
               _postList[_index].title,
-              style: Theme.of(context).textTheme.bodyText1,
+              style: TextStyle(
+                fontSize: 22.0,
+                fontWeight: FontWeight.w800,
+              ),
             ),
-            SizedBox(
-              height: 8,
-            ),
+            SizedBox(height: 8),
             Text(
               _postList[_index].description,
             ),
@@ -156,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _text = Text("");
         _icon = Icon(
           Icons.star,
-          color: Theme.of(context).primaryColor,
+          color: _themeData.primaryColor,
           size: 25,
         );
         break;

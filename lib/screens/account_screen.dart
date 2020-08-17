@@ -11,9 +11,13 @@ class AccountScreen extends StatefulWidget {
   _AccountScreenState createState() => _AccountScreenState();
 }
 
+ThemeData _themeData;
+
 class _AccountScreenState extends State<AccountScreen> {
   @override
   Widget build(BuildContext context) {
+    _themeData = Theme.of(context);
+
     return Scaffold(
       body: _listView(),
     );
@@ -39,10 +43,15 @@ class _AccountScreenState extends State<AccountScreen> {
         child: Card(
           child: ListTile(
             leading: CircleAvatar(
-              backgroundColor: Theme.of(context).primaryColor,
-              backgroundImage: NetworkImage(user.pictureUrl),
+              backgroundColor: _themeData.primaryColor,
+              child: Text(
+                user.name[0] + user.lastname[0],
+                style: TextStyle(color: Colors.white),
+              ),
             ),
-            title: Text("My Profile"),
+            title: Text(
+              "My Profile",
+            ),
             subtitle: Text(
               _myProfileInfoText(),
             ),
@@ -71,8 +80,11 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Widget _cardTouchableListTile(IconData icon, String title) => ListTile(
         leading: CircleAvatar(
-          backgroundColor: Theme.of(context).primaryColor,
-          child: Icon(icon),
+          backgroundColor: _themeData.primaryColor,
+          child: Icon(
+            icon,
+            color: Colors.white,
+          ),
         ),
         title: Text(title),
       );
