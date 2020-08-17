@@ -10,6 +10,9 @@ Future<void> main() async {
   runApp(SolidarityApp());
 }
 
+final primaryColor = Color(0xff4747d1);
+final accentColor = Color(0xff2929a3);
+
 class SolidarityApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -20,15 +23,16 @@ class SolidarityApp extends StatelessWidget {
       theme: ThemeData(
         // colors
         brightness: Brightness.light,
-        primaryColor: Color(0xff4747d1),
-        accentColor: Color(0xff2929a3),
+        primaryColor: primaryColor,
+        accentColor: accentColor,
         //appbar theme,
         appBarTheme: AppBarTheme(
           color: Theme.of(context).scaffoldBackgroundColor,
+          iconTheme: IconThemeData(color: primaryColor),
         ),
         // tabbar theme
         tabBarTheme: TabBarTheme(
-          labelColor: Color(0xff4747d1),
+          labelColor: primaryColor,
           unselectedLabelColor: Colors.grey,
         ),
       ),
