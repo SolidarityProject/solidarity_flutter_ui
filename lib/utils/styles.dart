@@ -25,11 +25,16 @@ class Styles {
   );
 
   static const TextStyle TF_HINT = TextStyle(
-    color: Colors.black,
+    color: Colors.black45,
   );
 
   static const TextStyle TF_LABEL = TextStyle(
     color: Colors.black,
+    fontWeight: FontWeight.bold,
+  );
+
+  static const TextStyle TF_LABEL_WHITE = TextStyle(
+    color: Colors.white,
     fontWeight: FontWeight.bold,
   );
 

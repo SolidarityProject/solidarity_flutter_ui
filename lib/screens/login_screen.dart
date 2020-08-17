@@ -4,6 +4,7 @@ import 'package:solidarity_flutter_ui/models/dtos/login_dto.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/auth_service.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/user_service.dart';
 import 'package:solidarity_flutter_ui/utils/constants.dart';
+import 'package:solidarity_flutter_ui/utils/styles.dart';
 import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -11,83 +12,140 @@ class LoginScreen extends StatefulWidget {
   _LoginScreenState createState() => _LoginScreenState();
 }
 
+ThemeData _themeData;
+
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
-  // TODO: LOGIN DESIGN
+  @override
+  Widget build(BuildContext context) {
+    _themeData = Theme.of(context);
 
-  Widget _buildEmailTextField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'Email',
-          style: kLabelStyle,
-        ),
-        SizedBox(height: 10.0),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: kBoxDecorationStyle,
-          height: 60.0,
-          child: TextField(
-            controller: _emailController,
-            keyboardType: TextInputType.emailAddress,
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'OpenSans',
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14.0),
-              prefixIcon: Icon(
-                Icons.email,
-                color: Colors.white,
+    return Scaffold(
+      body: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.light,
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Stack(
+            children: <Widget>[
+              Container(
+                height: double.infinity,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color(0xff9999e6),
+                      Color(0xff8484e1),
+                      Color(0xff6f6fdc),
+                      Color(0xff5b5bd7),
+                    ],
+                    stops: [0.1, 0.4, 0.7, 0.8],
+                  ),
+                ),
               ),
-              hintText: 'Enter your email',
-              hintStyle: kHintTextStyle,
-            ),
+              Container(
+                height: double.infinity,
+                child: SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  padding: EdgeInsets.only(
+                    top: 60.0,
+                    bottom: 20.0,
+                    left: 30.0,
+                    right: 30.0,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 90,
+                        width: 90,
+                        child: Image.asset(
+                          "assets/images/icon_github.png",
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      SizedBox(height: 15.0),
+                      Text(
+                        'Sign In',
+                        style: signInTextStyle,
+                      ),
+                      SizedBox(height: 20.0),
+                      _buildTextField(
+                        "Email",
+                        _emailController,
+                        false,
+                        TextInputType.emailAddress,
+                        Icons.email,
+                        "Enter your email",
+                      ),
+                      SizedBox(height: 30.0),
+                      _buildTextField(
+                        "Password",
+                        _passwordController,
+                        true,
+                        TextInputType.visiblePassword,
+                        Icons.lock,
+                        "Enter your password",
+                      ),
+                      SizedBox(height: 25.0),
+                      _buildLoginButton(),
+                      SizedBox(height: 80.0),
+                      _buildSignupButton()
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 
-  Widget _buildPasswordTextField() {
+  Widget _buildTextField(
+    String labelText,
+    TextEditingController controller,
+    bool obscureStatus,
+    TextInputType inputType,
+    IconData iconData,
+    String hintText,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          'Password',
-          style: kLabelStyle,
+          labelText,
+          style: Styles.TF_LABEL_WHITE,
         ),
         SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
-          decoration: kBoxDecorationStyle,
-          height: 60.0,
+          decoration: Styles.TF_BOXDEC,
+          height: 50.0,
           child: TextField(
-            controller: _passwordController,
-            obscureText: true,
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'OpenSans',
-            ),
+            controller: controller,
+            obscureText: obscureStatus,
+            keyboardType: inputType,
+            style: Styles.BLACK_TEXT,
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
-                Icons.lock,
-                color: Colors.white,
+                iconData,
+                color: _themeData.accentColor,
               ),
-              hintText: 'Enter your password',
-              hintStyle: kHintTextStyle,
+              hintText: hintText,
+              hintStyle: Styles.TF_HINT,
             ),
           ),
         ),
@@ -104,8 +162,9 @@ class _LoginScreenState extends State<LoginScreen> {
         onPressed: () {
           login(
             LoginDTO(
-                email: _emailController.text,
-                password: _passwordController.text),
+              email: _emailController.text,
+              password: _passwordController.text,
+            ),
           ).then((result) async {
             if (result) {
               await getUserMe();
@@ -127,20 +186,14 @@ class _LoginScreenState extends State<LoginScreen> {
             }
           });
         },
-        padding: EdgeInsets.all(15.0),
+        padding: EdgeInsets.all(13.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
         ),
         color: Colors.white,
         child: Text(
           'LOGIN',
-          style: TextStyle(
-            color: Color(0xFF527DAA),
-            letterSpacing: 1.5,
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'OpenSans',
-          ),
+          style: loginTextStyle,
         ),
       ),
     );
@@ -154,115 +207,40 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             TextSpan(
               text: 'Don\'t have an account? ',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16.0,
-                fontWeight: FontWeight.w400,
-                fontFamily: 'OpenSans',
-              ),
+              style: signUpTextSpanTextStyle,
             ),
             TextSpan(
               text: 'Sign Up',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'OpenSans',
-              ),
+              style: signUpTextStyle,
             ),
           ],
         ),
       ),
     );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Stack(
-            children: <Widget>[
-              Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0xFF73AEF5),
-                      Color(0xFF61A4F1),
-                      Color(0xFF478DE0),
-                      Color(0xFF398AE5),
-                    ],
-                    stops: [0.1, 0.4, 0.7, 0.8],
-                  ),
-                ),
-              ),
-              Container(
-                height: double.infinity,
-                child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.only(
-                    top: 120.0,
-                    bottom: 20.0,
-                    left: 30.0,
-                    right: 30.0,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        'Sign In',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'OpenSans',
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 30.0),
-                      _buildEmailTextField(),
-                      SizedBox(height: 30.0),
-                      _buildPasswordTextField(),
-                      SizedBox(height: 20.0),
-                      _buildLoginButton(),
-                      SizedBox(height: 90.0),
-                      _buildSignupButton()
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }
 
-final kHintTextStyle = TextStyle(
-  color: Colors.white54,
-  fontFamily: 'OpenSans',
-);
-
-final kLabelStyle = TextStyle(
+final signInTextStyle = TextStyle(
   color: Colors.white,
+  fontSize: 30.0,
   fontWeight: FontWeight.bold,
-  fontFamily: 'OpenSans',
 );
 
-final kBoxDecorationStyle = BoxDecoration(
-  color: Color(0xFF6CA8F1),
-  borderRadius: BorderRadius.circular(10.0),
-  boxShadow: [
-    BoxShadow(
-      color: Colors.black12,
-      blurRadius: 6.0,
-      offset: Offset(0, 2),
-    ),
-  ],
+final loginTextStyle = TextStyle(
+  color: _themeData.accentColor,
+  letterSpacing: 1.5,
+  fontSize: 18.0,
+  fontWeight: FontWeight.bold,
+);
+
+final signUpTextSpanTextStyle = TextStyle(
+  color: Colors.white,
+  fontSize: 16.0,
+  fontWeight: FontWeight.w400,
+);
+
+final signUpTextStyle = TextStyle(
+  color: Colors.white,
+  fontSize: 16.0,
+  fontWeight: FontWeight.bold,
 );
