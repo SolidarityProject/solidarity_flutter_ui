@@ -40,85 +40,91 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _themeData = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        elevation: 2,
-        centerTitle: true,
-        title: Text(
-          "My Profile",
-          style: Styles.BLACK_TEXT,
-        ),
+      appBar: _buildAppBar(),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: _buildScaffoldContainer(),
       ),
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Stack(
-            children: <Widget>[
-              Container(
-                height: double.infinity,
-                width: double.infinity,
-              ),
-              Container(
-                height: double.infinity,
-                child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.only(
-                    top: 20.0,
-                    bottom: 20.0,
-                    left: 30.0,
-                    right: 30.0,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 150,
-                        width: 150,
-                        child: CircleAvatar(
-                          backgroundImage: NetworkImage(user.pictureUrl),
-                        ),
-                      ),
-                      SizedBox(height: 30.0),
-                      _buildInfoRow(),
-                      SizedBox(height: 20.0),
-                      _buildTextField(
-                        "Name",
-                        _nameController,
-                        TextInputType.text,
-                        user.name,
-                        "Enter your name",
-                      ),
-                      SizedBox(height: 20.0),
-                      _buildTextField(
-                        "Last Name",
-                        _lastnameController,
-                        TextInputType.text,
-                        user.lastname,
-                        "Enter your last name",
-                      ),
-                      SizedBox(height: 20.0),
-                      _buildTextField(
-                        "Username",
-                        _usernameController,
-                        TextInputType.text,
-                        user.username,
-                        "Enter your username",
-                      ),
-                      SizedBox(height: 20.0),
-                      _buildTextField(
-                        "Email",
-                        _emailController,
-                        TextInputType.emailAddress,
-                        user.email,
-                        "Enter your email",
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+    );
+  }
+
+  Widget _buildAppBar() {
+    return AppBar(
+      elevation: 2,
+      centerTitle: true,
+      title: Text(
+        "My Profile",
+        style: Styles.BLACK_TEXT,
+      ),
+    );
+  }
+
+  Widget _buildScaffoldContainer() {
+    return Container(
+      height: double.infinity,
+      width: double.infinity,
+      child: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        padding: EdgeInsets.symmetric(
+          horizontal: 30.0,
+          vertical: 20.0,
         ),
+        child: _buildForm(),
+      ),
+    );
+  }
+
+  Widget _buildForm() {
+    return Form(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          _buildProfilePicture(),
+          SizedBox(height: 30.0),
+          _buildInfoRow(),
+          SizedBox(height: 5.0),
+          _buildTextFormField(
+            "Name",
+            _nameController,
+            TextInputType.text,
+            user.name,
+            "Enter your name",
+          ),
+          SizedBox(height: 20.0),
+          _buildTextFormField(
+            "Last Name",
+            _lastnameController,
+            TextInputType.text,
+            user.lastname,
+            "Enter your last name",
+          ),
+          SizedBox(height: 20.0),
+          _buildTextFormField(
+            "Username",
+            _usernameController,
+            TextInputType.text,
+            user.username,
+            "Enter your username",
+          ),
+          SizedBox(height: 20.0),
+          _buildTextFormField(
+            "Email",
+            _emailController,
+            TextInputType.emailAddress,
+            user.email,
+            "Enter your email",
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProfilePicture() {
+    return Container(
+      height: 150,
+      width: 150,
+      child: CircleAvatar(
+        backgroundImage: NetworkImage(user.pictureUrl),
       ),
     );
   }
@@ -132,43 +138,59 @@ class _ProfileScreenState extends State<ProfileScreen> {
           "Personal Information",
           style: Styles.TF_LABEL,
         ),
-        InkWell(
-          onTap: () => setState(() {
-            _editStatus = !_editStatus;
-            print(_editStatus);
-          }),
-          child: _editStatus
-              ? Text(
-                  "Save",
-                  style: TextStyle(
-                      color: _themeData.accentColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
-                )
-              : Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  spacing: 5,
-                  children: <Widget>[
-                    Text(
-                      "Edit your information",
-                      style: Styles.BLACK_TEXT.copyWith(
-                        fontStyle: FontStyle.italic,
-                        fontSize: 12,
-                      ),
-                    ),
-                    Icon(
-                      Icons.edit,
-                      color: _themeData.accentColor,
-                      size: 20,
-                    ),
-                  ],
-                ),
-        ),
+        _editStatus ? _buildSaveButton() : _buildEditButton(),
       ],
     );
   }
 
-  Widget _buildTextField(
+  Widget _buildSaveButton() {
+    return FlatButton(
+      color: _themeData.accentColor,
+      onPressed: () {
+        setState(() {
+          _editStatus = false;
+        });
+      },
+      child: Text(
+        "Save",
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+          fontSize: 17,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEditButton() {
+    return FlatButton(
+      onPressed: () {
+        setState(() {
+          _editStatus = true;
+        });
+      },
+      child: Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        spacing: 3,
+        children: <Widget>[
+          Text(
+            "Edit your information",
+            style: Styles.BLACK_TEXT.copyWith(
+              fontStyle: FontStyle.italic,
+              fontSize: 12,
+            ),
+          ),
+          Icon(
+            Icons.edit,
+            color: _themeData.accentColor,
+            size: 22,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTextFormField(
     String labelText,
     TextEditingController controller,
     TextInputType inputType,
@@ -187,7 +209,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           alignment: Alignment.centerLeft,
           decoration: Styles.TF_BOXDEC,
           height: 50.0,
-          child: TextField(
+          child: TextFormField(
             enabled: _editStatus ? true : false,
             controller: controller,
             keyboardType: inputType,
