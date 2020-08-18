@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
+import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -15,7 +16,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final _lastnameController = TextEditingController();
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+
   var _editStatus = false;
+  var _formTFHeight = 50.0;
 
   @override
   void initState() {
@@ -76,6 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildForm() {
     return Form(
+      key: _formKey,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -87,6 +93,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             "Name",
             _nameController,
             TextInputType.text,
+            (String value) => _nameFieldFunc(value),
             user.name,
             "Enter your name",
           ),
@@ -95,6 +102,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             "Last Name",
             _lastnameController,
             TextInputType.text,
+            (String value) => _lastNameFieldFunc(value),
             user.lastname,
             "Enter your last name",
           ),
@@ -103,6 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             "Username",
             _usernameController,
             TextInputType.text,
+            (String value) => _usernameFieldFunc(value),
             user.username,
             "Enter your username",
           ),
@@ -111,6 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             "Email",
             _emailController,
             TextInputType.emailAddress,
+            (String value) => _emailFieldFunc(value),
             user.email,
             "Enter your email",
           ),
@@ -146,10 +156,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildSaveButton() {
     return FlatButton(
       color: _themeData.accentColor,
-      onPressed: () {
-        setState(() {
-          _editStatus = false;
-        });
+      onPressed: () async {
+        if (_formKey.currentState.validate()) {
+          var alertDiaolog = AlertDialogOneButton(
+            title: "Success",
+            content: "Updated your information.",
+            okText: "OK",
+            okOnPressed: () {},
+          );
+          await showDialog(
+            context: context,
+            builder: (context) => alertDiaolog,
+          );
+          setState(() {
+            _editStatus = false;
+            _formTFHeight = 50.0;
+            user.name = _nameController.text;
+          });
+        }
       },
       child: Text(
         "Save",
@@ -167,6 +191,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       onPressed: () {
         setState(() {
           _editStatus = true;
+          _formTFHeight = 70.0;
         });
       },
       child: Wrap(
@@ -194,25 +219,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
     String labelText,
     TextEditingController controller,
     TextInputType inputType,
+    String validationFunc(String value),
     String iconText,
     String hintText,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          labelText,
-          style: Styles.TF_LABEL,
-        ),
+        //* label text
+        Text(labelText, style: Styles.TF_LABEL),
+
         SizedBox(height: 10.0),
+
         Container(
           alignment: Alignment.centerLeft,
           decoration: Styles.TF_BOXDEC,
-          height: 50.0,
+          height: _formTFHeight,
+
+          //* text form field
           child: TextFormField(
             enabled: _editStatus ? true : false,
             controller: controller,
             keyboardType: inputType,
+            autovalidate: true,
+            validator: (value) {
+              return validationFunc(value);
+            },
             style: Styles.BLACK_TEXT,
             decoration: InputDecoration(
               border: InputBorder.none,
@@ -233,4 +265,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ],
     );
   }
+}
+
+String _nameFieldFunc(String value) {
+  String result;
+
+  if (value.isEmpty) {
+    result = "Please enter your name";
+  } else if (value.length < 2) {
+    result = "Name must be at least 2 characters";
+  }
+
+  return result;
+}
+
+String _lastNameFieldFunc(String value) {
+  String result;
+
+  if (value.isEmpty) {
+    result = "Please enter your last name";
+  }
+
+  return result;
+}
+
+String _usernameFieldFunc(String value) {
+  String result;
+
+  if (value.isEmpty) {
+    result = "Please enter your username";
+  }
+
+  return result;
+}
+
+String _emailFieldFunc(String value) {
+  String result;
+
+  if (value.isEmpty) {
+    result = "Please enter your email";
+  }
+
+  return result;
 }
