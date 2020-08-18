@@ -7,6 +7,7 @@ import 'package:solidarity_flutter_ui/screens/search_screen.dart';
 import 'package:solidarity_flutter_ui/screens/starred_screen.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/post_service.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/starred_service.dart';
+import 'package:solidarity_flutter_ui/utils/constants.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 
 class TabControllerScreen extends StatefulWidget {
@@ -53,16 +54,26 @@ class _TabControllerScreenState extends State<TabControllerScreen> {
         ),
         leading: Padding(
           padding: const EdgeInsets.all(7.0),
-          child: CircleAvatar(
-            backgroundImage: NetworkImage(user.pictureUrl),
+          child: InkWell(
+            onTap: () async => await Navigator.pushNamed(
+              context,
+              Constants.ROUTE_PROFILE,
+            ),
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(user.pictureUrl),
+            ),
           ),
         ),
         actions: <Widget>[
-          FlatButton(
-              onPressed: () {
-                // TODO : district or city diaolog
-              },
-              child: Icon(Icons.settings))
+          Container(
+            height: 40,
+            width: 40,
+            child: InkWell(
+                onTap: () {
+                  // TODO : district or city diaolog
+                },
+                child: Icon(Icons.settings)),
+          )
         ],
       );
 
@@ -71,7 +82,7 @@ class _TabControllerScreenState extends State<TabControllerScreen> {
         children: <Widget>[
           HomeScreen(),
           SearchScreen(),
-          StarredScreen(), // TODO : stared & details screen
+          StarredScreen(),
           AccountScreen()
         ],
       );
