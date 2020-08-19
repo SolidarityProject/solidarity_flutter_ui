@@ -91,46 +91,13 @@ class _ProfileScreenState extends State<ProfileScreen>
           SizedBox(height: 30.0),
           _buildInfoRow(),
           SizedBox(height: 5.0),
-          _buildTextFormField(
-            "Name", //? label text
-            _nameController, //? text editing controller
-            50, //? text field max length
-            validateName, //? validation mixin function
-            user.name, //? text field icon text
-            "Enter your name", //? text field hint text
-            inputFormatters: _nameInputFormat(),
-          ),
+          _buildNameTextFormField(),
           SizedBox(height: 20.0),
-          _buildTextFormField(
-            "Last Name",
-            _lastnameController,
-            50,
-            validateLastName,
-            user.lastname,
-            "Enter your last name",
-            inputFormatters: _nameInputFormat(),
-          ),
+          _buildLastNameTextFormField(),
           SizedBox(height: 20.0),
-          _buildTextFormField(
-            "Username",
-            _usernameController,
-            20,
-            validateUsername,
-            user.username,
-            "Enter your username",
-            inputFormatters: _usernameInputFormat(),
-          ),
+          _buildUsernameTextFormField(),
           SizedBox(height: 20.0),
-          _buildTextFormField(
-            "Email",
-            _emailController,
-            50,
-            validateEmail,
-            user.email,
-            "Enter your email",
-            inputType: TextInputType.emailAddress,
-            inputFormatters: _emailInputFormat(),
-          ),
+          _buildEmailTextFormField(),
         ],
       ),
     );
@@ -222,6 +189,55 @@ class _ProfileScreenState extends State<ProfileScreen>
     );
   }
 
+  Widget _buildNameTextFormField() {
+    return _buildTextFormField(
+      "Name",
+      _nameController,
+      50,
+      validateName,
+      user.name,
+      "Enter your name",
+      inputFormatters: _nameInputFormat(),
+    );
+  }
+
+  Widget _buildLastNameTextFormField() {
+    return _buildTextFormField(
+      "Last Name",
+      _lastnameController,
+      50,
+      validateLastName,
+      user.lastname,
+      "Enter your last name",
+      inputFormatters: _nameInputFormat(),
+    );
+  }
+
+  Widget _buildUsernameTextFormField() {
+    return _buildTextFormField(
+      "Username",
+      _usernameController,
+      20,
+      validateUsername,
+      user.username,
+      "Enter your username",
+      inputFormatters: _usernameInputFormat(),
+    );
+  }
+
+  Widget _buildEmailTextFormField() {
+    return _buildTextFormField(
+      "Email",
+      _emailController,
+      50,
+      validateEmail,
+      user.email,
+      "Enter your email",
+      inputType: TextInputType.emailAddress,
+      inputFormatters: _emailInputFormat(),
+    );
+  }
+
   Widget _buildTextFormField(
     String labelText,
     TextEditingController controller,
@@ -254,6 +270,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             inputFormatters: inputFormatters,
             autovalidate: true,
             validator: validationMixin,
+            onSaved: (newValue) {},
             style: Styles.BLACK_TEXT,
             decoration: InputDecoration(
               border: InputBorder.none,
