@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:solidarity_flutter_ui/mixins/validation_mixin/profile_validation_mixin.dart';
 import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
 import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';
@@ -11,7 +12,8 @@ class ProfileScreen extends StatefulWidget {
 
 ThemeData _themeData;
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen>
+    with ProfileValidationMixin {
   final _nameController = TextEditingController();
   final _lastnameController = TextEditingController();
   final _usernameController = TextEditingController();
@@ -93,7 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             "Name",
             _nameController,
             TextInputType.text,
-            (String value) => _nameFieldFunc(value),
+            validateName,
             user.name,
             "Enter your name",
           ),
@@ -102,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             "Last Name",
             _lastnameController,
             TextInputType.text,
-            (String value) => _lastNameFieldFunc(value),
+            validateLastName,
             user.lastname,
             "Enter your last name",
           ),
@@ -111,7 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             "Username",
             _usernameController,
             TextInputType.text,
-            (String value) => _usernameFieldFunc(value),
+            validateUsername,
             user.username,
             "Enter your username",
           ),
@@ -120,7 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             "Email",
             _emailController,
             TextInputType.emailAddress,
-            (String value) => _emailFieldFunc(value),
+            validateEmail,
             user.email,
             "Enter your email",
           ),
@@ -219,7 +221,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     String labelText,
     TextEditingController controller,
     TextInputType inputType,
-    String validationFunc(String value),
+    String validationMixin(String val),
     String iconText,
     String hintText,
   ) {
@@ -242,9 +244,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             controller: controller,
             keyboardType: inputType,
             autovalidate: true,
-            validator: (value) {
-              return validationFunc(value);
-            },
+            validator: validationMixin,
             style: Styles.BLACK_TEXT,
             decoration: InputDecoration(
               border: InputBorder.none,
@@ -265,46 +265,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ],
     );
   }
-}
-
-String _nameFieldFunc(String value) {
-  String result;
-
-  if (value.isEmpty) {
-    result = "Please enter your name";
-  } else if (value.length < 2) {
-    result = "Name must be at least 2 characters";
-  }
-
-  return result;
-}
-
-String _lastNameFieldFunc(String value) {
-  String result;
-
-  if (value.isEmpty) {
-    result = "Please enter your last name";
-  }
-
-  return result;
-}
-
-String _usernameFieldFunc(String value) {
-  String result;
-
-  if (value.isEmpty) {
-    result = "Please enter your username";
-  }
-
-  return result;
-}
-
-String _emailFieldFunc(String value) {
-  String result;
-
-  if (value.isEmpty) {
-    result = "Please enter your email";
-  }
-
-  return result;
 }
