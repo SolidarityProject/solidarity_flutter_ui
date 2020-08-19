@@ -115,6 +115,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             validateUsername,
             user.username,
             "Enter your username",
+            inputFormatters: _usernameInputFormat(),
           ),
           SizedBox(height: 20.0),
           _buildTextFormField(
@@ -124,6 +125,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             user.email,
             "Enter your email",
             inputType: TextInputType.emailAddress,
+            inputFormatters: _emailInputFormat(),
           ),
         ],
       ),
@@ -271,5 +273,20 @@ class _ProfileScreenState extends State<ProfileScreen>
 List<TextInputFormatter> _nameInputFormat() {
   return [
     WhitelistingTextInputFormatter(RegExp("[a-zA-ZığüşöçİĞÜŞÖÇ ]")),
+    LengthLimitingTextInputFormatter(50),
+  ];
+}
+
+List<TextInputFormatter> _usernameInputFormat() {
+  return [
+    BlacklistingTextInputFormatter(" "),
+    LengthLimitingTextInputFormatter(20),
+  ];
+}
+
+List<TextInputFormatter> _emailInputFormat() {
+  return [
+    BlacklistingTextInputFormatter(" "),
+    LengthLimitingTextInputFormatter(50),
   ];
 }
