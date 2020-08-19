@@ -94,25 +94,24 @@ class _ProfileScreenState extends State<ProfileScreen>
           _buildTextFormField(
             "Name",
             _nameController,
-            TextInputType.text,
             validateName,
             user.name,
             "Enter your name",
+            inputFormatters: _nameInputFormat(),
           ),
           SizedBox(height: 20.0),
           _buildTextFormField(
             "Last Name",
             _lastnameController,
-            TextInputType.text,
             validateLastName,
             user.lastname,
             "Enter your last name",
+            inputFormatters: _nameInputFormat(),
           ),
           SizedBox(height: 20.0),
           _buildTextFormField(
             "Username",
             _usernameController,
-            TextInputType.text,
             validateUsername,
             user.username,
             "Enter your username",
@@ -121,10 +120,10 @@ class _ProfileScreenState extends State<ProfileScreen>
           _buildTextFormField(
             "Email",
             _emailController,
-            TextInputType.emailAddress,
             validateEmail,
             user.email,
             "Enter your email",
+            inputType: TextInputType.emailAddress,
           ),
         ],
       ),
@@ -220,11 +219,12 @@ class _ProfileScreenState extends State<ProfileScreen>
   Widget _buildTextFormField(
     String labelText,
     TextEditingController controller,
-    TextInputType inputType,
     String validationMixin(String val),
     String iconText,
-    String hintText,
-  ) {
+    String hintText, {
+    TextInputType inputType = TextInputType.text,
+    List<TextInputFormatter> inputFormatters,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -243,6 +243,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             enabled: _editStatus ? true : false,
             controller: controller,
             keyboardType: inputType,
+            inputFormatters: inputFormatters,
             autovalidate: true,
             validator: validationMixin,
             style: Styles.BLACK_TEXT,
@@ -265,4 +266,10 @@ class _ProfileScreenState extends State<ProfileScreen>
       ],
     );
   }
+}
+
+List<TextInputFormatter> _nameInputFormat() {
+  return [
+    WhitelistingTextInputFormatter(RegExp("[a-zA-ZığüşöçİĞÜŞÖÇ ]")),
+  ];
 }
