@@ -92,17 +92,19 @@ class _ProfileScreenState extends State<ProfileScreen>
           _buildInfoRow(),
           SizedBox(height: 5.0),
           _buildTextFormField(
-            "Name",
-            _nameController,
-            validateName,
-            user.name,
-            "Enter your name",
+            "Name", //? label text
+            _nameController, //? text editing controller
+            50, //? text field max length
+            validateName, //? validation mixin function
+            user.name, //? text field icon text
+            "Enter your name", //? text field hint text
             inputFormatters: _nameInputFormat(),
           ),
           SizedBox(height: 20.0),
           _buildTextFormField(
             "Last Name",
             _lastnameController,
+            50,
             validateLastName,
             user.lastname,
             "Enter your last name",
@@ -112,6 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen>
           _buildTextFormField(
             "Username",
             _usernameController,
+            20,
             validateUsername,
             user.username,
             "Enter your username",
@@ -121,6 +124,7 @@ class _ProfileScreenState extends State<ProfileScreen>
           _buildTextFormField(
             "Email",
             _emailController,
+            50,
             validateEmail,
             user.email,
             "Enter your email",
@@ -221,6 +225,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   Widget _buildTextFormField(
     String labelText,
     TextEditingController controller,
+    int maxLength,
     String validationMixin(String val),
     String iconText,
     String hintText, {
@@ -244,6 +249,7 @@ class _ProfileScreenState extends State<ProfileScreen>
           child: TextFormField(
             enabled: _editStatus ? true : false,
             controller: controller,
+            maxLength: _editStatus ? maxLength : null,
             keyboardType: inputType,
             inputFormatters: inputFormatters,
             autovalidate: true,
