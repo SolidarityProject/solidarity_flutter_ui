@@ -142,10 +142,12 @@ class _ProfileScreenState extends State<ProfileScreen>
             context: context,
             builder: (context) => alertDiaolog,
           );
+
+          _formKey.currentState.save();
+
           setState(() {
             _editStatus = false;
             _formTFHeight = 50.0;
-            user.name = _nameController.text;
           });
         }
       },
@@ -195,6 +197,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       _nameController,
       50,
       validateName,
+      saveName,
       user.name,
       "Enter your name",
       inputFormatters: _nameInputFormat(),
@@ -207,6 +210,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       _lastnameController,
       50,
       validateLastName,
+      saveLastName,
       user.lastname,
       "Enter your last name",
       inputFormatters: _nameInputFormat(),
@@ -219,6 +223,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       _usernameController,
       20,
       validateUsername,
+      saveUsername,
       user.username,
       "Enter your username",
       inputFormatters: _usernameInputFormat(),
@@ -231,6 +236,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       _emailController,
       50,
       validateEmail,
+      saveEmail,
       user.email,
       "Enter your email",
       inputType: TextInputType.emailAddress,
@@ -243,6 +249,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     TextEditingController controller,
     int maxLength,
     String validationMixin(String val),
+    Function saveMixin,
     String iconText,
     String hintText, {
     TextInputType inputType = TextInputType.text,
@@ -270,7 +277,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             inputFormatters: inputFormatters,
             autovalidate: true,
             validator: validationMixin,
-            onSaved: (newValue) {},
+            onSaved: saveMixin,
             style: Styles.BLACK_TEXT,
             decoration: InputDecoration(
               border: InputBorder.none,

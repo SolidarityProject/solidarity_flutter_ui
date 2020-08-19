@@ -1,3 +1,5 @@
+import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
+
 class ProfileValidationMixin {
   String validateName(String value) {
     if (value.startsWith(" ")) {
@@ -11,6 +13,10 @@ class ProfileValidationMixin {
     } else {
       return null;
     }
+  }
+
+  void saveName(String newValue) {
+    user.name = newValue;
   }
 
   String validateLastName(String value) {
@@ -27,6 +33,10 @@ class ProfileValidationMixin {
     }
   }
 
+  void saveLastName(String newValue) {
+    user.lastname = newValue;
+  }
+
   String validateUsername(String value) {
     if (value.isEmpty) {
       return "Please enter your username";
@@ -41,6 +51,10 @@ class ProfileValidationMixin {
     }
   }
 
+  void saveUsername(String newValue) {
+    user.username = newValue;
+  }
+
   String validateEmail(String value) {
     if (value.isEmpty) {
       return "Please enter your email";
@@ -51,6 +65,10 @@ class ProfileValidationMixin {
     } else {
       return null;
     }
+  }
+
+  void saveEmail(String newValue) {
+    user.email = newValue;
   }
 }
 
