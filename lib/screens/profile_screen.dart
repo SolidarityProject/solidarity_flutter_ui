@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:solidarity_flutter_ui/mixins/validation_mixin/profile_validation_mixin.dart';
 import 'package:solidarity_flutter_ui/models/dtos/check_available_email_dto.dart';
+import 'package:solidarity_flutter_ui/models/dtos/check_available_username_dto.dart';
 import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/auth_service.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
@@ -133,12 +134,49 @@ class _ProfileScreenState extends State<ProfileScreen>
     return FlatButton(
       color: _themeData.accentColor,
       onPressed: () async {
-        var changedStatus = _checkChangedFields();
-        if (changedStatus) {
-          var availableEmail = await _checkAvailableEmail();
+        if (_formKey.currentState.validate()) {
+          var changedStatus = _checkChangedFields();
+          if (changedStatus) {
+            var availableEmail = await _checkAvailableEmail();
+            var availableUsername = await _checkAvailableUsername();
 
-          if (availableEmail) {
-            if (_formKey.currentState.validate()) {
+            if (!availableEmail && !availableUsername) {
+              var alertDiaolog = AlertDialogOneButton(
+                title: "ERROR",
+                content:
+                    "This username (${_usernameController.text}) is already in use.\nThis email (${_emailController.text}) is already in use.",
+                okText: "OK",
+                okOnPressed: () {},
+              );
+              await showDialog(
+                context: context,
+                builder: (context) => alertDiaolog,
+              );
+            } else if (!availableEmail) {
+              var alertDiaolog = AlertDialogOneButton(
+                title: "ERROR",
+                content:
+                    "This email (${_emailController.text}) is already in use.",
+                okText: "OK",
+                okOnPressed: () {},
+              );
+              await showDialog(
+                context: context,
+                builder: (context) => alertDiaolog,
+              );
+            } else if (!availableUsername) {
+              var alertDiaolog = AlertDialogOneButton(
+                title: "ERROR",
+                content:
+                    "This username (${_usernameController.text}) is already in use.",
+                okText: "OK",
+                okOnPressed: () {},
+              );
+              await showDialog(
+                context: context,
+                builder: (context) => alertDiaolog,
+              );
+            } else {
               var alertDiaolog = AlertDialogOneButton(
                 title: "Success",
                 content: "Updated your information.",
@@ -158,23 +196,11 @@ class _ProfileScreenState extends State<ProfileScreen>
               });
             }
           } else {
-            var alertDiaolog = AlertDialogOneButton(
-              title: "ERROR",
-              content:
-                  "This email (${_emailController.text}) is already in use.",
-              okText: "OK",
-              okOnPressed: () {},
-            );
-            await showDialog(
-              context: context,
-              builder: (context) => alertDiaolog,
-            );
+            setState(() {
+              _editStatus = false;
+              _formTFHeight = 50.0;
+            });
           }
-        } else {
-          setState(() {
-            _editStatus = false;
-            _formTFHeight = 50.0;
-          });
         }
       },
       child: Text(
@@ -205,6 +231,15 @@ class _ProfileScreenState extends State<ProfileScreen>
     if (user.email != _emailController.text) {
       return await checkAvailableEmail(
         CheckAvailableEmailDTO(email: _emailController.text),
+      );
+    } else
+      return true;
+  }
+
+  Future<bool> _checkAvailableUsername() async {
+    if (user.username != _usernameController.text) {
+      return await checkAvailableUsername(
+        CheckAvailableUsernameDTO(username: _usernameController.text),
       );
     } else
       return true;
