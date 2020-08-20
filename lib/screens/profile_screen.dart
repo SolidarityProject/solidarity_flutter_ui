@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:solidarity_flutter_ui/mixins/validation_mixin/profile_validation_mixin.dart';
+import 'package:solidarity_flutter_ui/models/dtos/check_available_email_dto.dart';
 import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
+import 'package:solidarity_flutter_ui/services/solidarity_service/auth_service.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
 import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';
 
@@ -131,20 +133,44 @@ class _ProfileScreenState extends State<ProfileScreen>
     return FlatButton(
       color: _themeData.accentColor,
       onPressed: () async {
-        if (_formKey.currentState.validate()) {
-          var alertDiaolog = AlertDialogOneButton(
-            title: "Success",
-            content: "Updated your information.",
-            okText: "OK",
-            okOnPressed: () {},
-          );
-          await showDialog(
-            context: context,
-            builder: (context) => alertDiaolog,
-          );
+        var changedStatus = _checkChangedFields();
+        if (changedStatus) {
+          var availableEmail = await _checkAvailableEmail();
 
-          _formKey.currentState.save();
+          if (availableEmail) {
+            if (_formKey.currentState.validate()) {
+              var alertDiaolog = AlertDialogOneButton(
+                title: "Success",
+                content: "Updated your information.",
+                okText: "OK",
+                okOnPressed: () {},
+              );
+              await showDialog(
+                context: context,
+                builder: (context) => alertDiaolog,
+              );
 
+              _formKey.currentState.save();
+
+              setState(() {
+                _editStatus = false;
+                _formTFHeight = 50.0;
+              });
+            }
+          } else {
+            var alertDiaolog = AlertDialogOneButton(
+              title: "ERROR",
+              content:
+                  "This email (${_emailController.text}) is already in use.",
+              okText: "OK",
+              okOnPressed: () {},
+            );
+            await showDialog(
+              context: context,
+              builder: (context) => alertDiaolog,
+            );
+          }
+        } else {
           setState(() {
             _editStatus = false;
             _formTFHeight = 50.0;
@@ -160,6 +186,28 @@ class _ProfileScreenState extends State<ProfileScreen>
         ),
       ),
     );
+  }
+
+  bool _checkChangedFields() {
+    if (user.name != _nameController.text)
+      return true;
+    else if (user.lastname != _lastnameController.text)
+      return true;
+    else if (user.username != _usernameController.text)
+      return true;
+    else if (user.email != _emailController.text)
+      return true;
+    else
+      return false;
+  }
+
+  Future<bool> _checkAvailableEmail() async {
+    if (user.email != _emailController.text) {
+      return await checkAvailableEmail(
+        CheckAvailableEmailDTO(email: _emailController.text),
+      );
+    } else
+      return true;
   }
 
   Widget _buildEditButton() {
