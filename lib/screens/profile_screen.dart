@@ -137,64 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         if (_formKey.currentState.validate()) {
           var changedStatus = _checkChangedFields();
           if (changedStatus) {
-            var availableEmail = await _checkAvailableEmail();
-            var availableUsername = await _checkAvailableUsername();
-
-            if (!availableEmail && !availableUsername) {
-              var alertDiaolog = AlertDialogOneButton(
-                title: "ERROR",
-                content:
-                    "This username (${_usernameController.text}) is already in use.\nThis email (${_emailController.text}) is already in use.",
-                okText: "OK",
-                okOnPressed: () {},
-              );
-              await showDialog(
-                context: context,
-                builder: (context) => alertDiaolog,
-              );
-            } else if (!availableEmail) {
-              var alertDiaolog = AlertDialogOneButton(
-                title: "ERROR",
-                content:
-                    "This email (${_emailController.text}) is already in use.",
-                okText: "OK",
-                okOnPressed: () {},
-              );
-              await showDialog(
-                context: context,
-                builder: (context) => alertDiaolog,
-              );
-            } else if (!availableUsername) {
-              var alertDiaolog = AlertDialogOneButton(
-                title: "ERROR",
-                content:
-                    "This username (${_usernameController.text}) is already in use.",
-                okText: "OK",
-                okOnPressed: () {},
-              );
-              await showDialog(
-                context: context,
-                builder: (context) => alertDiaolog,
-              );
-            } else {
-              var alertDiaolog = AlertDialogOneButton(
-                title: "Success",
-                content: "Updated your information.",
-                okText: "OK",
-                okOnPressed: () {},
-              );
-              await showDialog(
-                context: context,
-                builder: (context) => alertDiaolog,
-              );
-
-              _formKey.currentState.save();
-
-              setState(() {
-                _editStatus = false;
-                _formTFHeight = 50.0;
-              });
-            }
+            await _showAlertDiaolog();
           } else {
             setState(() {
               _editStatus = false;
@@ -225,6 +168,67 @@ class _ProfileScreenState extends State<ProfileScreen>
       return true;
     else
       return false;
+  }
+
+  Future<void> _showAlertDiaolog() async {
+    var availableEmail = await _checkAvailableEmail();
+    var availableUsername = await _checkAvailableUsername();
+    var alertDiaolog;
+
+    //! error -> username & email not available
+    if (!availableEmail && !availableUsername) {
+      alertDiaolog = AlertDialogOneButton(
+        title: "OOPS!",
+        content:
+            "This username (${_usernameController.text}) and this email address (${_emailController.text}) are already in use.",
+        okText: "OK",
+        okOnPressed: () {},
+      );
+    }
+
+    //! error -> username not available
+    else if (!availableUsername) {
+      alertDiaolog = AlertDialogOneButton(
+        title: "OOPS!",
+        content:
+            "This username (${_usernameController.text}) is already in use.",
+        okText: "OK",
+        okOnPressed: () {},
+      );
+    }
+
+    //! error -> email not available
+    else if (!availableEmail) {
+      alertDiaolog = AlertDialogOneButton(
+        title: "OOPS!",
+        content: "This email (${_emailController.text}) is already in use.",
+        okText: "OK",
+        okOnPressed: () {},
+      );
+    }
+
+    //* success
+    else {
+      alertDiaolog = AlertDialogOneButton(
+        title: "Success",
+        content: "Updated your information.",
+        okText: "OK",
+        okOnPressed: () {},
+      );
+
+      _formKey.currentState.save();
+
+      setState(() {
+        _editStatus = false;
+        _formTFHeight = 50.0;
+      });
+    }
+
+    // show alert diaolog
+    await showDialog(
+      context: context,
+      builder: (context) => alertDiaolog,
+    );
   }
 
   Future<bool> _checkAvailableEmail() async {
