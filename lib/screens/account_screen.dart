@@ -87,7 +87,10 @@ class _AccountScreenState extends State<AccountScreen> {
       );
 
   Future<void> _myProfileFunc() async {
-    await Navigator.pushNamed(context, Constants.ROUTE_PROFILE);
+    await Navigator.pushNamed(
+      context,
+      Constants.ROUTE_PROFILE,
+    ).then((value) => setState(() {}));
   }
 
   void _changePasswordFunc() {
