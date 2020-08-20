@@ -80,7 +80,7 @@ bool _usernameValidControl(String username) {
 }
 
 bool _emailValidControl(String email) {
-  Pattern emailPattern = r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$";
+  Pattern emailPattern = r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,3}$";
   bool emailValid = RegExp(emailPattern).hasMatch(email);
 
   return emailValid;
