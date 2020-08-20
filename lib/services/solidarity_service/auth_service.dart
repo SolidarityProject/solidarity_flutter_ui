@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:solidarity_flutter_ui/models/dtos/check_available_email_dto.dart';
+import 'package:solidarity_flutter_ui/models/dtos/check_available_username_dto.dart';
 import 'package:solidarity_flutter_ui/models/dtos/login_dto.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 
@@ -33,6 +34,22 @@ Future<bool> checkAvailableEmail(
     "$_apiUrl/checkavailableemail",
     headers: {HttpHeaders.contentTypeHeader: "application/json"},
     body: checkAvailableEmailToJson(checkAvailableEmailDTO),
+  );
+
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+Future<bool> checkAvailableUsername(
+  CheckAvailableUsernameDTO checkAvailableUsernameDTO,
+) async {
+  final response = await http.post(
+    "$_apiUrl/checkavailableusername",
+    headers: {HttpHeaders.contentTypeHeader: "application/json"},
+    body: checkAvailableUsernameToJson(checkAvailableUsernameDTO),
   );
 
   if (response.statusCode == 200) {
