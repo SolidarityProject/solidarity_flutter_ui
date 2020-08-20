@@ -302,21 +302,21 @@ class _ProfileScreenState extends State<ProfileScreen>
 
 List<TextInputFormatter> _nameInputFormat() {
   return [
-    WhitelistingTextInputFormatter(RegExp("[a-zA-ZığüşöçİĞÜŞÖÇ ]")),
+    FilteringTextInputFormatter.allow((RegExp("[a-zA-ZığüşöçİĞÜŞÖÇ ]"))),
     LengthLimitingTextInputFormatter(50),
   ];
 }
 
 List<TextInputFormatter> _usernameInputFormat() {
   return [
-    BlacklistingTextInputFormatter(" "),
+    FilteringTextInputFormatter.deny(" "),
     LengthLimitingTextInputFormatter(20),
   ];
 }
 
 List<TextInputFormatter> _emailInputFormat() {
   return [
-    BlacklistingTextInputFormatter(" "),
+    FilteringTextInputFormatter.deny(" "),
     LengthLimitingTextInputFormatter(50),
   ];
 }
