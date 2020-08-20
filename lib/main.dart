@@ -25,6 +25,19 @@ class SolidarityApp extends StatelessWidget {
         brightness: Brightness.light,
         primaryColor: primaryColor,
         accentColor: accentColor,
+        // dialog theme
+        dialogTheme: DialogTheme(
+          titleTextStyle: TextStyle(
+            color: accentColor,
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+          ),
+          contentTextStyle: TextStyle(
+            fontStyle: FontStyle.italic,
+            color: Colors.black,
+            fontSize: 15,
+          ),
+        ),
         //appbar theme,
         appBarTheme: AppBarTheme(
           color: Theme.of(context).scaffoldBackgroundColor,

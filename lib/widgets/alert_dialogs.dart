@@ -19,7 +19,12 @@ class AlertDialogOneButton extends StatelessWidget {
       title: Text(title),
       content: Text(content),
       actions: <Widget>[
-        _alertDiaologFlatButton(context, okText, okOnPressed),
+        _alertDiaologFlatButton(
+          context,
+          okText,
+          Theme.of(context).accentColor,
+          okOnPressed,
+        ),
       ],
     );
   }
@@ -48,8 +53,18 @@ class AlertDialogTwoButtons extends StatelessWidget {
       title: Text(title),
       content: Text(content),
       actions: <Widget>[
-        _alertDiaologFlatButton(context, noText, noOnPressed),
-        _alertDiaologFlatButton(context, yesText, yesOnPressed),
+        _alertDiaologFlatButton(
+          context,
+          noText,
+          Colors.blueGrey,
+          noOnPressed,
+        ),
+        _alertDiaologFlatButton(
+          context,
+          yesText,
+          Theme.of(context).accentColor,
+          yesOnPressed,
+        ),
       ],
     );
   }
@@ -58,10 +73,11 @@ class AlertDialogTwoButtons extends StatelessWidget {
 Widget _alertDiaologFlatButton(
   BuildContext context,
   String text,
+  Color color,
   Function onPressedFunc,
 ) =>
     FlatButton(
-      child: Text(text),
+      child: Text(text, style: TextStyle(color: color)),
       onPressed: () async {
         await onPressedFunc();
         Navigator.pop(context);
