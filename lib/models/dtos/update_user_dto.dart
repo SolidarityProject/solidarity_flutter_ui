@@ -27,8 +27,8 @@ class UpdateUserDTO {
 
   Map<String, dynamic> toJson() => {
         "_id": this.id,
-        "address": addressToJson(this.address),
-        "birthdate": this.birthdate,
+        "address": this.address,
+        "birthdate": this.birthdate.toIso8601String(),
         "email": this.email,
         "gender": this.gender,
         "lastname": this.lastname,

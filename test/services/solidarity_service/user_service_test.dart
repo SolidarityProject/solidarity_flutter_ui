@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solidarity_flutter_ui/models/dtos/login_dto.dart';
+import 'package:solidarity_flutter_ui/models/dtos/update_user_dto.dart';
 import 'package:solidarity_flutter_ui/models/user_model.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/auth_service.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/user_service.dart';
@@ -31,6 +32,89 @@ void main() async {
       var result = await getUserByUsername(_user.username);
       expect(result.id, _user.id);
       expect(result.email, _user.email);
+    });
+
+    test("PUT: updateUser", () async {
+      var _updateUser = UpdateUserDTO(
+        id: _user.id,
+        address: _user.address,
+        birthdate: _user.birthdate,
+        email: _user.email,
+        gender: _user.gender,
+        lastname: _user.lastname,
+        name: "Mustafaa",
+        pictureUrl: _user.pictureUrl,
+        username: _user.username,
+      );
+
+      var result = await updateUser(_updateUser);
+      expect(result.id, _user.id);
+      expect(result.name, _updateUser.name);
+      expect(result.email, _user.email);
+    });
+
+    test("PUT: updateUser (update email & username)", () async {
+      var _updateUser = UpdateUserDTO(
+        id: _user.id,
+        address: _user.address,
+        birthdate: _user.birthdate,
+        email: "semustafacevik@solidarity.org",
+        gender: _user.gender,
+        lastname: _user.lastname,
+        name: _user.name,
+        pictureUrl: _user.pictureUrl,
+        username: "semustafacevikupd",
+      );
+
+      var result = await updateUser(_updateUser);
+      expect(result.id, _user.id);
+      expect(result.email, _updateUser.email);
+      expect(result.username, _updateUser.username);
+    });
+
+    // because username exists
+    test("PUT: updateUser (error)", () async {
+      var _updateUser = UpdateUserDTO(
+        id: _user.id,
+        address: _user.address,
+        birthdate: _user.birthdate,
+        email: _user.email,
+        gender: _user.gender,
+        lastname: _user.lastname,
+        name: _user.name,
+        pictureUrl: _user.pictureUrl,
+        username: "testuser",
+      );
+
+      var error = false;
+      var onErrorResult = "";
+
+      await updateUser(_updateUser).catchError((onError) {
+        onErrorResult = onError.toString();
+        error = true;
+      });
+      expect(error, true);
+      expect(onErrorResult, "Exception: Failed to update user.");
+    });
+
+    test("PUT: updateUser (re-update to first information)", () async {
+      var _updateUser = UpdateUserDTO(
+        id: _user.id,
+        address: _user.address,
+        birthdate: _user.birthdate,
+        email: _user.email,
+        gender: _user.gender,
+        lastname: _user.lastname,
+        name: _user.name,
+        pictureUrl: _user.pictureUrl,
+        username: _user.username,
+      );
+
+      var result = await updateUser(_updateUser);
+      expect(result.id, _user.id);
+      expect(result.name, _user.name);
+      expect(result.email, _user.email);
+      expect(result.username, _user.username);
     });
   });
 }
