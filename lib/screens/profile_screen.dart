@@ -3,8 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:solidarity_flutter_ui/mixins/validation_mixin/profile_validation_mixin.dart';
 import 'package:solidarity_flutter_ui/models/dtos/check_available_email_dto.dart';
 import 'package:solidarity_flutter_ui/models/dtos/check_available_username_dto.dart';
+import 'package:solidarity_flutter_ui/models/dtos/update_user_dto.dart';
 import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/auth_service.dart';
+import 'package:solidarity_flutter_ui/services/solidarity_service/user_service.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
 import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';
 
@@ -209,19 +211,34 @@ class _ProfileScreenState extends State<ProfileScreen>
 
     //* success
     else {
-      alertDiaolog = AlertDialogOneButton(
-        title: "Success",
-        content: "Updated your information.",
-        okText: "OK",
-        okOnPressed: () {},
-      );
+      var updatedResult = await _updateUser();
 
-      _formKey.currentState.save();
+      if (updatedResult) {
+        alertDiaolog = AlertDialogOneButton(
+          title: "Success",
+          content: "Updated your information.",
+          okText: "OK",
+          okOnPressed: () {},
+        );
 
-      setState(() {
-        _editStatus = false;
-        _formTFHeight = 50.0;
-      });
+        _formKey.currentState.save();
+
+        setState(() {
+          _editStatus = false;
+          _formTFHeight = 50.0;
+        });
+      }
+
+      //! server error
+      // TODO : log -> server error
+      else {
+        alertDiaolog = AlertDialogOneButton(
+          title: "ERROR",
+          content: "Please try again later.",
+          okText: "OK",
+          okOnPressed: () {},
+        );
+      }
     }
 
     // show alert diaolog
@@ -247,6 +264,38 @@ class _ProfileScreenState extends State<ProfileScreen>
       );
     } else
       return true;
+  }
+
+  Future<bool> _updateUser() async {
+    var _updateUserDTO = UpdateUserDTO(
+      //
+      // update value from fields
+      //
+      name: _nameController.text,
+      lastname: _lastnameController.text,
+      username: _usernameController.text,
+      email: _emailController.text,
+
+      //
+
+      id: user.id,
+      address: user.address,
+      birthdate: user.birthdate,
+      gender: user.gender,
+      pictureUrl: user.pictureUrl,
+    );
+
+    var result;
+
+    await updateUser(_updateUserDTO).then(
+      (updatedUser) {
+        user = updatedUser;
+        result = true;
+      },
+    ).catchError((onError) {
+      result = false;
+    });
+    return result;
   }
 
   Widget _buildEditButton() {
