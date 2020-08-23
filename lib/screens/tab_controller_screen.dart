@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:solidarity_flutter_ui/models/country_model.dart';
 import 'package:solidarity_flutter_ui/models/post_model.dart';
 import 'package:solidarity_flutter_ui/models/user_model.dart';
 import 'package:solidarity_flutter_ui/screens/account_screen.dart';
 import 'package:solidarity_flutter_ui/screens/home_screen.dart';
 import 'package:solidarity_flutter_ui/screens/search_screen.dart';
 import 'package:solidarity_flutter_ui/screens/starred_screen.dart';
+import 'package:solidarity_flutter_ui/services/address_service/country_service.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/post_service.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/starred_service.dart';
 import 'package:solidarity_flutter_ui/utils/constants.dart';
@@ -17,6 +19,7 @@ class TabControllerScreen extends StatefulWidget {
 
 Future<List<Post>> futurePostList;
 Future<List<Post>> futureStarredPostList;
+Future<List<Country>> futureCountryList;
 List<dynamic> myStarredPosts;
 String token;
 User user;
@@ -29,6 +32,7 @@ class _TabControllerScreenState extends State<TabControllerScreen> {
     myStarredPosts = user.starredPosts;
     futurePostList = getPostsByFullAddress(user.address.districtId);
     futureStarredPostList = getStarredPostsByUserId(user.id);
+    futureCountryList = getAllCountry();
     super.initState();
   }
 
