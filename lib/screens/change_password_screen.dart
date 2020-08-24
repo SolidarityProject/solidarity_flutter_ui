@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:solidarity_flutter_ui/mixins/validation_mixin/change_password_validation_mixin.dart';
+import 'package:solidarity_flutter_ui/models/dtos/change_password_dto.dart';
+import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
+import 'package:solidarity_flutter_ui/services/solidarity_service/user_service.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
+import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   ChangePasswordScreen({Key key}) : super(key: key);
@@ -89,13 +93,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
 
   Widget _buildOldPasswordTextFormField() {
     return _buildTextFormField(
-      "Password",
+      "Current Password",
       _oldPasswordController,
       15,
       validateOldPassword,
-      //saveName,
       Icons.lock_outline,
-      "Enter your password",
+      "Enter your current password",
       inputFormatters: _passwordInputFormatter(),
     );
   }
@@ -106,7 +109,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
       _newPasswordController,
       15,
       validateNewPassword,
-      //saveLastName,
       Icons.lock,
       "Enter your new password",
       inputFormatters: _passwordInputFormatter(),
@@ -119,7 +121,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
       _newPasswordAgainController,
       15,
       validateNewPasswordAgain,
-      //saveUsername,
       Icons.lock,
       "Enter your new password again",
       inputFormatters: _passwordInputFormatter(),
@@ -131,7 +132,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
     TextEditingController controller,
     int maxLength,
     String validationMixin(String val),
-    // Function saveMixin,
     IconData icon,
     String hintText, {
     TextInputType inputType = TextInputType.text,
@@ -148,7 +148,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
         Container(
           alignment: Alignment.centerLeft,
           decoration: Styles.TF_BOXDEC,
-          height: 70.0,
+          height: 90.0,
 
           //* text form field
           child: TextFormField(
@@ -159,7 +159,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
             inputFormatters: inputFormatters,
             autovalidate: _autoValidateStatus ? true : false,
             validator: validationMixin,
-            //onSaved: saveMixin,
             style: Styles.BLACK_TEXT,
             decoration: InputDecoration(
               border: InputBorder.none,
@@ -176,10 +175,53 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
 
   Widget _submitButton() => FlatButton(
         color: _themeData.accentColor,
-        onPressed: () {
-          setState(() {
-            _autoValidateStatus = true;
-          });
+        onPressed: () async {
+          if (_formKey.currentState.validate()) {
+            // create change password dto
+            var _changePassword = ChangePasswordDTO(
+              id: user.id,
+              oldPassword: _oldPasswordController.text,
+              newPassword: _newPasswordController.text,
+            );
+
+            // call changePassword service function
+            await changePassword(_changePassword).then(
+              (value) async {
+                // success
+                var alertDiaolog = AlertDialogOneButton(
+                  title: "Success",
+                  content: "Changed your password.",
+                  okText: "OK",
+                  okOnPressed: () {
+                    Navigator.pop(context);
+                  },
+                );
+                await showDialog(
+                  context: context,
+                  builder: (context) => alertDiaolog,
+                );
+              },
+            ).catchError(
+              (onError) async {
+                // error
+                var alertDiaolog = AlertDialogOneButton(
+                  title: "OOPS!",
+                  content: "Please check your current password.",
+                  okText: "OK",
+                  okOnPressed: () {},
+                );
+                await showDialog(
+                  context: context,
+                  builder: (context) => alertDiaolog,
+                );
+              },
+            );
+          } else {
+            // not valid
+            setState(() {
+              _autoValidateStatus = true;
+            });
+          }
         },
         child: Text(
           "Change Password",
