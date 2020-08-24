@@ -9,6 +9,31 @@ class Styles {
     color: Colors.white,
   );
 
+  static const TextStyle LOGIN_TITLE = TextStyle(
+    color: Colors.white,
+    fontSize: 30.0,
+    fontWeight: FontWeight.bold,
+  );
+
+  static const TextStyle LOGIN_BTN_TEXT = TextStyle(
+    color: Color(0xff2929a3),
+    letterSpacing: 1.5,
+    fontSize: 18.0,
+    fontWeight: FontWeight.bold,
+  );
+
+  static const TextStyle LOGIN_TEXTSPAN = TextStyle(
+    color: Colors.white,
+    fontSize: 16.0,
+    fontWeight: FontWeight.w400,
+  );
+
+  static const TextStyle LOGIN_SIGNUP_TEXT = TextStyle(
+    color: Colors.white,
+    fontSize: 16.0,
+    fontWeight: FontWeight.bold,
+  );
+
   static const TextStyle POST_DATE = TextStyle(
     color: Color(0xff2929a3),
     fontWeight: FontWeight.w700,
