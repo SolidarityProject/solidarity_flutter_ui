@@ -93,8 +93,11 @@ class _AccountScreenState extends State<AccountScreen> {
     ).then((value) => setState(() {}));
   }
 
-  void _changePasswordFunc() {
-    print("tap -> change password");
+  Future<void> _changePasswordFunc() async {
+    await Navigator.pushNamed(
+      context,
+      Constants.ROUTE_CHANGEPASSWORD,
+    );
   }
 
   Future<void> _logOutFunc() async {
