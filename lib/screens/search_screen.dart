@@ -23,6 +23,7 @@ Province selectedProvince;
 List<District> districts;
 District selectedDistrict;
 
+String _countryHintText;
 String _provinceHintText;
 String _districtHintText;
 
@@ -31,6 +32,7 @@ bool _submitStatus;
 class _SearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
+    _countryHintText = "loading...";
     _provinceHintText = "Please select country first";
     _districtHintText = "Please select country & province first";
     _submitStatus = false;
@@ -43,8 +45,8 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Column(children: [
       _futureBuilderCountryList(),
-      _dropDownProvince(),
-      _dropDownDistrict(),
+      _buildDropDownProvince(),
+      _buildDropDownDistrict(),
       _submitButton(),
     ]);
   }
@@ -54,155 +56,85 @@ class _SearchScreenState extends State<SearchScreen> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             countries = snapshot.data;
-            return _dropDownCountry();
+            _countryHintText = "Please select country";
+            return _buildDropDownCountry();
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return _buildDropDownCountry();
           }
         },
       );
 
-  Widget _dropDownCountry() => Padding(
-        padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Country", style: Styles.TF_LABEL),
-            SizedBox(height: 10.0),
-            Container(
-              padding: EdgeInsets.only(left: 15, right: 10),
-              decoration: Styles.TF_BOXDEC.copyWith(
-                border: Border.all(color: Theme.of(context).accentColor),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<Country>(
-                  isExpanded: true,
-                  hint: Text(
-                    "Please select country",
-                    style: Styles.TF_HINT.copyWith(
-                      fontStyle: FontStyle.italic,
-                    ),
-                  ),
-                  value: selectedCountry,
-                  onChanged: (value) async {
-                    setState(() {
-                      selectedCountry = value;
-                      _provinceHintText = "loading...";
-                      _districtHintText = "Please select province first";
-                      _submitStatus = false;
-                    });
-                    provinces = null;
-                    selectedProvince = null;
-                    districts = null;
-                    selectedDistrict = null;
-
-                    var newProvinces =
-                        await getProvincesByCountryId(selectedCountry.id);
-                    setState(() {
-                      provinces = newProvinces;
-                      _provinceHintText = "Please select province";
-                    });
-                  },
-                  items: countries.map((country) {
-                    return DropdownMenuItem<Country>(
-                        value: country, child: Text(country.name));
-                  }).toList(),
-                ),
-              ),
-            ),
-          ],
-        ),
+  Widget _buildDropDownCountry() => _buildDropDown(
+        "Country",
+        _countryHintText,
+        selectedCountry,
+        countries,
+        (T) => _dropDownCountryOnChanged(T),
+        _dropDownMenuItemCountry,
       );
 
-  Widget _dropDownProvince() => Padding(
+  Widget _buildDropDownProvince() => _buildDropDown(
+        "Province",
+        _provinceHintText,
+        selectedProvince,
+        provinces,
+        (T) => _dropDownProvinceOnChanged(T),
+        _dropDownMenuItemProvince,
+      );
+
+  Widget _buildDropDownDistrict() => _buildDropDown(
+        "District",
+        _districtHintText,
+        selectedDistrict,
+        districts,
+        (T) => _dropDownDistrictOnChanged(T),
+        _dropDownMenuItemDistrict,
+      );
+
+  //* build drop down (generic)
+  Widget _buildDropDown<T>(
+    String labelText,
+    String hintText,
+    T selectedValue,
+    List<T> items,
+    void onChangedFunc(T),
+    DropdownMenuItem<T> dropDownMenuItem(T),
+  ) =>
+      Padding(
         padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Province", style: Styles.TF_LABEL),
+            //* drop down label
+            Text(labelText, style: Styles.TF_LABEL),
+
             SizedBox(height: 10.0),
+
+            //* drop down container (padding, decoration, child -> drop down button)
             Container(
               padding: EdgeInsets.only(left: 15, right: 10),
               decoration: Styles.TF_BOXDEC.copyWith(
                 border: Border.all(color: Theme.of(context).accentColor),
               ),
               child: DropdownButtonHideUnderline(
-                child: DropdownButton<Province>(
+                child: DropdownButton<T>(
                     isExpanded: true,
                     hint: Text(
-                      _provinceHintText,
+                      hintText,
                       style: Styles.TF_HINT.copyWith(
                         fontStyle: FontStyle.italic,
                       ),
                     ),
-                    value: selectedProvince,
-                    onChanged: (value) async {
-                      setState(() {
-                        selectedProvince = value;
-                        _districtHintText = "loading...";
-                        _submitStatus = false;
-                      });
-                      districts = null;
-                      selectedDistrict = null;
-
-                      var newDistricts =
-                          await getDistrictsByProvinceId(selectedProvince.id);
-
-                      setState(() {
-                        districts = newDistricts;
-                        _districtHintText = "Please select district";
-                      });
-                    },
-                    items: provinces != null
-                        ? provinces.map((province) {
-                            return DropdownMenuItem<Province>(
-                                value: province, child: Text(province.name));
-                          }).toList()
-                        : null),
-              ),
-            ),
-          ],
-        ),
-      );
-
-  Widget _dropDownDistrict() => Padding(
-        padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("District", style: Styles.TF_LABEL),
-            SizedBox(height: 10.0),
-            Container(
-              padding: EdgeInsets.only(left: 15, right: 10),
-              decoration: Styles.TF_BOXDEC.copyWith(
-                border: Border.all(color: Theme.of(context).accentColor),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<District>(
-                    isExpanded: true,
-                    hint: Text(
-                      _districtHintText,
-                      style: Styles.TF_HINT.copyWith(
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
-                    value: selectedDistrict,
+                    value: selectedValue,
                     onChanged: (value) {
-                      setState(() {
-                        selectedDistrict = value;
-                        _submitStatus = true;
-                      });
+                      onChangedFunc(value);
                     },
-                    items: districts != null
-                        ? districts.map((district) {
-                            return DropdownMenuItem<District>(
-                                value: district, child: Text(district.name));
+                    items: items != null
+                        ? items.map((item) {
+                            return dropDownMenuItem(item);
                           }).toList()
                         : null),
               ),
@@ -210,6 +142,75 @@ class _SearchScreenState extends State<SearchScreen> {
           ],
         ),
       );
+
+  void _dropDownCountryOnChanged(Country value) async {
+    setState(() {
+      selectedCountry = value;
+      _provinceHintText = "loading...";
+      _districtHintText = "Please select province first";
+
+      provinces = null;
+      selectedProvince = null;
+      districts = null;
+      selectedDistrict = null;
+      _submitStatus = false;
+    });
+
+    var newProvinces = await getProvincesByCountryId(selectedCountry.id);
+    setState(() {
+      provinces = newProvinces;
+      _provinceHintText = "Please select province";
+    });
+  }
+
+  void _dropDownProvinceOnChanged(Province value) async {
+    setState(() {
+      selectedProvince = value;
+      _districtHintText = "loading...";
+
+      districts = null;
+      selectedDistrict = null;
+      _submitStatus = false;
+    });
+
+    var newDistricts = await getDistrictsByProvinceId(selectedProvince.id);
+
+    setState(() {
+      districts = newDistricts;
+      _districtHintText = "Please select district";
+    });
+  }
+
+  void _dropDownDistrictOnChanged(District value) {
+    setState(() {
+      selectedDistrict = value;
+      _submitStatus = true;
+    });
+  }
+
+  DropdownMenuItem<T> _dropDownMenuItemCountry<T>(T item) {
+    Country country = item as Country;
+    return DropdownMenuItem<T>(
+      value: item,
+      child: Text(country.name),
+    );
+  }
+
+  DropdownMenuItem<T> _dropDownMenuItemProvince<T>(T item) {
+    Province province = item as Province;
+    return DropdownMenuItem<T>(
+      value: item,
+      child: Text(province.name),
+    );
+  }
+
+  DropdownMenuItem<T> _dropDownMenuItemDistrict<T>(T item) {
+    District district = item as District;
+    return DropdownMenuItem<T>(
+      value: item,
+      child: Text(district.name),
+    );
+  }
 
   Widget _submitButton() => Padding(
         padding: const EdgeInsets.all(20.0),
