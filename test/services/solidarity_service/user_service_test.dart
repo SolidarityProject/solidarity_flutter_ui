@@ -12,7 +12,10 @@ void main() async {
   SharedPreferences.setMockInitialValues({});
   await SharedPrefs.init();
 
-  var _login = LoginDTO(email: "semustafacevik@gmail.com", password: "c123123");
+  final _login = LoginDTO(
+    email: "testuser_flutter@solidarity.org",
+    password: "tU123123.",
+  );
   await login(_login);
   User _user;
 
@@ -43,7 +46,7 @@ void main() async {
         email: _user.email,
         gender: _user.gender,
         lastname: _user.lastname,
-        name: "Mustafaa",
+        name: "Test Upd",
         pictureUrl: _user.pictureUrl,
         username: _user.username,
       );
@@ -121,8 +124,8 @@ void main() async {
     test("PUT: changePassword", () async {
       var _changePassword = ChangePasswordDTO(
         id: _user.id,
-        oldPassword: "c123123",
-        newPassword: "c123123*",
+        oldPassword: "tU123123.",
+        newPassword: "tU123123*",
       );
 
       var oldPass = _user.password;
@@ -132,11 +135,11 @@ void main() async {
       expect(result.password != oldPass, true);
     });
 
-     test("PUT: changePassword (error)", () async {
+    test("PUT: changePassword (error)", () async {
       var _changePassword = ChangePasswordDTO(
         id: _user.id,
-        oldPassword: "c123123*",
-        newPassword: "c123",
+        oldPassword: "tU123123*",
+        newPassword: "t123",
       );
 
       var error = false;
@@ -151,11 +154,11 @@ void main() async {
       expect(onErrorResult, "Exception: Failed to change password.");
     });
 
-     test("PUT: changePassword (re-change to first information)", () async {
+    test("PUT: changePassword (re-change to first information)", () async {
       var _changePassword = ChangePasswordDTO(
         id: _user.id,
-        oldPassword: "c123123*",
-        newPassword: "c123123",
+        oldPassword: "tU123123*",
+        newPassword: "tU123123.",
       );
 
       var oldPass = _user.password;

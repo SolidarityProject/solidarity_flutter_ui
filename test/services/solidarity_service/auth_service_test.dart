@@ -14,7 +14,10 @@ void main() async {
   SharedPreferences.setMockInitialValues({});
   await SharedPrefs.init();
 
-  var _login = LoginDTO(email: "semustafacevik@gmail.com", password: "c123123");
+  final _login = LoginDTO(
+    email: "testuser_flutter@solidarity.org",
+    password: "tU123123.",
+  );
 
   group("Solidarity Service - Auth Service Test Functions", () {
     test("login", () async {
@@ -56,7 +59,7 @@ void main() async {
 
     test("checkavailableemail", () async {
       var _checkAvailableEmail = CheckAvailableEmailDTO(
-        email: "random345@mail.com",
+        email: "random345@xmail.com",
       );
 
       var result = await checkAvailableEmail(_checkAvailableEmail);

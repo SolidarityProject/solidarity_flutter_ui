@@ -9,8 +9,10 @@ void main() async {
   SharedPreferences.setMockInitialValues({});
   await SharedPrefs.init();
 
-  final _login =
-      LoginDTO(email: "semustafacevik@gmail.com", password: "c123123");
+  final _login = LoginDTO(
+    email: "testuser_flutter@solidarity.org",
+    password: "tU123123.",
+  );
   await login(_login);
 
   final _postId = "5ef789fc398c473790a4e728";
