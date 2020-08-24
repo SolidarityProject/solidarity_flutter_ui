@@ -4,6 +4,7 @@ class Constants {
   static const String ROUTE_HOME = "/home";
   static const String ROUTE_LOGIN = "/login";
   static const String ROUTE_PROFILE = "/profile";
+  static const String ROUTE_REGISTER = "/register";
   static const String ROUTE_SEARCH = "/search";
   static const String ROUTE_SPLASH = "/splash";
   static const String ROUTE_STARRED = "/starred";
