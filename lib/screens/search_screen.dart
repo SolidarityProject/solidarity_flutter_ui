@@ -39,8 +39,6 @@ class _SearchScreenState extends State<SearchScreen> {
     super.initState();
   }
 
-  //TODO : refactoring -> search_screen
-
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -217,37 +215,8 @@ class _SearchScreenState extends State<SearchScreen> {
         child: FlatButton(
           color: Theme.of(context).accentColor,
           onPressed: _submitStatus
-              ? () async {
-                  futurePostList = getPostsByFullAddress(selectedDistrict.id);
-                  var alertDiaolog = AlertDialogOneButton(
-                    title: "Success",
-                    content:
-                        "You can look the posts in ${selectedDistrict.name} / ${selectedProvince.name}.",
-                    okText: "OK",
-                    okOnPressed: () {},
-                  );
-                  await showDialog(
-                    context: context,
-                    builder: (context) => alertDiaolog,
-                  );
-
-                  DefaultTabController.of(context).animateTo(0);
-                }
-              : () async {
-                  ///
-                  var alertDiaolog = AlertDialogOneButton(
-                    title: "OOPS!",
-                    content: "Please select all field first.",
-                    okText: "OK",
-                    okOnPressed: () {},
-                  );
-                  await showDialog(
-                    context: context,
-                    builder: (context) => alertDiaolog,
-                  );
-
-                  ///
-                },
+              ? () async => _submitTrueFunc()
+              : () async => _submitFalseFunc(),
           child: Text(
             "Show Result",
             style: TextStyle(
@@ -258,4 +227,42 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ),
       );
+
+  void _submitTrueFunc() async {
+    futurePostList = getPostsByFullAddress(selectedDistrict.id);
+    var alertDiaolog = AlertDialogOneButton(
+      title: "Success",
+      content:
+          "You can look the posts in ${selectedDistrict.name} / ${selectedProvince.name}.",
+      okText: "OK",
+      okOnPressed: () {},
+    );
+    await showDialog(
+      context: context,
+      builder: (context) => alertDiaolog,
+    );
+
+    countries = null;
+    selectedCountry = null;
+    provinces = null;
+    selectedProvince = null;
+    districts = null;
+    selectedDistrict = null;
+    _submitStatus = false;
+
+    DefaultTabController.of(context).animateTo(0);
+  }
+
+  void _submitFalseFunc() async {
+    var alertDiaolog = AlertDialogOneButton(
+      title: "OOPS!",
+      content: "Please select all field first.",
+      okText: "OK",
+      okOnPressed: () {},
+    );
+    await showDialog(
+      context: context,
+      builder: (context) => alertDiaolog,
+    );
+  }
 }
