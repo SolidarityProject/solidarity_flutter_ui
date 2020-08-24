@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:solidarity_flutter_ui/mixins/validation_mixin/change_password_validation_mixin.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -11,10 +12,13 @@ class ChangePasswordScreen extends StatefulWidget {
 
 ThemeData _themeData;
 
-class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
+class _ChangePasswordScreenState extends State<ChangePasswordScreen>
+    with ChangePasswordValidationMixin {
   final _oldPasswordController = TextEditingController();
   final _newPasswordController = TextEditingController();
   final _newPasswordAgainController = TextEditingController();
+
+  bool _autoValidateStatus = false;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -88,11 +92,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       "Password",
       _oldPasswordController,
       15,
-      // validateName,
+      validateOldPassword,
       //saveName,
-      Icons.lock,
+      Icons.lock_outline,
       "Enter your password",
-      //inputFormatters: _nameInputFormat(),
+      inputFormatters: _passwordInputFormatter(),
     );
   }
 
@@ -101,11 +105,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       "New Password",
       _newPasswordController,
       15,
-      //validateLastName,
+      validateNewPassword,
       //saveLastName,
       Icons.lock,
       "Enter your new password",
-      //inputFormatters: _nameInputFormat(),
+      inputFormatters: _passwordInputFormatter(),
     );
   }
 
@@ -114,11 +118,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       "New Password Again",
       _newPasswordAgainController,
       15,
-      // validateUsername,
+      validateNewPasswordAgain,
       //saveUsername,
       Icons.lock,
       "Enter your new password again",
-      //  inputFormatters: _usernameInputFormat(),
+      inputFormatters: _passwordInputFormatter(),
     );
   }
 
@@ -126,12 +130,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     String labelText,
     TextEditingController controller,
     int maxLength,
-    // String validationMixin(String val),
+    String validationMixin(String val),
     // Function saveMixin,
     IconData icon,
     String hintText, {
     TextInputType inputType = TextInputType.text,
-    //List<TextInputFormatter> inputFormatters,
+    List<TextInputFormatter> inputFormatters,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,9 +156,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             maxLength: maxLength,
             keyboardType: inputType,
             obscureText: true,
-            //inputFormatters: inputFormatters,
-            autovalidate: true,
-            //validator: validationMixin,
+            inputFormatters: inputFormatters,
+            autovalidate: _autoValidateStatus ? true : false,
+            validator: validationMixin,
             //onSaved: saveMixin,
             style: Styles.BLACK_TEXT,
             decoration: InputDecoration(
@@ -172,7 +176,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   Widget _submitButton() => FlatButton(
         color: _themeData.accentColor,
-        onPressed: () {},
+        onPressed: () {
+          setState(() {
+            _autoValidateStatus = true;
+          });
+        },
         child: Text(
           "Change Password",
           style: TextStyle(
@@ -182,4 +190,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           ),
         ),
       );
+}
+
+List<TextInputFormatter> _passwordInputFormatter() {
+  return [
+    FilteringTextInputFormatter.deny(" "),
+    LengthLimitingTextInputFormatter(15),
+  ];
 }
