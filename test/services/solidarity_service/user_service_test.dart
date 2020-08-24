@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:solidarity_flutter_ui/models/dtos/change_password_dto.dart';
 import 'package:solidarity_flutter_ui/models/dtos/login_dto.dart';
 import 'package:solidarity_flutter_ui/models/dtos/update_user_dto.dart';
 import 'package:solidarity_flutter_ui/models/user_model.dart';
@@ -115,6 +116,53 @@ void main() async {
       expect(result.name, _user.name);
       expect(result.email, _user.email);
       expect(result.username, _user.username);
+    });
+
+    test("PUT: changePassword", () async {
+      var _changePassword = ChangePasswordDTO(
+        id: _user.id,
+        oldPassword: "c123123",
+        newPassword: "c123123*",
+      );
+
+      var oldPass = _user.password;
+
+      var result = await changePassword(_changePassword);
+      expect(result.id, _user.id);
+      expect(result.password != oldPass, true);
+    });
+
+     test("PUT: changePassword (error)", () async {
+      var _changePassword = ChangePasswordDTO(
+        id: _user.id,
+        oldPassword: "c123123*",
+        newPassword: "c123",
+      );
+
+      var error = false;
+      var onErrorResult = "";
+
+      await changePassword(_changePassword).catchError((onError) {
+        onErrorResult = onError.toString();
+        error = true;
+      });
+
+      expect(error, true);
+      expect(onErrorResult, "Exception: Failed to change password.");
+    });
+
+     test("PUT: changePassword (re-change to first information)", () async {
+      var _changePassword = ChangePasswordDTO(
+        id: _user.id,
+        oldPassword: "c123123*",
+        newPassword: "c123123",
+      );
+
+      var oldPass = _user.password;
+
+      var result = await changePassword(_changePassword);
+      expect(result.id, _user.id);
+      expect(result.password != oldPass, true);
     });
   });
 }
