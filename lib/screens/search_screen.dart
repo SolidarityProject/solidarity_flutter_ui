@@ -5,7 +5,9 @@ import 'package:solidarity_flutter_ui/models/province_model.dart';
 import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
 import 'package:solidarity_flutter_ui/services/address_service/district_service.dart';
 import 'package:solidarity_flutter_ui/services/address_service/province_service.dart';
+import 'package:solidarity_flutter_ui/services/solidarity_service/post_service.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
+import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -24,13 +26,18 @@ District selectedDistrict;
 String _provinceHintText;
 String _districtHintText;
 
+bool _submitStatus;
+
 class _SearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
     _provinceHintText = "Please select country first";
     _districtHintText = "Please select country & province first";
+    _submitStatus = false;
     super.initState();
   }
+
+  //TODO : refactoring -> search_screen
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +45,7 @@ class _SearchScreenState extends State<SearchScreen> {
       _futureBuilderCountryList(),
       _dropDownProvince(),
       _dropDownDistrict(),
+      _submitButton(),
     ]);
   }
 
@@ -85,6 +93,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       selectedCountry = value;
                       _provinceHintText = "loading...";
                       _districtHintText = "Please select province first";
+                      _submitStatus = false;
                     });
                     provinces = null;
                     selectedProvince = null;
@@ -136,6 +145,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       setState(() {
                         selectedProvince = value;
                         _districtHintText = "loading...";
+                        _submitStatus = false;
                       });
                       districts = null;
                       selectedDistrict = null;
@@ -186,6 +196,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     onChanged: (value) {
                       setState(() {
                         selectedDistrict = value;
+                        _submitStatus = true;
                       });
                     },
                     items: districts != null
@@ -197,6 +208,53 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ),
           ],
+        ),
+      );
+
+  Widget _submitButton() => Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: FlatButton(
+          color: Theme.of(context).accentColor,
+          onPressed: _submitStatus
+              ? () async {
+                  futurePostList = getPostsByFullAddress(selectedDistrict.id);
+                  var alertDiaolog = AlertDialogOneButton(
+                    title: "Success",
+                    content:
+                        "You can look the posts in ${selectedDistrict.name} / ${selectedProvince.name}.",
+                    okText: "OK",
+                    okOnPressed: () {},
+                  );
+                  await showDialog(
+                    context: context,
+                    builder: (context) => alertDiaolog,
+                  );
+
+                  DefaultTabController.of(context).animateTo(0);
+                }
+              : () async {
+                  ///
+                  var alertDiaolog = AlertDialogOneButton(
+                    title: "OOPS!",
+                    content: "Please select all field first.",
+                    okText: "OK",
+                    okOnPressed: () {},
+                  );
+                  await showDialog(
+                    context: context,
+                    builder: (context) => alertDiaolog,
+                  );
+
+                  ///
+                },
+          child: Text(
+            "Show Result",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+              fontSize: 17,
+            ),
+          ),
         ),
       );
 }
