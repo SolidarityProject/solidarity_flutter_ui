@@ -336,7 +336,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       saveName,
       user.name,
       "Enter your name",
-      inputFormatters: _nameInputFormat(),
+      inputFormatters: nameInputFormat(),
     );
   }
 
@@ -349,7 +349,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       saveLastName,
       user.lastname,
       "Enter your last name",
-      inputFormatters: _nameInputFormat(),
+      inputFormatters: nameInputFormat(),
     );
   }
 
@@ -362,7 +362,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       saveUsername,
       user.username,
       "Enter your username",
-      inputFormatters: _usernameInputFormat(),
+      inputFormatters: usernameInputFormat(),
     );
   }
 
@@ -376,7 +376,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       user.email,
       "Enter your email",
       inputType: TextInputType.emailAddress,
-      inputFormatters: _emailInputFormat(),
+      inputFormatters: emailInputFormat(),
     );
   }
 
@@ -434,25 +434,4 @@ class _ProfileScreenState extends State<ProfileScreen>
       ],
     );
   }
-}
-
-List<TextInputFormatter> _nameInputFormat() {
-  return [
-    FilteringTextInputFormatter.allow((RegExp("[a-zA-ZığüşöçİĞÜŞÖÇ ]"))),
-    LengthLimitingTextInputFormatter(50),
-  ];
-}
-
-List<TextInputFormatter> _usernameInputFormat() {
-  return [
-    FilteringTextInputFormatter.deny(" "),
-    LengthLimitingTextInputFormatter(20),
-  ];
-}
-
-List<TextInputFormatter> _emailInputFormat() {
-  return [
-    FilteringTextInputFormatter.deny(" "),
-    LengthLimitingTextInputFormatter(50),
-  ];
 }

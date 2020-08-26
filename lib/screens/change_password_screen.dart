@@ -99,7 +99,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
       validateOldPassword,
       Icons.lock_outline,
       "Enter your current password",
-      inputFormatters: _passwordInputFormatter(),
+      inputFormatters: passwordInputFormatter(),
     );
   }
 
@@ -111,7 +111,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
       validateNewPassword,
       Icons.lock,
       "Enter your new password",
-      inputFormatters: _passwordInputFormatter(),
+      inputFormatters: passwordInputFormatter(),
     );
   }
 
@@ -123,7 +123,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
       validateNewPasswordAgain,
       Icons.lock,
       "Enter your new password again",
-      inputFormatters: _passwordInputFormatter(),
+      inputFormatters: passwordInputFormatter(),
     );
   }
 
@@ -232,11 +232,4 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
           ),
         ),
       );
-}
-
-List<TextInputFormatter> _passwordInputFormatter() {
-  return [
-    FilteringTextInputFormatter.deny(" "),
-    LengthLimitingTextInputFormatter(15),
-  ];
 }

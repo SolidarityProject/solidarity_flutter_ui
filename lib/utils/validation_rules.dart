@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart';
+
 class ValidationRules {
   static String validateName(String value) {
     if (value.startsWith(" ")) {
@@ -92,7 +94,17 @@ class ValidationRules {
     }
   }
 
-  // valid control functions -> regex
+  //* text input formatter
+
+  static TextInputFormatter nameInputFormat() =>
+      FilteringTextInputFormatter.allow(
+        (RegExp("[a-zA-ZığüşöçİĞÜŞÖÇ ]")),
+      );
+
+  static TextInputFormatter nonSpaceInputFormat() =>
+      FilteringTextInputFormatter.deny(" ");
+
+  //* valid control functions -> regex
 
   static bool _usernameValidControl(String username) {
     Pattern usernamePattern = r"^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$";

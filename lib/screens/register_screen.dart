@@ -139,7 +139,7 @@ class _RegisterScreenState extends State<RegisterScreen>
       // saveName,
       "N",
       "Enter your name",
-      // inputFormatters: _nameInputFormat(),
+      inputFormatters: nameInputFormat(),
     );
   }
 
@@ -152,7 +152,7 @@ class _RegisterScreenState extends State<RegisterScreen>
       // saveName,
       "L",
       "Enter your last name",
-      // inputFormatters: _nameInputFormat(),
+      inputFormatters: nameInputFormat(),
     );
   }
 
@@ -165,7 +165,7 @@ class _RegisterScreenState extends State<RegisterScreen>
       // saveName,
       "U",
       "Enter your username",
-      // inputFormatters: _nameInputFormat(),
+      inputFormatters: usernameInputFormat(),
     );
   }
 
@@ -180,7 +180,7 @@ class _RegisterScreenState extends State<RegisterScreen>
       "Enter your email",
       inputType: TextInputType.emailAddress,
       icon: Icons.email,
-      // inputFormatters: _nameInputFormat(),
+      inputFormatters: emailInputFormat(),
     );
   }
 
@@ -195,7 +195,7 @@ class _RegisterScreenState extends State<RegisterScreen>
       "Enter your password",
       obscureText: true,
       icon: Icons.lock,
-      // inputFormatters: _nameInputFormat(),
+      inputFormatters: passwordInputFormat(),
     );
   }
 
