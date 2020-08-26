@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:solidarity_flutter_ui/mixins/validation_mixin/profile_validation_mixin.dart';
-import 'package:solidarity_flutter_ui/models/dtos/check_available_email_dto.dart';
-import 'package:solidarity_flutter_ui/models/dtos/check_available_username_dto.dart';
 import 'package:solidarity_flutter_ui/models/dtos/update_user_dto.dart';
 import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
-import 'package:solidarity_flutter_ui/services/solidarity_service/auth_service.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/user_service.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
+import 'package:solidarity_flutter_ui/utils/username_email_check.dart';
 import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -173,40 +171,14 @@ class _ProfileScreenState extends State<ProfileScreen>
   }
 
   Future<void> _showAlertDiaolog() async {
-    var availableEmail = await _checkAvailableEmail();
-    var availableUsername = await _checkAvailableUsername();
-    var alertDiaolog;
+    var resultAlert = await usernameEmailCheckAlert(
+      _usernameController.text,
+      _emailController.text,
+    );
+    AlertDialogOneButton alertDiaolog;
 
-    //! error -> username & email not available
-    if (!availableEmail && !availableUsername) {
-      alertDiaolog = AlertDialogOneButton(
-        title: "OOPS!",
-        content:
-            "This username (${_usernameController.text}) and this email address (${_emailController.text}) are already in use.",
-        okText: "OK",
-        okOnPressed: () {},
-      );
-    }
-
-    //! error -> username not available
-    else if (!availableUsername) {
-      alertDiaolog = AlertDialogOneButton(
-        title: "OOPS!",
-        content:
-            "This username (${_usernameController.text}) is already in use.",
-        okText: "OK",
-        okOnPressed: () {},
-      );
-    }
-
-    //! error -> email not available
-    else if (!availableEmail) {
-      alertDiaolog = AlertDialogOneButton(
-        title: "OOPS!",
-        content: "This email (${_emailController.text}) is already in use.",
-        okText: "OK",
-        okOnPressed: () {},
-      );
+    if (resultAlert != null) {
+      alertDiaolog = resultAlert;
     }
 
     //* success
@@ -246,24 +218,6 @@ class _ProfileScreenState extends State<ProfileScreen>
       context: context,
       builder: (context) => alertDiaolog,
     );
-  }
-
-  Future<bool> _checkAvailableEmail() async {
-    if (user.email != _emailController.text) {
-      return await checkAvailableEmail(
-        CheckAvailableEmailDTO(email: _emailController.text),
-      );
-    } else
-      return true;
-  }
-
-  Future<bool> _checkAvailableUsername() async {
-    if (user.username != _usernameController.text) {
-      return await checkAvailableUsername(
-        CheckAvailableUsernameDTO(username: _usernameController.text),
-      );
-    } else
-      return true;
   }
 
   Future<bool> _updateUser() async {
