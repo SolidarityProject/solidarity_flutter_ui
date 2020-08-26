@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:solidarity_flutter_ui/mixins/validation_mixin/register_validation_mixin.dart';
 import 'package:solidarity_flutter_ui/utils/constants.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
 
@@ -12,15 +13,17 @@ class RegisterScreen extends StatefulWidget {
 
 ThemeData _themeData;
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends State<RegisterScreen>
+    with RegisterValidationMixin {
   final _nameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  final _formTFHeight = 50.0;
-  final _autoValidateStatus = false;
+  var _formTFHeight = 50.0;
+  var _formTFHeightPW = 50.0;
+  var _autoValidateStatus = false;
 
   @override
   void dispose() {
@@ -132,7 +135,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       "Name",
       _nameController,
       50,
-      //  validateName,
+      validateName,
       // saveName,
       "N",
       "Enter your name",
@@ -145,7 +148,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       "Last Name",
       _lastNameController,
       50,
-      //  validateName,
+      validateLastName,
       // saveName,
       "L",
       "Enter your last name",
@@ -158,7 +161,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       "Username",
       _usernameController,
       20,
-      //  validateName,
+      validateUsername,
       // saveName,
       "U",
       "Enter your username",
@@ -171,7 +174,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       "Email",
       _emailController,
       50,
-      //  validateName,
+      validateEmail,
       // saveName,
       "E",
       "Enter your email",
@@ -186,7 +189,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       "Password",
       _passwordController,
       16,
-      //  validateName,
+      validatePassword,
       // saveName,
       "P",
       "Enter your password",
@@ -202,7 +205,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () {},
+        onPressed: () {
+          setState(() {
+            _autoValidateStatus = true;
+            _formTFHeight = 70;
+            _formTFHeightPW = 90;
+          });
+        },
         padding: EdgeInsets.all(13.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
@@ -218,7 +227,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget _buildSignInButton() {
     return GestureDetector(
-      onTap: () async => Navigator.pushReplacementNamed(
+      onTap: () async => await Navigator.pushReplacementNamed(
         context,
         Constants.ROUTE_LOGIN,
       ),
@@ -243,7 +252,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String labelText,
     TextEditingController controller,
     int maxLength,
-    //String validationMixin(String val),
+    String validationMixin(String val),
     //Function saveMixin,
     String iconText,
     String hintText, {
@@ -266,7 +275,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         Container(
           alignment: Alignment.centerLeft,
           decoration: Styles.TF_BOXDEC,
-          height: _formTFHeight,
+          height: obscureText ? _formTFHeightPW : _formTFHeight,
 
           //* text form field
           child: TextFormField(
@@ -276,7 +285,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             keyboardType: inputType,
             inputFormatters: inputFormatters,
             autovalidate: _autoValidateStatus ? true : false,
-            // validator: validationMixin,
+            validator: validationMixin,
             //onSaved: saveMixin,
             style: Styles.BLACK_TEXT,
             decoration: InputDecoration(
