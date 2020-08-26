@@ -51,7 +51,7 @@ Future<AlertDialogOneButton> usernameEmailCheckAlert(
 }
 
 Future<bool> _checkAvailableEmail(String email) async {
-  if (user.email != email) {
+  if (user == null || user.email != email) {
     return await checkAvailableEmail(
       CheckAvailableEmailDTO(email: email),
     );
@@ -60,7 +60,7 @@ Future<bool> _checkAvailableEmail(String email) async {
 }
 
 Future<bool> _checkAvailableUsername(String username) async {
-  if (user.username != username) {
+  if (user == null || user.username != username) {
     return await checkAvailableUsername(
       CheckAvailableUsernameDTO(username: username),
     );

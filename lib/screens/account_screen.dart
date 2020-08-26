@@ -109,7 +109,11 @@ class _AccountScreenState extends State<AccountScreen> {
       noOnPressed: () {},
       yesOnPressed: () async {
         await SharedPrefs.sharedClear();
-        await Navigator.pushReplacementNamed(context, Constants.ROUTE_LOGIN);
+        await Navigator.pushNamedAndRemoveUntil(
+          context,
+          Constants.ROUTE_LOGIN,
+          (Route<dynamic> route) => false,
+        );
       },
     );
     await showDialog(
