@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:solidarity_flutter_ui/mixins/validation_mixin/register_validation_mixin.dart';
+import 'package:solidarity_flutter_ui/models/address_model.dart';
+import 'package:solidarity_flutter_ui/models/dtos/register_dto.dart';
+import 'package:solidarity_flutter_ui/services/solidarity_service/auth_service.dart';
 import 'package:solidarity_flutter_ui/utils/constants.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
+import 'package:solidarity_flutter_ui/utils/username_email_check.dart';
+import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({Key key}) : super(key: key);
@@ -20,6 +25,8 @@ class _RegisterScreenState extends State<RegisterScreen>
   final _emailController = TextEditingController();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
 
   var _formTFHeight = 50.0;
   var _formTFHeightPW = 50.0;
@@ -82,33 +89,36 @@ class _RegisterScreenState extends State<RegisterScreen>
           left: 30.0,
           right: 30.0,
         ),
-        child: _buildColumnContainer(),
+        child: _buildForm(),
       ),
     );
   }
 
-  Column _buildColumnContainer() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        _appIconSizedBox(),
-        SizedBox(height: 15.0),
-        _signUpText(),
-        SizedBox(height: 20.0),
-        _buildNameTextFormField(),
-        SizedBox(height: 20.0),
-        _buildLastNameTextFormField(),
-        SizedBox(height: 20.0),
-        _buildUsernameTextFormField(),
-        SizedBox(height: 20.0),
-        _buildEmailTextFormField(),
-        SizedBox(height: 20.0),
-        _buildPasswordTextFormField(),
-        SizedBox(height: 20.0),
-        _buildRegisterButton(),
-        SizedBox(height: 40.0),
-        _buildSignInButton(),
-      ],
+  Widget _buildForm() {
+    return Form(
+      key: _formKey,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          _appIconSizedBox(),
+          SizedBox(height: 15.0),
+          _signUpText(),
+          SizedBox(height: 20.0),
+          _buildNameTextFormField(),
+          SizedBox(height: 20.0),
+          _buildLastNameTextFormField(),
+          SizedBox(height: 20.0),
+          _buildUsernameTextFormField(),
+          SizedBox(height: 20.0),
+          _buildEmailTextFormField(),
+          SizedBox(height: 20.0),
+          _buildPasswordTextFormField(),
+          SizedBox(height: 20.0),
+          _buildRegisterButton(),
+          SizedBox(height: 40.0),
+          _buildSignInButton(),
+        ],
+      ),
     );
   }
 
@@ -136,7 +146,6 @@ class _RegisterScreenState extends State<RegisterScreen>
       _nameController,
       50,
       validateName,
-      // saveName,
       "N",
       "Enter your name",
       inputFormatters: nameInputFormat(),
@@ -149,7 +158,6 @@ class _RegisterScreenState extends State<RegisterScreen>
       _lastNameController,
       50,
       validateLastName,
-      // saveName,
       "L",
       "Enter your last name",
       inputFormatters: nameInputFormat(),
@@ -162,7 +170,6 @@ class _RegisterScreenState extends State<RegisterScreen>
       _usernameController,
       20,
       validateUsername,
-      // saveName,
       "U",
       "Enter your username",
       inputFormatters: usernameInputFormat(),
@@ -175,7 +182,6 @@ class _RegisterScreenState extends State<RegisterScreen>
       _emailController,
       50,
       validateEmail,
-      // saveName,
       "E",
       "Enter your email",
       inputType: TextInputType.emailAddress,
@@ -190,7 +196,6 @@ class _RegisterScreenState extends State<RegisterScreen>
       _passwordController,
       16,
       validatePassword,
-      // saveName,
       "P",
       "Enter your password",
       obscureText: true,
@@ -205,12 +210,16 @@ class _RegisterScreenState extends State<RegisterScreen>
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () {
-          setState(() {
-            _autoValidateStatus = true;
-            _formTFHeight = 70;
-            _formTFHeightPW = 90;
-          });
+        onPressed: () async {
+          if (_formKey.currentState.validate()) {
+            await _showAlertDiaolog();
+          } else {
+            setState(() {
+              _autoValidateStatus = true;
+              _formTFHeight = 70;
+              _formTFHeightPW = 90;
+            });
+          }
         },
         padding: EdgeInsets.all(13.0),
         shape: RoundedRectangleBorder(
@@ -223,6 +232,91 @@ class _RegisterScreenState extends State<RegisterScreen>
         ),
       ),
     );
+  }
+
+  Future<void> _showAlertDiaolog() async {
+    var resultAlert = await usernameEmailCheckAlert(
+      _usernameController.text,
+      _emailController.text,
+    );
+    AlertDialogOneButton alertDiaolog;
+
+    if (resultAlert != null) {
+      alertDiaolog = resultAlert;
+    }
+
+    //* success
+    else {
+      var registerResult = await _registerUser();
+
+      if (registerResult) {
+        alertDiaolog = AlertDialogOneButton(
+          title: "Success",
+          content: "Registered to Solidarity Platform.",
+          okText: "OK",
+          okOnPressed: () {
+            Navigator.pop(context);
+          },
+        );
+
+        _formKey.currentState.save();
+      }
+
+      //! server error
+      // TODO : log -> server error
+      else {
+        alertDiaolog = AlertDialogOneButton(
+          title: "ERROR",
+          content: "Please try again later.",
+          okText: "OK",
+          okOnPressed: () {},
+        );
+      }
+    }
+
+    // show alert diaolog
+    await showDialog(
+      context: context,
+      builder: (context) => alertDiaolog,
+    );
+  }
+
+  Future<bool> _registerUser() async {
+    // TODO : address fields
+    Address address = Address(
+      country: "Türkiye",
+      countryId: "5eef52787e2213196405352e",
+      province: "İzmir",
+      provinceId: "5eef530e7e22131964053531",
+      district: "Ödemiş",
+      districtId: "5eef567d7e2213196405353f",
+    );
+    var _registerUserDTO = RegisterDTO(
+      //
+      // define value from fields
+      //
+      name: _nameController.text,
+      lastname: _lastNameController.text,
+      username: _usernameController.text,
+      email: _emailController.text,
+      password: _passwordController.text,
+      address: address,
+      birthdate: DateTime.parse("1998-08-08"),
+      gender: 0,
+      pictureUrl:
+          "https://raw.githubusercontent.com/SolidarityProject/solidarity_icons/master/test_user.png",
+    );
+
+    var result;
+
+    await register(_registerUserDTO).then(
+      (_) {
+        result = true;
+      },
+    ).catchError((_) {
+      result = false;
+    });
+    return result;
   }
 
   Widget _buildSignInButton() {
@@ -253,7 +347,6 @@ class _RegisterScreenState extends State<RegisterScreen>
     TextEditingController controller,
     int maxLength,
     String validationMixin(String val),
-    //Function saveMixin,
     String iconText,
     String hintText, {
     bool obscureText = false,
@@ -286,7 +379,6 @@ class _RegisterScreenState extends State<RegisterScreen>
             inputFormatters: inputFormatters,
             autovalidate: _autoValidateStatus ? true : false,
             validator: validationMixin,
-            //onSaved: saveMixin,
             style: Styles.BLACK_TEXT,
             decoration: InputDecoration(
               border: InputBorder.none,
