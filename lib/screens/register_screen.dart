@@ -11,6 +11,7 @@ import 'package:solidarity_flutter_ui/utils/styles.dart';
 import 'package:solidarity_flutter_ui/utils/username_email_check.dart';
 import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';
 import 'package:solidarity_flutter_ui/widgets/drop_down_field.dart';
+import 'package:solidarity_flutter_ui/widgets/label_text_form_field.dart';
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({Key key}) : super(key: key);
@@ -149,14 +150,21 @@ class _RegisterScreenState extends State<RegisterScreen>
   }
 
   Widget _buildNameTextFormField() {
-    return _buildTextFormField(
-      "Name",
-      _nameController,
-      50,
-      validateName,
-      "N",
-      "Enter your name",
+    return LabelTextFormField(
+      formHeight: _formTFHeight,
+      autoValidateStatus: _autoValidateStatus,
+      labelText: "Name",
+      labelTextStyle: Styles.TF_LABEL_WHITE,
+      fieldTextStyle: Styles.BLACK_TEXT,
+      controller: _nameController,
+      maxLength: 50,
+      fieldDecoration: Styles.TF_BOXDEC,
+      iconText: "N",
+      hintText: "e.g Mustafa",
+      hintStyle: Styles.TF_HINT,
+      themeColor: _themeData.accentColor,
       inputFormatters: nameInputFormat(),
+      validationMixin: (_) => validateName(_),
     );
   }
 

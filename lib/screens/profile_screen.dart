@@ -26,6 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   var _editStatus = false;
   var _formTFHeight = 50.0;
+  var _autoValidateStatus = false;
 
   @override
   void initState() {
@@ -141,6 +142,7 @@ class _ProfileScreenState extends State<ProfileScreen>
           } else {
             setState(() {
               _editStatus = false;
+              _autoValidateStatus = false;
               _formTFHeight = 50.0;
             });
           }
@@ -197,6 +199,7 @@ class _ProfileScreenState extends State<ProfileScreen>
 
         setState(() {
           _editStatus = false;
+          _autoValidateStatus = false;
           _formTFHeight = 50.0;
         });
       }
@@ -258,6 +261,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         setState(() {
           _editStatus = true;
           _formTFHeight = 70.0;
+          _autoValidateStatus = true;
         });
       },
       child: Wrap(
@@ -285,6 +289,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     return LabelTextFormField(
       formHeight: _formTFHeight,
       editStatus: _editStatus,
+      autoValidateStatus: _autoValidateStatus,
       labelText: "Name",
       labelTextStyle: Styles.TF_LABEL,
       fieldTextStyle: Styles.BLACK_TEXT,
@@ -305,6 +310,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     return LabelTextFormField(
       formHeight: _formTFHeight,
       editStatus: _editStatus,
+      autoValidateStatus: _autoValidateStatus,
       labelText: "Last Name",
       labelTextStyle: Styles.TF_LABEL,
       fieldTextStyle: Styles.BLACK_TEXT,
@@ -325,6 +331,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     return LabelTextFormField(
       formHeight: _formTFHeight,
       editStatus: _editStatus,
+      autoValidateStatus: _autoValidateStatus,
       labelText: "Username",
       labelTextStyle: Styles.TF_LABEL,
       fieldTextStyle: Styles.BLACK_TEXT,
@@ -345,6 +352,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     return LabelTextFormField(
       formHeight: _formTFHeight,
       editStatus: _editStatus,
+      autoValidateStatus: _autoValidateStatus,
       labelText: "Email",
       labelTextStyle: Styles.TF_LABEL,
       fieldTextStyle: Styles.BLACK_TEXT,

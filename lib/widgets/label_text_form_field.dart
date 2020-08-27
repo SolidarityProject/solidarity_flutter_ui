@@ -64,7 +64,7 @@ class LabelTextFormField extends StatelessWidget {
             enabled: editStatus ? true : false,
             obscureText: obscureStatus,
             controller: controller,
-            maxLength: editStatus ? maxLength : null,
+            maxLength: autoValidateStatus ? maxLength : null,
             keyboardType: inputType,
             inputFormatters: inputFormatters,
             autovalidate: autoValidateStatus ? true : false,
