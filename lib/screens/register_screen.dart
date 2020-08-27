@@ -173,7 +173,7 @@ class _RegisterScreenState extends State<RegisterScreen>
       "Birthdate",
       _birthdateController,
       10,
-      null,
+      validateBirthdate,
       "B",
       "Select your birthdate",
       readOnly: true,

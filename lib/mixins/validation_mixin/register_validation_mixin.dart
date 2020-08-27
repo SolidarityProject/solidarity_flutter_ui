@@ -11,6 +11,10 @@ class RegisterValidationMixin {
     return ValidationRules.validateLastName(value);
   }
 
+  String validateBirthdate(String value) {
+    return ValidationRules.validateBirthdate(value);
+  }
+
   String validateUsername(String value) {
     return ValidationRules.validateUsername(value);
   }

@@ -29,6 +29,14 @@ class ValidationRules {
     }
   }
 
+  static String validateBirthdate(String value) {
+    if (value.isEmpty) {
+      return "Please enter your birthdate";
+    } else {
+      return null;
+    }
+  }
+
   static String validateUsername(String value) {
     if (value.isEmpty) {
       return "Please enter your username";
