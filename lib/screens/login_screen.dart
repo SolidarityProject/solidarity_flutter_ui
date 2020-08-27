@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:solidarity_flutter_ui/mixins/validation_mixin/login_validation_mixin.dart';
 import 'package:solidarity_flutter_ui/models/dtos/login_dto.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/auth_service.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/user_service.dart';
@@ -15,13 +16,14 @@ class LoginScreen extends StatefulWidget {
 
 ThemeData _themeData;
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> with LoginValidationMixin {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
   var _formHeight = 50.0;
+  var _loginBtnSizedBoxHeight = 80.0;
   var _autoValidateStatus = false;
 
   @override
@@ -94,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
           _buildPasswordTextFormField(),
           SizedBox(height: 25.0),
           _buildLoginButton(),
-          SizedBox(height: 80.0),
+          SizedBox(height: _loginBtnSizedBoxHeight),
           _buildSignupButton()
         ],
       ),
@@ -133,8 +135,8 @@ class _LoginScreenState extends State<LoginScreen> {
       hintStyle: Styles.TF_HINT,
       themeColor: _themeData.accentColor,
       inputType: TextInputType.emailAddress,
-      //inputFormatters: //,
-      //validationMixin: ,
+      inputFormatters: emailInputFormat(),
+      validationMixin: (_) => validateEmail(_),
     );
   }
 
@@ -152,8 +154,8 @@ class _LoginScreenState extends State<LoginScreen> {
       hintText: "Enter your password",
       hintStyle: Styles.TF_HINT,
       themeColor: _themeData.accentColor,
-      //inputFormatters: //,
-      //validationMixin: ,
+      inputFormatters: passwordInputFormat(),
+      validationMixin: (_) => validatePassword(_),
     );
   }
 
@@ -170,34 +172,46 @@ class _LoginScreenState extends State<LoginScreen> {
         color: Colors.white,
         child: Text("LOGIN", style: Styles.LOGIN_BTN_TEXT),
         onPressed: () async {
-          var _loginDTO = LoginDTO(
-            email: _emailController.text,
-            password: _passwordController.text,
-          );
-
-          var result = await login(_loginDTO);
-
-          if (result) {
-            await getUserMe();
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              Constants.ROUTE_TABCONTROLLER,
-              (Route<dynamic> route) => false,
-            );
+          if (_formKey.currentState.validate()) {
+            await _loginValidFunc();
           } else {
-            var alertDiaolog = AlertDialogOneButton(
-              title: "OOPS!",
-              content: "Please check your email or password.",
-              okText: "OK",
-              okOnPressed: () {},
-            );
-            showDialog(
-              context: context,
-              builder: (context) => alertDiaolog,
-            );
+            setState(() {
+              _formHeight = 70;
+              _loginBtnSizedBoxHeight = 45;
+              _autoValidateStatus = true;
+            });
           }
         },
       ),
     );
+  }
+
+  Future<void> _loginValidFunc() async {
+    var _loginDTO = LoginDTO(
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
+
+    var result = await login(_loginDTO);
+
+    if (result) {
+      await getUserMe();
+      await Navigator.of(context).pushNamedAndRemoveUntil(
+        Constants.ROUTE_TABCONTROLLER,
+        (Route<dynamic> route) => false,
+      );
+    } else {
+      var alertDiaolog = AlertDialogOneButton(
+        title: "OOPS!",
+        content: "Please check your email or password.",
+        okText: "OK",
+        okOnPressed: () {},
+      );
+      await showDialog(
+        context: context,
+        builder: (context) => alertDiaolog,
+      );
+    }
   }
 
   Widget _buildSignupButton() {

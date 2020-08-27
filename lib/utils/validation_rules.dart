@@ -112,6 +112,9 @@ class ValidationRules {
   static TextInputFormatter nonSpaceInputFormat() =>
       FilteringTextInputFormatter.deny(" ");
 
+  static TextInputFormatter maxLengthInputFormat(int maxLength) =>
+      LengthLimitingTextInputFormatter(maxLength);
+
   //* valid control functions -> regex
 
   static bool _usernameValidControl(String username) {
