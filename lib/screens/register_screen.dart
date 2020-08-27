@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:solidarity_flutter_ui/mixins/validation_mixin/register_validation_mixin.dart';
 import 'package:solidarity_flutter_ui/models/address_model.dart';
 import 'package:solidarity_flutter_ui/models/dtos/register_dto.dart';
@@ -22,6 +23,7 @@ class _RegisterScreenState extends State<RegisterScreen>
     with RegisterValidationMixin {
   final _nameController = TextEditingController();
   final _lastNameController = TextEditingController();
+  final _birthdateController = TextEditingController();
   final _emailController = TextEditingController();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -108,6 +110,8 @@ class _RegisterScreenState extends State<RegisterScreen>
           SizedBox(height: 20.0),
           _buildLastNameTextFormField(),
           SizedBox(height: 20.0),
+          _buildBirthDateTextFormField(),
+          SizedBox(height: 20.0),
           _buildUsernameTextFormField(),
           SizedBox(height: 20.0),
           _buildEmailTextFormField(),
@@ -161,6 +165,19 @@ class _RegisterScreenState extends State<RegisterScreen>
       "L",
       "Enter your last name",
       inputFormatters: nameInputFormat(),
+    );
+  }
+
+  Widget _buildBirthDateTextFormField() {
+    return _buildTextFormField(
+      "Birthdate",
+      _birthdateController,
+      10,
+      null,
+      "B",
+      "Select your birthdate",
+      readOnly: true,
+      onTapFunc: _datePicker,
     );
   }
 
@@ -350,9 +367,11 @@ class _RegisterScreenState extends State<RegisterScreen>
     String iconText,
     String hintText, {
     bool obscureText = false,
+    bool readOnly = false,
     IconData icon,
     TextInputType inputType = TextInputType.text,
     List<TextInputFormatter> inputFormatters,
+    Future<void> onTapFunc(),
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -372,17 +391,30 @@ class _RegisterScreenState extends State<RegisterScreen>
 
           //* text form field
           child: TextFormField(
+            // enabled: false,
+            readOnly: readOnly,
             controller: controller,
             obscureText: obscureText,
             maxLength: _autoValidateStatus ? maxLength : null,
             keyboardType: inputType,
             inputFormatters: inputFormatters,
             autovalidate: _autoValidateStatus ? true : false,
+            onTap: readOnly
+                ? () async {
+                    await onTapFunc();
+                  }
+                : null,
             validator: validationMixin,
             style: Styles.BLACK_TEXT,
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.all(15.0),
+              suffixIcon: readOnly
+                  ? Icon(
+                      Icons.date_range,
+                      color: _themeData.accentColor,
+                    )
+                  : null,
               prefixIcon: CircleAvatar(
                 backgroundColor: Colors.transparent,
                 foregroundColor: _themeData.accentColor,
@@ -391,7 +423,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                     : Text(
                         iconText[0].toUpperCase(),
                         style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w700),
+                            fontSize: 20, fontWeight: FontWeight.w600),
                       ),
               ),
               hintText: hintText,
@@ -401,5 +433,28 @@ class _RegisterScreenState extends State<RegisterScreen>
         ),
       ],
     );
+  }
+
+  DateTime _selectedDate;
+
+  Future<void> _datePicker() async {
+    DateTime _dateNow = DateTime.now();
+
+    final DateTime _picked = await showDatePicker(
+      helpText: "Select your birthdate",
+      fieldLabelText: "Enter birthdate",
+      context: context,
+      initialDate:
+          _selectedDate == null ? DateTime(_dateNow.year - 20) : _selectedDate,
+      firstDate: DateTime(_dateNow.year - 100),
+      lastDate: DateTime(_dateNow.year - 18),
+    );
+    if (_picked != null) {
+      setState(() {
+        _selectedDate = _picked;
+      });
+      String formattedDate = DateFormat('dd.MM.yyyy').format(_picked);
+      _birthdateController.text = formattedDate;
+    }
   }
 }
