@@ -31,7 +31,7 @@ class ValidationRules {
 
   static String validateBirthdate(String value) {
     if (value.isEmpty) {
-      return "Please enter your birthdate";
+      return "Please select your birthdate";
     } else {
       return null;
     }
