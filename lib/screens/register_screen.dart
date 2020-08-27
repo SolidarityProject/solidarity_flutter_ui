@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:solidarity_flutter_ui/mixins/validation_mixin/register_validation_mixin.dart';
 import 'package:solidarity_flutter_ui/models/address_model.dart';
+import 'package:solidarity_flutter_ui/models/dtos/gender_dto.dart';
 import 'package:solidarity_flutter_ui/models/dtos/register_dto.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/auth_service.dart';
 import 'package:solidarity_flutter_ui/utils/constants.dart';
@@ -112,6 +113,8 @@ class _RegisterScreenState extends State<RegisterScreen>
           SizedBox(height: 20.0),
           _buildBirthDateTextFormField(),
           SizedBox(height: 20.0),
+          _buildGenderTextFormField(),
+          SizedBox(height: 20.0),
           _buildUsernameTextFormField(),
           SizedBox(height: 20.0),
           _buildEmailTextFormField(),
@@ -178,6 +181,17 @@ class _RegisterScreenState extends State<RegisterScreen>
       "Select your birthdate",
       readOnly: true,
       onTapFunc: _datePicker,
+    );
+  }
+
+  Widget _buildGenderTextFormField() {
+    return _buildDropDown(
+      "Gender",
+      "Select your gender",
+      _selectedGender,
+      dropDownGenderItems,
+      (T) => _dropDownGenderOnChanged(T),
+      _dropDownMenuItems,
     );
   }
 
@@ -435,6 +449,69 @@ class _RegisterScreenState extends State<RegisterScreen>
     );
   }
 
+  List<GenderDTO> dropDownGenderItems = genderList;
+  var _selectedGender;
+
+  //* build drop down (generic)
+  Widget _buildDropDown<T>(
+    String labelText,
+    String hintText,
+    T selectedValue,
+    List<T> items,
+    void onChangedFunc(T),
+    DropdownMenuItem<T> dropDownMenuItem(T),
+  ) =>
+      Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            //* drop down label
+            Text(labelText, style: Styles.TF_LABEL_WHITE),
+
+            SizedBox(height: 10.0),
+
+            //* drop down container (padding, decoration, child -> drop down button)
+            Stack(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(left: 44, right: 10),
+                  decoration: Styles.TF_BOXDEC,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<T>(
+                        itemHeight: 50,
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          color: _themeData.accentColor,
+                        ),
+                        isExpanded: true,
+                        hint: Text(hintText, style: Styles.TF_HINT),
+                        value: selectedValue,
+                        onChanged: (value) {
+                          onChangedFunc(value);
+                        },
+                        items: items != null
+                            ? items.map((item) {
+                                return dropDownMenuItem(item);
+                              }).toList()
+                            : null),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 5.0, left: 2.0),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: _themeData.accentColor,
+                    child: Text(
+                      "G",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                )
+              ],
+            )
+          ]);
+
   DateTime _selectedDate;
 
   Future<void> _datePicker() async {
@@ -456,5 +533,19 @@ class _RegisterScreenState extends State<RegisterScreen>
       String formattedDate = DateFormat('dd.MM.yyyy').format(_picked);
       _birthdateController.text = formattedDate;
     }
+  }
+
+  void _dropDownGenderOnChanged(GenderDTO value) async {
+    setState(() {
+      _selectedGender = value;
+    });
+  }
+
+  DropdownMenuItem<T> _dropDownMenuItems<T>(T item) {
+    GenderDTO _gender = item as GenderDTO;
+    return DropdownMenuItem<T>(
+      value: item,
+      child: Text(_gender.description),
+    );
   }
 }
