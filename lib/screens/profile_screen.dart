@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:solidarity_flutter_ui/mixins/validation_mixin/profile_validation_mixin.dart';
 import 'package:solidarity_flutter_ui/models/dtos/update_user_dto.dart';
 import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
@@ -7,6 +6,7 @@ import 'package:solidarity_flutter_ui/services/solidarity_service/user_service.d
 import 'package:solidarity_flutter_ui/utils/styles.dart';
 import 'package:solidarity_flutter_ui/utils/username_email_check.dart';
 import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';
+import 'package:solidarity_flutter_ui/widgets/label_text_form_field.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -282,110 +282,83 @@ class _ProfileScreenState extends State<ProfileScreen>
   }
 
   Widget _buildNameTextFormField() {
-    return _buildTextFormField(
-      "Name",
-      _nameController,
-      50,
-      validateName,
-      saveName,
-      user.name,
-      "Enter your name",
+    return LabelTextFormField(
+      formHeight: _formTFHeight,
+      editStatus: _editStatus,
+      labelText: "Name",
+      labelTextStyle: Styles.TF_LABEL,
+      fieldTextStyle: Styles.BLACK_TEXT,
+      controller: _nameController,
+      maxLength: 50,
+      fieldDecoration: Styles.TF_BOXDEC,
+      iconText: user.name,
+      hintText: "e.g. Mustafa",
+      hintStyle: Styles.TF_HINT,
+      themeColor: _themeData.accentColor,
       inputFormatters: nameInputFormat(),
+      validationMixin: (_) => validateName(_),
+      saveMixin: saveName,
     );
   }
 
   Widget _buildLastNameTextFormField() {
-    return _buildTextFormField(
-      "Last Name",
-      _lastnameController,
-      50,
-      validateLastName,
-      saveLastName,
-      user.lastname,
-      "Enter your last name",
+    return LabelTextFormField(
+      formHeight: _formTFHeight,
+      editStatus: _editStatus,
+      labelText: "Last Name",
+      labelTextStyle: Styles.TF_LABEL,
+      fieldTextStyle: Styles.BLACK_TEXT,
+      controller: _lastnameController,
+      maxLength: 50,
+      fieldDecoration: Styles.TF_BOXDEC,
+      iconText: user.lastname,
+      hintText: "e.g. ÇEVİK",
+      hintStyle: Styles.TF_HINT,
+      themeColor: _themeData.accentColor,
       inputFormatters: nameInputFormat(),
+      validationMixin: (_) => validateLastName(_),
+      saveMixin: saveLastName,
     );
   }
 
   Widget _buildUsernameTextFormField() {
-    return _buildTextFormField(
-      "Username",
-      _usernameController,
-      20,
-      validateUsername,
-      saveUsername,
-      user.username,
-      "Enter your username",
+    return LabelTextFormField(
+      formHeight: _formTFHeight,
+      editStatus: _editStatus,
+      labelText: "Username",
+      labelTextStyle: Styles.TF_LABEL,
+      fieldTextStyle: Styles.BLACK_TEXT,
+      controller: _usernameController,
+      maxLength: 20,
+      fieldDecoration: Styles.TF_BOXDEC,
+      iconText: user.username,
+      hintText: "e.g. mcevik",
+      hintStyle: Styles.TF_HINT,
+      themeColor: _themeData.accentColor,
       inputFormatters: usernameInputFormat(),
+      validationMixin: (_) => validateUsername(_),
+      saveMixin: saveUsername,
     );
   }
 
   Widget _buildEmailTextFormField() {
-    return _buildTextFormField(
-      "Email",
-      _emailController,
-      50,
-      validateEmail,
-      saveEmail,
-      user.email,
-      "Enter your email",
-      inputType: TextInputType.emailAddress,
+    return LabelTextFormField(
+      formHeight: _formTFHeight,
+      editStatus: _editStatus,
+      labelText: "Email",
+      labelTextStyle: Styles.TF_LABEL,
+      fieldTextStyle: Styles.BLACK_TEXT,
+      controller: _emailController,
+      maxLength: 50,
+      fieldDecoration: Styles.TF_BOXDEC,
+      iconText: user.email,
+      icon: Icons.email,
+      hintText: "e.g. mcevik@xmail.com",
+      hintStyle: Styles.TF_HINT,
+      themeColor: _themeData.accentColor,
       inputFormatters: emailInputFormat(),
-    );
-  }
-
-  Widget _buildTextFormField(
-    String labelText,
-    TextEditingController controller,
-    int maxLength,
-    String validationMixin(String val),
-    Function saveMixin,
-    String iconText,
-    String hintText, {
-    TextInputType inputType = TextInputType.text,
-    List<TextInputFormatter> inputFormatters,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        //* label text
-        Text(labelText, style: Styles.TF_LABEL),
-
-        SizedBox(height: 10.0),
-
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: Styles.TF_BOXDEC,
-          height: _formTFHeight,
-
-          //* text form field
-          child: TextFormField(
-            enabled: _editStatus ? true : false,
-            controller: controller,
-            maxLength: _editStatus ? maxLength : null,
-            keyboardType: inputType,
-            inputFormatters: inputFormatters,
-            autovalidate: true,
-            validator: validationMixin,
-            onSaved: saveMixin,
-            style: Styles.BLACK_TEXT,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.all(15.0),
-              prefixIcon: CircleAvatar(
-                child: Text(
-                  iconText[0].toUpperCase(),
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
-                backgroundColor: Colors.transparent,
-                foregroundColor: _themeData.accentColor,
-              ),
-              hintText: hintText,
-              hintStyle: Styles.TF_HINT,
-            ),
-          ),
-        ),
-      ],
+      validationMixin: (_) => validateEmail(_),
+      saveMixin: saveEmail,
     );
   }
 }
