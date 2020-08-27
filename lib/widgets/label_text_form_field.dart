@@ -6,6 +6,7 @@ class LabelTextFormField extends StatelessWidget {
   final bool editStatus;
   final bool obscureStatus;
   final bool autoValidateStatus;
+  final bool readOnlyStatus;
   final String labelText;
   final TextStyle labelTextStyle;
   final TextStyle fieldTextStyle;
@@ -13,12 +14,14 @@ class LabelTextFormField extends StatelessWidget {
   final int maxLength;
   final Decoration fieldDecoration;
   final IconData icon;
+  final IconData suffixIcon;
   final String iconText;
   final String hintText;
   final TextStyle hintStyle;
   final Color themeColor;
   final TextInputType inputType;
   final List<TextInputFormatter> inputFormatters;
+  final Future<void> Function() onTapFunc;
   final String Function(String) validationMixin;
   final Function saveMixin;
 
@@ -27,6 +30,7 @@ class LabelTextFormField extends StatelessWidget {
     this.editStatus = true,
     this.obscureStatus = false,
     this.autoValidateStatus = true,
+    this.readOnlyStatus = false,
     this.labelText,
     this.labelTextStyle,
     this.fieldTextStyle,
@@ -34,12 +38,14 @@ class LabelTextFormField extends StatelessWidget {
     this.maxLength,
     this.fieldDecoration,
     this.icon,
+    this.suffixIcon,
     this.iconText,
     this.hintText,
     this.hintStyle,
     this.themeColor,
     this.inputType = TextInputType.text,
     this.inputFormatters,
+    this.onTapFunc,
     this.validationMixin,
     this.saveMixin,
   });
@@ -62,12 +68,14 @@ class LabelTextFormField extends StatelessWidget {
           //* text form field
           child: TextFormField(
             enabled: editStatus ? true : false,
+            readOnly: readOnlyStatus,
             obscureText: obscureStatus,
             controller: controller,
             maxLength: autoValidateStatus ? maxLength : null,
             keyboardType: inputType,
             inputFormatters: inputFormatters,
             autovalidate: autoValidateStatus ? true : false,
+            onTap: () async => onTapFunc != null ? await onTapFunc() : null,
             validator: (value) => validationMixin(value),
             onSaved: saveMixin,
             style: fieldTextStyle,
@@ -84,6 +92,12 @@ class LabelTextFormField extends StatelessWidget {
                   backgroundColor: Colors.transparent,
                   foregroundColor: themeColor,
                 ),
+                suffixIcon: suffixIcon != null
+                    ? Icon(
+                        suffixIcon,
+                        color: themeColor,
+                      )
+                    : null,
                 hintText: hintText,
                 hintStyle: hintStyle),
           ),

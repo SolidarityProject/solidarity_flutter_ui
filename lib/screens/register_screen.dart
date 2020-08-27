@@ -33,6 +33,11 @@ class _RegisterScreenState extends State<RegisterScreen>
 
   final _formKey = GlobalKey<FormState>();
 
+  List<GenderDTO> dropDownGenderItems = genderList;
+  var _selectedGender;
+
+  DateTime _selectedDate;
+
   var _formTFHeight = 50.0;
   var _formTFHeightPW = 50.0;
   var _autoValidateStatus = false;
@@ -113,9 +118,9 @@ class _RegisterScreenState extends State<RegisterScreen>
           SizedBox(height: 20.0),
           _buildLastNameTextFormField(),
           SizedBox(height: 20.0),
-          _buildBirthDateTextFormField(),
+          _buildBirthdateTextFormField(),
           SizedBox(height: 20.0),
-          _buildGenderTextFormField(),
+          _buildGenderDropDownField(),
           SizedBox(height: 20.0),
           _buildUsernameTextFormField(),
           SizedBox(height: 20.0),
@@ -160,7 +165,7 @@ class _RegisterScreenState extends State<RegisterScreen>
       maxLength: 50,
       fieldDecoration: Styles.TF_BOXDEC,
       iconText: "N",
-      hintText: "e.g Mustafa",
+      hintText: "e.g. Mustafa",
       hintStyle: Styles.TF_HINT,
       themeColor: _themeData.accentColor,
       inputFormatters: nameInputFormat(),
@@ -169,31 +174,46 @@ class _RegisterScreenState extends State<RegisterScreen>
   }
 
   Widget _buildLastNameTextFormField() {
-    return _buildTextFormField(
-      "Last Name",
-      _lastNameController,
-      50,
-      validateLastName,
-      "L",
-      "Enter your last name",
+    return LabelTextFormField(
+      formHeight: _formTFHeight,
+      autoValidateStatus: _autoValidateStatus,
+      labelText: "Last Name",
+      labelTextStyle: Styles.TF_LABEL_WHITE,
+      fieldTextStyle: Styles.BLACK_TEXT,
+      controller: _lastNameController,
+      maxLength: 50,
+      fieldDecoration: Styles.TF_BOXDEC,
+      iconText: "L",
+      hintText: "e.g. ÇEVİK",
+      hintStyle: Styles.TF_HINT,
+      themeColor: _themeData.accentColor,
       inputFormatters: nameInputFormat(),
+      validationMixin: (_) => validateLastName(_),
     );
   }
 
-  Widget _buildBirthDateTextFormField() {
-    return _buildTextFormField(
-      "Birthdate",
-      _birthdateController,
-      10,
-      validateBirthdate,
-      "B",
-      "Select your birthdate",
-      readOnly: true,
-      onTapFunc: _datePicker,
+  Widget _buildBirthdateTextFormField() {
+    return LabelTextFormField(
+      formHeight: _formTFHeight,
+      autoValidateStatus: _autoValidateStatus,
+      readOnlyStatus: true,
+      labelText: "Birthdate",
+      labelTextStyle: Styles.TF_LABEL_WHITE,
+      fieldTextStyle: Styles.BLACK_TEXT,
+      controller: _birthdateController,
+      maxLength: 10,
+      fieldDecoration: Styles.TF_BOXDEC,
+      iconText: "B",
+      suffixIcon: Icons.date_range,
+      hintText: "Select your birthdate",
+      hintStyle: Styles.TF_HINT,
+      themeColor: _themeData.accentColor,
+      onTapFunc: () => _datePicker(),
+      validationMixin: (_) => validateBirthdate(_),
     );
   }
 
-  Widget _buildGenderTextFormField() {
+  Widget _buildGenderDropDownField() {
     return DropDownField<GenderDTO>(
       labelText: "Gender",
       labelTextStyle: Styles.TF_LABEL_WHITE,
@@ -210,42 +230,61 @@ class _RegisterScreenState extends State<RegisterScreen>
   }
 
   Widget _buildUsernameTextFormField() {
-    return _buildTextFormField(
-      "Username",
-      _usernameController,
-      20,
-      validateUsername,
-      "U",
-      "Enter your username",
+    return LabelTextFormField(
+      formHeight: _formTFHeight,
+      autoValidateStatus: _autoValidateStatus,
+      labelText: "Username",
+      labelTextStyle: Styles.TF_LABEL_WHITE,
+      fieldTextStyle: Styles.BLACK_TEXT,
+      controller: _usernameController,
+      maxLength: 20,
+      fieldDecoration: Styles.TF_BOXDEC,
+      iconText: "U",
+      hintText: "e.g. mcevik",
+      hintStyle: Styles.TF_HINT,
+      themeColor: _themeData.accentColor,
       inputFormatters: usernameInputFormat(),
+      validationMixin: (_) => validateUsername(_),
     );
   }
 
   Widget _buildEmailTextFormField() {
-    return _buildTextFormField(
-      "Email",
-      _emailController,
-      50,
-      validateEmail,
-      "E",
-      "Enter your email",
-      inputType: TextInputType.emailAddress,
+    return LabelTextFormField(
+      formHeight: _formTFHeight,
+      autoValidateStatus: _autoValidateStatus,
+      labelText: "Email",
+      labelTextStyle: Styles.TF_LABEL_WHITE,
+      fieldTextStyle: Styles.BLACK_TEXT,
+      controller: _emailController,
+      maxLength: 50,
+      fieldDecoration: Styles.TF_BOXDEC,
       icon: Icons.email,
+      hintText: "e.g. mcevik@xmail.com",
+      hintStyle: Styles.TF_HINT,
+      themeColor: _themeData.accentColor,
+      inputType: TextInputType.emailAddress,
       inputFormatters: emailInputFormat(),
+      validationMixin: (_) => validateEmail(_),
     );
   }
 
   Widget _buildPasswordTextFormField() {
-    return _buildTextFormField(
-      "Password",
-      _passwordController,
-      16,
-      validatePassword,
-      "P",
-      "Enter your password",
-      obscureText: true,
+    return LabelTextFormField(
+      formHeight: _formTFHeightPW,
+      autoValidateStatus: _autoValidateStatus,
+      obscureStatus: true,
+      labelText: "Password",
+      labelTextStyle: Styles.TF_LABEL_WHITE,
+      fieldTextStyle: Styles.BLACK_TEXT,
+      controller: _passwordController,
+      maxLength: 15,
+      fieldDecoration: Styles.TF_BOXDEC,
       icon: Icons.lock,
+      hintText: "e.g. pW123123*",
+      hintStyle: Styles.TF_HINT,
+      themeColor: _themeData.accentColor,
       inputFormatters: passwordInputFormat(),
+      validationMixin: (_) => validateUsername(_),
     );
   }
 
@@ -386,87 +425,6 @@ class _RegisterScreenState extends State<RegisterScreen>
       ),
     );
   }
-
-  Widget _buildTextFormField(
-    String labelText,
-    TextEditingController controller,
-    int maxLength,
-    String validationMixin(String val),
-    String iconText,
-    String hintText, {
-    bool obscureText = false,
-    bool readOnly = false,
-    IconData icon,
-    TextInputType inputType = TextInputType.text,
-    List<TextInputFormatter> inputFormatters,
-    Future<void> onTapFunc(),
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        //* label text
-        Text(
-          labelText,
-          style: Styles.TF_LABEL_WHITE,
-        ),
-
-        SizedBox(height: 10.0),
-
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: Styles.TF_BOXDEC,
-          height: obscureText ? _formTFHeightPW : _formTFHeight,
-
-          //* text form field
-          child: TextFormField(
-            // enabled: false,
-            readOnly: readOnly,
-            controller: controller,
-            obscureText: obscureText,
-            maxLength: _autoValidateStatus ? maxLength : null,
-            keyboardType: inputType,
-            inputFormatters: inputFormatters,
-            autovalidate: _autoValidateStatus ? true : false,
-            onTap: readOnly
-                ? () async {
-                    await onTapFunc();
-                  }
-                : null,
-            validator: validationMixin,
-            style: Styles.BLACK_TEXT,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.all(15.0),
-              suffixIcon: readOnly
-                  ? Icon(
-                      Icons.date_range,
-                      color: _themeData.accentColor,
-                    )
-                  : null,
-              prefixIcon: CircleAvatar(
-                backgroundColor: Colors.transparent,
-                foregroundColor: _themeData.accentColor,
-                child: icon != null
-                    ? Icon(icon)
-                    : Text(
-                        iconText[0].toUpperCase(),
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w600),
-                      ),
-              ),
-              hintText: hintText,
-              hintStyle: Styles.TF_HINT,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  List<GenderDTO> dropDownGenderItems = genderList;
-  var _selectedGender;
-
-  DateTime _selectedDate;
 
   Future<void> _datePicker() async {
     DateTime _dateNow = DateTime.now();
