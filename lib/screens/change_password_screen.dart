@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:solidarity_flutter_ui/mixins/validation_mixin/change_password_validation_mixin.dart';
 import 'package:solidarity_flutter_ui/models/dtos/change_password_dto.dart';
 import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/user_service.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
 import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';
+import 'package:solidarity_flutter_ui/widgets/label_text_form_field.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   ChangePasswordScreen({Key key}) : super(key: key);
@@ -92,84 +92,62 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
   }
 
   Widget _buildOldPasswordTextFormField() {
-    return _buildTextFormField(
-      "Current Password",
-      _oldPasswordController,
-      15,
-      validateOldPassword,
-      Icons.lock_outline,
-      "Enter your current password",
+    return LabelTextFormField(
+      formHeight: 90,
+      obscureStatus: true,
+      autoValidateStatus: _autoValidateStatus,
+      labelText: "Current Password",
+      labelTextStyle: Styles.TF_LABEL,
+      fieldTextStyle: Styles.BLACK_TEXT,
+      controller: _oldPasswordController,
+      maxLength: 15,
+      fieldDecoration: Styles.TF_BOXDEC,
+      icon: Icons.lock_outline,
+      hintText: "e.g. currentPW123*",
+      hintStyle: Styles.TF_HINT,
+      themeColor: _themeData.accentColor,
       inputFormatters: passwordInputFormatter(),
+      validationMixin: (_) => validateOldPassword(_),
     );
   }
 
   Widget _buildNewPasswordTextFormField() {
-    return _buildTextFormField(
-      "New Password",
-      _newPasswordController,
-      15,
-      validateNewPassword,
-      Icons.lock,
-      "Enter your new password",
+    return LabelTextFormField(
+      formHeight: 90,
+      obscureStatus: true,
+      autoValidateStatus: _autoValidateStatus,
+      labelText: "New Password",
+      labelTextStyle: Styles.TF_LABEL,
+      fieldTextStyle: Styles.BLACK_TEXT,
+      controller: _newPasswordController,
+      maxLength: 15,
+      fieldDecoration: Styles.TF_BOXDEC,
+      icon: Icons.lock,
+      hintText: "e.g. newPW123*",
+      hintStyle: Styles.TF_HINT,
+      themeColor: _themeData.accentColor,
       inputFormatters: passwordInputFormatter(),
+      validationMixin: (_) => validateNewPassword(_),
     );
   }
 
   Widget _buildNewPasswordAgainTextFormField() {
-    return _buildTextFormField(
-      "New Password Again",
-      _newPasswordAgainController,
-      15,
-      validateNewPasswordAgain,
-      Icons.lock,
-      "Enter your new password again",
+    return LabelTextFormField(
+      formHeight: 90,
+      obscureStatus: true,
+      autoValidateStatus: _autoValidateStatus,
+      labelText: "New Password Again",
+      labelTextStyle: Styles.TF_LABEL,
+      fieldTextStyle: Styles.BLACK_TEXT,
+      controller: _newPasswordAgainController,
+      maxLength: 15,
+      fieldDecoration: Styles.TF_BOXDEC,
+      icon: Icons.lock,
+      hintText: "e.g. newPW123*",
+      hintStyle: Styles.TF_HINT,
+      themeColor: _themeData.accentColor,
       inputFormatters: passwordInputFormatter(),
-    );
-  }
-
-  Widget _buildTextFormField(
-    String labelText,
-    TextEditingController controller,
-    int maxLength,
-    String validationMixin(String val),
-    IconData icon,
-    String hintText, {
-    TextInputType inputType = TextInputType.text,
-    List<TextInputFormatter> inputFormatters,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        //* label text
-        Text(labelText, style: Styles.TF_LABEL),
-
-        SizedBox(height: 10.0),
-
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: Styles.TF_BOXDEC,
-          height: 90.0,
-
-          //* text form field
-          child: TextFormField(
-            controller: controller,
-            maxLength: maxLength,
-            keyboardType: inputType,
-            obscureText: true,
-            inputFormatters: inputFormatters,
-            autovalidate: _autoValidateStatus ? true : false,
-            validator: validationMixin,
-            style: Styles.BLACK_TEXT,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.all(15.0),
-              prefixIcon: Icon(icon),
-              hintText: hintText,
-              hintStyle: Styles.TF_HINT,
-            ),
-          ),
-        ),
-      ],
+      validationMixin: (_) => validateNewPasswordAgain(_),
     );
   }
 

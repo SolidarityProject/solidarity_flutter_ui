@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 class LabelTextFormField extends StatelessWidget {
   final double formHeight;
   final bool editStatus;
+  final bool obscureStatus;
+  final bool autoValidateStatus;
   final String labelText;
   final TextStyle labelTextStyle;
   final TextStyle fieldTextStyle;
@@ -22,7 +24,9 @@ class LabelTextFormField extends StatelessWidget {
 
   LabelTextFormField({
     this.formHeight,
-    this.editStatus,
+    this.editStatus = true,
+    this.obscureStatus = false,
+    this.autoValidateStatus = true,
     this.labelText,
     this.labelTextStyle,
     this.fieldTextStyle,
@@ -58,11 +62,12 @@ class LabelTextFormField extends StatelessWidget {
           //* text form field
           child: TextFormField(
             enabled: editStatus ? true : false,
+            obscureText: obscureStatus,
             controller: controller,
             maxLength: editStatus ? maxLength : null,
             keyboardType: inputType,
             inputFormatters: inputFormatters,
-            autovalidate: true,
+            autovalidate: autoValidateStatus ? true : false,
             validator: (value) => validationMixin(value),
             onSaved: saveMixin,
             style: fieldTextStyle,
