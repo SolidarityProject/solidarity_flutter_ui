@@ -10,6 +10,7 @@ import 'package:solidarity_flutter_ui/utils/constants.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
 import 'package:solidarity_flutter_ui/utils/username_email_check.dart';
 import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';
+import 'package:solidarity_flutter_ui/widgets/drop_down_field.dart';
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({Key key}) : super(key: key);
@@ -185,13 +186,18 @@ class _RegisterScreenState extends State<RegisterScreen>
   }
 
   Widget _buildGenderTextFormField() {
-    return _buildDropDown(
-      "Gender",
-      "Select your gender",
-      _selectedGender,
-      dropDownGenderItems,
-      (T) => _dropDownGenderOnChanged(T),
-      _dropDownMenuItems,
+    return DropDownField<GenderDTO>(
+      labelText: "Gender",
+      labelTextStyle: Styles.TF_LABEL_WHITE,
+      fieldDecoration: Styles.TF_BOXDEC,
+      hintText: "Select your gender",
+      hintStyle: Styles.TF_HINT,
+      icon: Icons.keyboard_arrow_down,
+      items: dropDownGenderItems,
+      selectedValue: _selectedGender,
+      themeColor: _themeData.accentColor,
+      onChangedFunc: (_) => _dropDownGenderOnChanged(_),
+      dropDownMenuItem: (_) => _dropDownGenderMenuItems(_),
     );
   }
 
@@ -452,66 +458,6 @@ class _RegisterScreenState extends State<RegisterScreen>
   List<GenderDTO> dropDownGenderItems = genderList;
   var _selectedGender;
 
-  //* build drop down (generic)
-  Widget _buildDropDown<T>(
-    String labelText,
-    String hintText,
-    T selectedValue,
-    List<T> items,
-    void onChangedFunc(T),
-    DropdownMenuItem<T> dropDownMenuItem(T),
-  ) =>
-      Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //* drop down label
-            Text(labelText, style: Styles.TF_LABEL_WHITE),
-
-            SizedBox(height: 10.0),
-
-            //* drop down container (padding, decoration, child -> drop down button)
-            Stack(
-              children: [
-                Container(
-                  padding: EdgeInsets.only(left: 44, right: 10),
-                  decoration: Styles.TF_BOXDEC,
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<T>(
-                        itemHeight: 50,
-                        icon: Icon(
-                          Icons.arrow_drop_down,
-                          color: _themeData.accentColor,
-                        ),
-                        isExpanded: true,
-                        hint: Text(hintText, style: Styles.TF_HINT),
-                        value: selectedValue,
-                        onChanged: (value) {
-                          onChangedFunc(value);
-                        },
-                        items: items != null
-                            ? items.map((item) {
-                                return dropDownMenuItem(item);
-                              }).toList()
-                            : null),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 5.0, left: 2.0),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.transparent,
-                    foregroundColor: _themeData.accentColor,
-                    child: Text(
-                      "G",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                )
-              ],
-            )
-          ]);
-
   DateTime _selectedDate;
 
   Future<void> _datePicker() async {
@@ -541,11 +487,10 @@ class _RegisterScreenState extends State<RegisterScreen>
     });
   }
 
-  DropdownMenuItem<T> _dropDownMenuItems<T>(T item) {
-    GenderDTO _gender = item as GenderDTO;
-    return DropdownMenuItem<T>(
+  DropdownMenuItem<GenderDTO> _dropDownGenderMenuItems(GenderDTO item) {
+    return DropdownMenuItem<GenderDTO>(
       value: item,
-      child: Text(_gender.description),
+      child: Text(item.description),
     );
   }
 }
