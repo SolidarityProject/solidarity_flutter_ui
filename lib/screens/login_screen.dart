@@ -6,6 +6,7 @@ import 'package:solidarity_flutter_ui/services/solidarity_service/user_service.d
 import 'package:solidarity_flutter_ui/utils/constants.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
 import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';
+import 'package:solidarity_flutter_ui/widgets/label_text_form_field.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -17,6 +18,11 @@ ThemeData _themeData;
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+
+  var _formHeight = 50.0;
+  var _autoValidateStatus = false;
 
   @override
   void dispose() {
@@ -30,126 +36,124 @@ class _LoginScreenState extends State<LoginScreen> {
     _themeData = Theme.of(context);
 
     return Scaffold(
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Stack(
-            children: <Widget>[
-              Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0xff9999e6),
-                      Color(0xff8484e1),
-                      Color(0xff6f6fdc),
-                      Color(0xff5b5bd7),
-                    ],
-                    stops: [0.1, 0.4, 0.7, 0.8],
-                  ),
-                ),
-              ),
-              Container(
-                height: double.infinity,
-                child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.only(
-                    top: 60.0,
-                    bottom: 20.0,
-                    left: 30.0,
-                    right: 30.0,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 90,
-                        width: 90,
-                        child: Image.asset(
-                          "assets/images/icon_github.png",
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      SizedBox(height: 15.0),
-                      Text(
-                        'Sign In',
-                        style: signInTextStyle,
-                      ),
-                      SizedBox(height: 20.0),
-                      _buildTextField(
-                        "Email",
-                        _emailController,
-                        false,
-                        TextInputType.emailAddress,
-                        Icons.email,
-                        "Enter your email",
-                      ),
-                      SizedBox(height: 30.0),
-                      _buildTextField(
-                        "Password",
-                        _passwordController,
-                        true,
-                        TextInputType.visiblePassword,
-                        Icons.lock,
-                        "Enter your password",
-                      ),
-                      SizedBox(height: 25.0),
-                      _buildLoginButton(),
-                      SizedBox(height: 80.0),
-                      _buildSignupButton()
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Stack(
+          children: <Widget>[
+            _buildColorContainer(),
+            _buildMainContainer(),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildTextField(
-    String labelText,
-    TextEditingController controller,
-    bool obscureStatus,
-    TextInputType inputType,
-    IconData iconData,
-    String hintText,
-  ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          labelText,
-          style: Styles.TF_LABEL_WHITE,
+  Container _buildColorContainer() {
+    return Container(
+      height: double.infinity,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xff9999e6),
+            Color(0xff8484e1),
+            Color(0xff6f6fdc),
+            Color(0xff5b5bd7),
+          ],
+          stops: [0.1, 0.4, 0.7, 0.8],
         ),
-        SizedBox(height: 10.0),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: Styles.TF_BOXDEC,
-          height: 50.0,
-          child: TextField(
-            controller: controller,
-            obscureText: obscureStatus,
-            keyboardType: inputType,
-            style: Styles.BLACK_TEXT,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14.0),
-              prefixIcon: Icon(
-                iconData,
-                color: _themeData.accentColor,
-              ),
-              hintText: hintText,
-              hintStyle: Styles.TF_HINT,
-            ),
-          ),
-        ),
-      ],
+      ),
+    );
+  }
+
+  Container _buildMainContainer() {
+    return Container(
+      height: double.infinity,
+      child: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        padding: EdgeInsets.fromLTRB(30, 60, 30, 20),
+        child: _buildForm(),
+      ),
+    );
+  }
+
+  Form _buildForm() {
+    return Form(
+      key: _formKey,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          _appIconSizedBox(),
+          SizedBox(height: 15.0),
+          _signInText(),
+          SizedBox(height: 20.0),
+          _buildEmailTextFormField(),
+          SizedBox(height: 30.0),
+          _buildPasswordTextFormField(),
+          SizedBox(height: 25.0),
+          _buildLoginButton(),
+          SizedBox(height: 80.0),
+          _buildSignupButton()
+        ],
+      ),
+    );
+  }
+
+  SizedBox _appIconSizedBox() {
+    return SizedBox(
+      height: 90,
+      width: 90,
+      child: Image.asset(
+        "assets/images/icon_github.png",
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
+  Text _signInText() {
+    return Text(
+      "Sign In",
+      style: Styles.LOGIN_TITLE,
+    );
+  }
+
+  Widget _buildEmailTextFormField() {
+    return LabelTextFormField(
+      formHeight: _formHeight,
+      autoValidateStatus: _autoValidateStatus,
+      labelText: "Email",
+      labelTextStyle: Styles.TF_LABEL_WHITE,
+      fieldTextStyle: Styles.BLACK_TEXT,
+      controller: _emailController,
+      fieldDecoration: Styles.TF_BOXDEC,
+      icon: Icons.email,
+      hintText: "Enter your email",
+      hintStyle: Styles.TF_HINT,
+      themeColor: _themeData.accentColor,
+      inputType: TextInputType.emailAddress,
+      //inputFormatters: //,
+      //validationMixin: ,
+    );
+  }
+
+  Widget _buildPasswordTextFormField() {
+    return LabelTextFormField(
+      formHeight: _formHeight,
+      obscureStatus: true,
+      autoValidateStatus: _autoValidateStatus,
+      labelText: "Password",
+      labelTextStyle: Styles.TF_LABEL_WHITE,
+      fieldTextStyle: Styles.BLACK_TEXT,
+      controller: _passwordController,
+      fieldDecoration: Styles.TF_BOXDEC,
+      icon: Icons.lock,
+      hintText: "Enter your password",
+      hintStyle: Styles.TF_HINT,
+      themeColor: _themeData.accentColor,
+      //inputFormatters: //,
+      //validationMixin: ,
     );
   }
 
@@ -159,42 +163,39 @@ class _LoginScreenState extends State<LoginScreen> {
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () {
-          login(
-            LoginDTO(
-              email: _emailController.text,
-              password: _passwordController.text,
-            ),
-          ).then((result) async {
-            if (result) {
-              await getUserMe();
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                Constants.ROUTE_TABCONTROLLER,
-                (Route<dynamic> route) => false,
-              );
-            } else {
-              var alertDiaologOneButton = AlertDialogOneButton(
-                title: "OOPS!",
-                content: "Check your email or password.",
-                okText: "OK",
-                okOnPressed: () {},
-              );
-              showDialog(
-                context: context,
-                builder: (context) => alertDiaologOneButton,
-              );
-            }
-          });
-        },
         padding: EdgeInsets.all(13.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
         ),
         color: Colors.white,
-        child: Text(
-          'LOGIN',
-          style: loginTextStyle,
-        ),
+        child: Text("LOGIN", style: Styles.LOGIN_BTN_TEXT),
+        onPressed: () async {
+          var _loginDTO = LoginDTO(
+            email: _emailController.text,
+            password: _passwordController.text,
+          );
+
+          var result = await login(_loginDTO);
+
+          if (result) {
+            await getUserMe();
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              Constants.ROUTE_TABCONTROLLER,
+              (Route<dynamic> route) => false,
+            );
+          } else {
+            var alertDiaolog = AlertDialogOneButton(
+              title: "OOPS!",
+              content: "Please check your email or password.",
+              okText: "OK",
+              okOnPressed: () {},
+            );
+            showDialog(
+              context: context,
+              builder: (context) => alertDiaolog,
+            );
+          }
+        },
       ),
     );
   }
@@ -209,12 +210,12 @@ class _LoginScreenState extends State<LoginScreen> {
         text: TextSpan(
           children: [
             TextSpan(
-              text: 'Don\'t have an account? ',
-              style: signUpTextSpanTextStyle,
+              text: "Don\'t have an account? ",
+              style: Styles.LOGIN_TEXTSPAN,
             ),
             TextSpan(
               text: 'Sign Up',
-              style: signUpTextStyle,
+              style: Styles.LOGIN_SIGNUP_TEXT,
             ),
           ],
         ),
@@ -222,28 +223,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
-final signInTextStyle = TextStyle(
-  color: Colors.white,
-  fontSize: 30.0,
-  fontWeight: FontWeight.bold,
-);
-
-final loginTextStyle = TextStyle(
-  color: _themeData.accentColor,
-  letterSpacing: 1.5,
-  fontSize: 18.0,
-  fontWeight: FontWeight.bold,
-);
-
-final signUpTextSpanTextStyle = TextStyle(
-  color: Colors.white,
-  fontSize: 16.0,
-  fontWeight: FontWeight.w400,
-);
-
-final signUpTextStyle = TextStyle(
-  color: Colors.white,
-  fontSize: 16.0,
-  fontWeight: FontWeight.bold,
-);
