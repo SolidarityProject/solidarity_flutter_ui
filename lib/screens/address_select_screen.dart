@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
+import 'package:solidarity_flutter_ui/widgets/color_container.dart';
 
 class AddressSelectScreen extends StatefulWidget {
   @override
@@ -13,9 +14,12 @@ class _AddressSelectScreenState extends State<AddressSelectScreen> {
       appBar: _buildAppBar(),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
-        child: Center(
-          child: Text("Address Select"),
-        ),
+        child: Stack(
+          children: [
+            ColorContainer(),
+
+          ],
+        )
       ),
     );
   }
