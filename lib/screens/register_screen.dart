@@ -3,8 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:solidarity_flutter_ui/mixins/validation_mixin/register_validation_mixin.dart';
 import 'package:solidarity_flutter_ui/models/address_model.dart';
+import 'package:solidarity_flutter_ui/models/country_model.dart';
 import 'package:solidarity_flutter_ui/models/dtos/gender_dto.dart';
 import 'package:solidarity_flutter_ui/models/dtos/register_dto.dart';
+import 'package:solidarity_flutter_ui/services/address_service/country_service.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/auth_service.dart';
 import 'package:solidarity_flutter_ui/utils/constants.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
@@ -21,13 +23,22 @@ class RegisterScreen extends StatefulWidget {
 }
 
 ThemeData _themeData;
+Future<List<Country>> futureCountryListRegister;
+TextEditingController addressController;
+Address addressObj;
 
 class _RegisterScreenState extends State<RegisterScreen>
     with RegisterValidationMixin {
+  @override
+  void initState() {
+    futureCountryListRegister = getAllCountry();
+    addressController = TextEditingController();
+    super.initState();
+  }
+
   final _nameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _birthdateController = TextEditingController();
-  final _addressController = TextEditingController();
   final _emailController = TextEditingController();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -240,7 +251,7 @@ class _RegisterScreenState extends State<RegisterScreen>
       labelText: "Address",
       labelTextStyle: Styles.TF_LABEL_WHITE,
       fieldTextStyle: Styles.BLACK_TEXT,
-      controller: _addressController,
+      controller: addressController,
       maxLength: 50,
       fieldDecoration: Styles.TF_BOXDEC,
       icon: Icons.not_listed_location,
