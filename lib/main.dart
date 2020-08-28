@@ -25,6 +25,10 @@ class SolidarityApp extends StatelessWidget {
         brightness: Brightness.light,
         primaryColor: primaryColor,
         accentColor: accentColor,
+        colorScheme: ColorScheme.light(
+          primary: primaryColor,
+          secondary: accentColor,
+        ),
         // dialog theme
         dialogTheme: DialogTheme(
           titleTextStyle: TextStyle(
