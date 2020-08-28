@@ -37,6 +37,14 @@ class ValidationRules {
     }
   }
 
+  static String validateAddress(String value) {
+    if (value.isEmpty) {
+      return "Please select your address";
+    } else {
+      return null;
+    }
+  }
+
   static String validateUsername(String value) {
     if (value.isEmpty) {
       return "Please enter your username";

@@ -46,7 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen>
   final _formKey = GlobalKey<FormState>();
 
   List<GenderDTO> dropDownGenderItems = genderList;
-  var _selectedGender;
+  GenderDTO _selectedGender;
 
   DateTime _selectedDate;
 
@@ -260,7 +260,7 @@ class _RegisterScreenState extends State<RegisterScreen>
       hintStyle: Styles.TF_HINT,
       themeColor: _themeData.accentColor,
       onTapFunc: () => _addressOnTapFunc(),
-      validationMixin: (_) => validateBirthdate(_),
+      validationMixin: (_) => validateAddress(_),
     );
   }
 
@@ -319,7 +319,7 @@ class _RegisterScreenState extends State<RegisterScreen>
       hintStyle: Styles.TF_HINT,
       themeColor: _themeData.accentColor,
       inputFormatters: passwordInputFormat(),
-      validationMixin: (_) => validateUsername(_),
+      validationMixin: (_) => validatePassword(_),
     );
   }
 
@@ -401,15 +401,6 @@ class _RegisterScreenState extends State<RegisterScreen>
   }
 
   Future<bool> _registerUser() async {
-    // TODO : address fields
-    Address address = Address(
-      country: "Türkiye",
-      countryId: "5eef52787e2213196405352e",
-      province: "İzmir",
-      provinceId: "5eef530e7e22131964053531",
-      district: "Ödemiş",
-      districtId: "5eef567d7e2213196405353f",
-    );
     var _registerUserDTO = RegisterDTO(
       //
       // define value from fields
@@ -419,9 +410,9 @@ class _RegisterScreenState extends State<RegisterScreen>
       username: _usernameController.text,
       email: _emailController.text,
       password: _passwordController.text,
-      address: address,
-      birthdate: DateTime.parse("1998-08-08"),
-      gender: 0,
+      address: addressObj,
+      birthdate: _selectedDate,
+      gender: _selectedGender == null ? 0 : _selectedGender.number,
       pictureUrl:
           "https://raw.githubusercontent.com/SolidarityProject/solidarity_icons/master/test_user.png",
     );

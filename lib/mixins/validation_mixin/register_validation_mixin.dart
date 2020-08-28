@@ -15,6 +15,10 @@ class RegisterValidationMixin {
     return ValidationRules.validateBirthdate(value);
   }
 
+  String validateAddress(String value) {
+    return ValidationRules.validateAddress(value);
+  }
+
   String validateUsername(String value) {
     return ValidationRules.validateUsername(value);
   }
