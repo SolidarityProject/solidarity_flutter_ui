@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solidarity_flutter_ui/screens/account_screen.dart';
+import 'package:solidarity_flutter_ui/screens/address_select_screen.dart';
 import 'package:solidarity_flutter_ui/screens/change_password_screen.dart';
 import 'package:solidarity_flutter_ui/screens/home_screen.dart';
 import 'package:solidarity_flutter_ui/screens/login_screen.dart';
@@ -14,6 +15,8 @@ import 'package:solidarity_flutter_ui/utils/constants.dart';
 class Routes {
   static final routes = <String, WidgetBuilder>{
     Constants.ROUTE_ACCOUNT: (BuildContext context) => AccountScreen(),
+    Constants.ROUTE_ADDRESSSELECT: (BuildContext context) =>
+        AddressSelectScreen(),
     Constants.ROUTE_CHANGEPASSWORD: (BuildContext context) =>
         ChangePasswordScreen(),
     Constants.ROUTE_HOME: (BuildContext context) => HomeScreen(),

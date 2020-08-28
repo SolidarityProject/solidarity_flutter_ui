@@ -27,6 +27,7 @@ class _RegisterScreenState extends State<RegisterScreen>
   final _nameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _birthdateController = TextEditingController();
+  final _addressController = TextEditingController();
   final _emailController = TextEditingController();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -121,6 +122,8 @@ class _RegisterScreenState extends State<RegisterScreen>
           _buildBirthdateTextFormField(),
           SizedBox(height: 20.0),
           _buildGenderDropDownField(),
+          SizedBox(height: 20.0),
+          _buildAddressTextFormField(),
           SizedBox(height: 20.0),
           _buildUsernameTextFormField(),
           SizedBox(height: 20.0),
@@ -226,6 +229,27 @@ class _RegisterScreenState extends State<RegisterScreen>
       themeColor: _themeData.accentColor,
       onChangedFunc: (_) => _dropDownGenderOnChanged(_),
       dropDownMenuItem: (_) => _dropDownGenderMenuItems(_),
+    );
+  }
+
+  Widget _buildAddressTextFormField() {
+    return LabelTextFormField(
+      formHeight: _formTFHeight,
+      autoValidateStatus: _autoValidateStatus,
+      readOnlyStatus: true,
+      labelText: "Address",
+      labelTextStyle: Styles.TF_LABEL_WHITE,
+      fieldTextStyle: Styles.BLACK_TEXT,
+      controller: _addressController,
+      maxLength: 50,
+      fieldDecoration: Styles.TF_BOXDEC,
+      icon: Icons.not_listed_location,
+      suffixIcon: Icons.arrow_forward_ios,
+      hintText: "Select your address",
+      hintStyle: Styles.TF_HINT,
+      themeColor: _themeData.accentColor,
+      onTapFunc: () => _addressOnTapFunc(),
+      validationMixin: (_) => validateBirthdate(_),
     );
   }
 
@@ -424,6 +448,10 @@ class _RegisterScreenState extends State<RegisterScreen>
         ),
       ),
     );
+  }
+
+  Future<void> _addressOnTapFunc() async {
+    await Navigator.pushNamed(context, Constants.ROUTE_ADDRESSSELECT);
   }
 
   Future<void> _datePicker() async {
