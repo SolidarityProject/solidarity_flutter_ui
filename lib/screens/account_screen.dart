@@ -95,14 +95,14 @@ class _AccountScreenState extends State<AccountScreen> {
     await Navigator.pushNamed(
       context,
       Constants.ROUTE_PROFILE,
-    ).then((value) => setState(() {}));
+    ).then((_) => setState(() {}));
   }
 
   Future<void> _changeAddressFunc() async {
     await Navigator.pushNamed(
       context,
       Constants.ROUTE_CHANGEADDRESS,
-    );
+    ).then((_) => setState(() {}));
   }
 
   Future<void> _changePasswordFunc() async {
