@@ -1,6 +1,7 @@
 class Constants {
   static const String ROUTE_ACCOUNT = "/account";
   static const String ROUTE_ADDRESSSELECT = "/addressselect";
+  static const String ROUTE_CHANGEADDRESS = "/changeaddress";
   static const String ROUTE_CHANGEPASSWORD = "/changepassword";
   static const String ROUTE_HOME = "/home";
   static const String ROUTE_LOGIN = "/login";

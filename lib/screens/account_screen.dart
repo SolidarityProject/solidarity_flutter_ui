@@ -27,6 +27,11 @@ class _AccountScreenState extends State<AccountScreen> {
         children: <Widget>[
           _listViewProfileCard(),
           _listViewCard(
+            Icons.edit_location,
+            "Change Address",
+            _changeAddressFunc,
+          ),
+          _listViewCard(
             Icons.lock_outline,
             "Change Password",
             _changePasswordFunc,
@@ -91,6 +96,13 @@ class _AccountScreenState extends State<AccountScreen> {
       context,
       Constants.ROUTE_PROFILE,
     ).then((value) => setState(() {}));
+  }
+
+  Future<void> _changeAddressFunc() async {
+    await Navigator.pushNamed(
+      context,
+      Constants.ROUTE_CHANGEADDRESS,
+    );
   }
 
   Future<void> _changePasswordFunc() async {
