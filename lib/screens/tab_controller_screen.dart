@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:solidarity_flutter_ui/models/address_model.dart';
 import 'package:solidarity_flutter_ui/models/country_model.dart';
 import 'package:solidarity_flutter_ui/models/post_model.dart';
 import 'package:solidarity_flutter_ui/models/user_model.dart';
@@ -23,12 +24,14 @@ Future<List<Country>> futureCountryList;
 List<dynamic> myStarredPosts;
 String token;
 User user;
+Address searchAddress;
 
 class _TabControllerScreenState extends State<TabControllerScreen> {
   @override
   void initState() {
     token = SharedPrefs.getToken;
     user = SharedPrefs.getUser;
+    searchAddress = user.address;
     myStarredPosts = user.starredPosts;
     futurePostList = getPostsByFullAddress(user.address.districtId);
     futureStarredPostList = getStarredPostsByUserId(user.id);

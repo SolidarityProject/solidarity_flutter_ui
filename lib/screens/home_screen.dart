@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Padding(
       padding: const EdgeInsets.only(top: 10, bottom: 5, right: 25),
       child: Text(
-        "${user.address.district} / ${user.address.province.toUpperCase()}",
+        "${searchAddress.district} / ${searchAddress.province.toUpperCase()}",
         style: Styles.POST_DATE,
       ),
     );

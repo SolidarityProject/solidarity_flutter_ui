@@ -230,6 +230,13 @@ class _SearchScreenState extends State<SearchScreen> {
       builder: (context) => alertDiaolog,
     );
 
+    searchAddress.country = selectedCountry.name;
+    searchAddress.countryId = selectedCountry.id;
+    searchAddress.province = selectedProvince.name;
+    searchAddress.provinceId = selectedProvince.id;
+    searchAddress.district = selectedDistrict.name;
+    searchAddress.districtId = selectedDistrict.id;
+
     countries = null;
     selectedCountry = null;
     provinces = null;
