@@ -65,6 +65,7 @@ class _TabControllerScreenState extends State<TabControllerScreen> {
             ),
             child: CircleAvatar(
               backgroundImage: NetworkImage(user.pictureUrl),
+              backgroundColor: Theme.of(context).primaryColor,
             ),
           ),
         ),

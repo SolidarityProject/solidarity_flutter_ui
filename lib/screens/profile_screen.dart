@@ -113,6 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       width: 150,
       child: CircleAvatar(
         backgroundImage: NetworkImage(user.pictureUrl),
+        backgroundColor: _themeData.primaryColor,
       ),
     );
   }
