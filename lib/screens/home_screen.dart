@@ -30,7 +30,23 @@ class _HomeScreenState extends State<HomeScreen> {
     _width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: _futureBuilderPostList(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          _addressInfoText(),
+          _futureBuilderPostList(),
+        ],
+      ),
+    );
+  }
+
+  Widget _addressInfoText() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10, bottom: 5, right: 25),
+      child: Text(
+        "${user.address.district} / ${user.address.province.toUpperCase()}",
+        style: Styles.POST_DATE,
+      ),
     );
   }
 
@@ -50,12 +66,15 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       );
 
-  Widget _listView() => ListView.builder(
-      itemCount: _postList.length,
-      itemBuilder: (context, index) {
-        _index = index;
-        return _listViewCard();
-      });
+  Widget _listView() => Expanded(
+        child: ListView.builder(
+          itemCount: _postList.length,
+          itemBuilder: (context, index) {
+            _index = index;
+            return _listViewCard();
+          },
+        ),
+      );
 
   Widget _listViewCard() => Card(
         margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
