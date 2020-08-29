@@ -16,8 +16,8 @@ Future<User> getUserMe() async {
   );
 
   if (response.statusCode == 200) {
-    SharedPrefs.saveUser(response.body);
-    SharedPrefs.login();
+    await SharedPrefs.saveUser(response.body);
+    await SharedPrefs.login();
     return userFromJson(response.body);
   } else {
     SharedPrefs.sharedClear();
@@ -62,6 +62,7 @@ Future<User> updateUser(UpdateUserDTO updateUserDTO) async {
   );
 
   if (response.statusCode == 200) {
+    await SharedPrefs.saveUser(response.body);
     return userFromJson(response.body);
   } else {
     throw Exception("Failed to update user.");
@@ -92,6 +93,7 @@ Future<User> changeUserAddress(Address address) async {
   );
 
   if (response.statusCode == 200) {
+    await SharedPrefs.saveUser(response.body);
     return userFromJson(response.body);
   } else {
     throw Exception("Failed to update user.");
@@ -109,6 +111,7 @@ Future<User> changePassword(ChangePasswordDTO changePasswordDTO) async {
   );
 
   if (response.statusCode == 200) {
+    await SharedPrefs.saveUser(response.body);
     return userFromJson(response.body);
   } else {
     throw Exception("Failed to change password.");
