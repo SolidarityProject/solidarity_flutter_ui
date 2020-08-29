@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           _addressInfoText(),
-          _futureBuilderPostList(),
+          Expanded(child: _futureBuilderPostList()),
         ],
       ),
     );
@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             _postList = snapshot.data;
-            return _listView();
+            return _postWidgetSelection();
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           } else {
@@ -66,14 +66,21 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       );
 
-  Widget _listView() => Expanded(
-        child: ListView.builder(
-          itemCount: _postList.length,
-          itemBuilder: (context, index) {
-            _index = index;
-            return _listViewCard();
-          },
-        ),
+  Widget _postWidgetSelection() => _postList.length == 0
+      ? Center(
+          child: Text(
+            "There is no solidarity post in ${searchAddress.district} / ${searchAddress.province.toUpperCase()} yet.",
+            style: Styles.TF_HINT,
+          ),
+        )
+      : _listView();
+
+  Widget _listView() => ListView.builder(
+        itemCount: _postList.length,
+        itemBuilder: (context, index) {
+          _index = index;
+          return _listViewCard();
+        },
       );
 
   Widget _listViewCard() => Card(
