@@ -37,9 +37,8 @@ class SolidarityApp extends StatelessWidget {
             fontWeight: FontWeight.w700,
           ),
           contentTextStyle: TextStyle(
-            fontStyle: FontStyle.italic,
-            color: Colors.black,
-            fontSize: 15,
+            color: Colors.black87,
+            fontSize: 15.6,
           ),
         ),
         //appbar theme,
