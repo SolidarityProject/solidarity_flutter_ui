@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:solidarity_flutter_ui/models/address_model.dart';
 import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
+import 'package:solidarity_flutter_ui/services/solidarity_service/post_service.dart';
+import 'package:solidarity_flutter_ui/services/solidarity_service/user_service.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
 import 'package:solidarity_flutter_ui/widgets/address_fields.dart';
 import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';
 
 ThemeData _themeData;
-Address _selectedAddress;
 
 class ChangeAddressScreen extends StatefulWidget {
   @override
@@ -41,7 +42,7 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
     return AddressFields(
       futureCountryList: futureCountryList,
       labelTextStyle: Styles.TF_LABEL,
-      buttonText: "Change Password",
+      buttonText: "Change Address",
       buttonTextStyle: TextStyle(
         color: Colors.white,
         fontWeight: FontWeight.w600,
@@ -53,7 +54,12 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
   }
 
   void _submitTrueFunc() async {
-    _selectedAddress = selectedAddressInfo;
+    Address _selectedAddress = selectedAddressInfo;
+
+    user = await changeUserAddress(_selectedAddress);
+
+    futurePostList = getPostsByFullAddress(selectedAddressInfo.districtId);
+    searchAddress = _selectedAddress;
 
     var alertDiaolog = AlertDialogOneButton(
       title: "Success",

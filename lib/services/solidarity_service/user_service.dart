@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:solidarity_flutter_ui/models/address_model.dart';
 import 'package:solidarity_flutter_ui/models/dtos/change_password_dto.dart';
 import 'package:solidarity_flutter_ui/models/dtos/update_user_dto.dart';
 import 'package:solidarity_flutter_ui/models/user_model.dart';
@@ -51,6 +52,36 @@ Future<User> getUserByUsername(String username) async {
 }
 
 Future<User> updateUser(UpdateUserDTO updateUserDTO) async {
+  final response = await http.put(
+    "$_apiUrl/update",
+    headers: {
+      HttpHeaders.contentTypeHeader: "application/json",
+      "token": SharedPrefs.getToken
+    },
+    body: updateUserToJson(updateUserDTO),
+  );
+
+  if (response.statusCode == 200) {
+    return userFromJson(response.body);
+  } else {
+    throw Exception("Failed to update user.");
+  }
+}
+
+Future<User> changeUserAddress(Address address) async {
+  User user = SharedPrefs.getUser;
+  UpdateUserDTO updateUserDTO = UpdateUserDTO(
+    address: address,
+    id: user.id,
+    birthdate: user.birthdate,
+    email: user.email,
+    gender: user.gender,
+    lastname: user.lastname,
+    name: user.name,
+    pictureUrl: user.pictureUrl,
+    username: user.username,
+  );
+
   final response = await http.put(
     "$_apiUrl/update",
     headers: {
