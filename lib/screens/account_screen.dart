@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
 import 'package:solidarity_flutter_ui/utils/constants.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
-import 'package:solidarity_flutter_ui/utils/styles.dart';
 import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -45,9 +44,10 @@ class _AccountScreenState extends State<AccountScreen> {
           child: ListTile(
             leading: CircleAvatar(
               backgroundColor: _themeData.primaryColor,
-              child: Text(
-                user.name[0] + user.lastname[0],
-                style: Styles.WHITE_TEXT,
+              child: Icon(
+                Icons.account_circle,
+                color: Colors.white,
+                size: 28,
               ),
             ),
             title: Text("My Profile"),
