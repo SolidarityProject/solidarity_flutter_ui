@@ -37,7 +37,7 @@ class _StarredScreenState extends State<StarredScreen> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             _starredPostList = snapshot.data;
-            return _listView();
+            return _postWidgetSelection();
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           } else {
@@ -47,6 +47,15 @@ class _StarredScreenState extends State<StarredScreen> {
           }
         },
       );
+
+  Widget _postWidgetSelection() => _starredPostList.length == 0
+      ? Center(
+          child: Text(
+            "You don't have starred post yet.",
+            style: Styles.TF_HINT,
+          ),
+        )
+      : _listView();
 
   Widget _listView() => ListView.builder(
       itemCount: _starredPostList.length,
