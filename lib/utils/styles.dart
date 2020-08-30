@@ -22,6 +22,12 @@ class Styles {
     fontWeight: FontWeight.bold,
   );
 
+  static const TextStyle ADDRESS_BTN_TEXT = TextStyle(
+    color: Colors.white,
+    fontSize: 17,
+    fontWeight: FontWeight.w600,
+  );
+
   static const TextStyle LOGIN_TEXTSPAN = TextStyle(
     color: Colors.white,
     fontSize: 16.0,

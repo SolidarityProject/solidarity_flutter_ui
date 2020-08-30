@@ -43,11 +43,7 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
       futureCountryList: futureCountryList,
       labelTextStyle: Styles.TF_LABEL,
       buttonText: "Change Address",
-      buttonTextStyle: TextStyle(
-        color: Colors.white,
-        fontWeight: FontWeight.w600,
-        fontSize: 17,
-      ),
+      buttonTextStyle: Styles.ADDRESS_BTN_TEXT,
       buttonColor: _themeData.accentColor,
       submitFunc: () => _submitTrueFunc(),
     );
