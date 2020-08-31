@@ -150,12 +150,8 @@ class _AddressFieldsState extends State<AddressFields> {
   Widget _buildDropDownDistrict() {
     return DropDownField(
       labelText: "District",
-      labelTextStyle: Styles.TF_LABEL,
-      fieldDecoration: Styles.TF_BOXDEC.copyWith(
-        border: Border.all(
-          color: _themeData.accentColor,
-        ),
-      ),
+      labelTextStyle: widget.labelTextStyle,
+      fieldDecoration: _fieldDecoration,
       hintText: _districtHintText,
       hintStyle: Styles.TF_HINT,
       icon: Icons.keyboard_arrow_down,
