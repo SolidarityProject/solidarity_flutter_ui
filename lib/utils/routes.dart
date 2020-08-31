@@ -5,6 +5,7 @@ import 'package:solidarity_flutter_ui/screens/change_address_screen.dart';
 import 'package:solidarity_flutter_ui/screens/change_password_screen.dart';
 import 'package:solidarity_flutter_ui/screens/home_screen.dart';
 import 'package:solidarity_flutter_ui/screens/login_screen.dart';
+import 'package:solidarity_flutter_ui/screens/post_detail_screen.dart';
 import 'package:solidarity_flutter_ui/screens/profile_screen.dart';
 import 'package:solidarity_flutter_ui/screens/register_screen.dart';
 import 'package:solidarity_flutter_ui/screens/splash_screen.dart';
@@ -24,6 +25,7 @@ class Routes {
         ChangePasswordScreen(),
     Constants.ROUTE_HOME: (BuildContext context) => HomeScreen(),
     Constants.ROUTE_LOGIN: (BuildContext context) => LoginScreen(),
+    Constants.ROUTE_POSTDETAIL: (BuildContext context) => PostDetailScreen(),
     Constants.ROUTE_PROFILE: (BuildContext context) => ProfileScreen(),
     Constants.ROUTE_REGISTER: (BuildContext context) => RegisterScreen(),
     Constants.ROUTE_SEARCH: (BuildContext context) => SearchScreen(),

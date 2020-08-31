@@ -5,6 +5,7 @@ import 'package:solidarity_flutter_ui/models/dtos/add_starred_post_dto.dart';
 import 'package:solidarity_flutter_ui/models/post_model.dart';
 import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/starred_service.dart';
+import 'package:solidarity_flutter_ui/utils/constants.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
 
@@ -89,15 +90,21 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            _cardPostInkwell(),
+            _cardPostInkwell(_postList[_index]),
             _cardPostItemsRow(),
           ],
         ),
       );
 
-  Widget _cardPostInkwell() => InkWell(
+  Widget _cardPostInkwell(Post currentPost) => InkWell(
         child: _cardPostTouchableColumn(),
-        onTap: () {},
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            Constants.ROUTE_POSTDETAIL,
+            arguments: currentPost,
+          );
+        },
       );
 
   Widget _cardPostTouchableColumn() => Column(
