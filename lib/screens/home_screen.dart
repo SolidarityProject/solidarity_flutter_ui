@@ -98,11 +98,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _cardPostInkwell(Post currentPost) => InkWell(
         child: _cardPostTouchableColumn(),
-        onTap: () {
-          Navigator.pushNamed(
+        onTap: () async {
+          await Navigator.pushNamed(
             context,
             Constants.ROUTE_POSTDETAIL,
-            arguments: currentPost,
+            arguments: currentPost.id,
           );
         },
       );

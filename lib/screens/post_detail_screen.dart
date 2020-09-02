@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:solidarity_flutter_ui/models/post_model.dart';
+import 'package:solidarity_flutter_ui/models/dtos/post_detail_dto.dart';
+import 'package:solidarity_flutter_ui/services/solidarity_service/post_service.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
 
 class PostDetailScreen extends StatefulWidget {
@@ -8,16 +9,18 @@ class PostDetailScreen extends StatefulWidget {
   _PostDetailScreenState createState() => _PostDetailScreenState();
 }
 
-Post _post;
-
 class _PostDetailScreenState extends State<PostDetailScreen> {
+  Future<PostDetailDTO> _futurePostDetail;
+  PostDetailDTO _postDetail;
+
   @override
   Widget build(BuildContext context) {
-    _post = ModalRoute.of(context).settings.arguments;
+    final String postId = ModalRoute.of(context).settings.arguments;
+    _futurePostDetail = getPostDetailById(postId);
 
     return Scaffold(
       appBar: _buildAppBar(),
-      body: _buildMainContainer(),
+      body: _futureBuilderPostDetail(),
     );
   }
 
@@ -30,6 +33,22 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
       ),
     );
   }
+
+  Widget _futureBuilderPostDetail() => FutureBuilder<PostDetailDTO>(
+        future: _futurePostDetail,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            _postDetail = snapshot.data;
+            return _buildMainContainer();
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      );
 
   Container _buildMainContainer() {
     return Container(
@@ -56,18 +75,18 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
               Text(
                 _localDateFormat(
                   "tr_TR",
-                  _post.dateSolidarity.toLocal(),
+                  _postDetail.post.dateSolidarity.toLocal(),
                 ),
                 style: Styles.POST_DATE,
               ),
               SizedBox(height: 8),
               Text(
-                _post.title,
+                _postDetail.post.title,
                 style: Styles.POST_TITLE,
               ),
               SizedBox(height: 8),
               Text(
-                _post.description,
+                _postDetail.post.description,
               ),
             ],
           ),
@@ -82,7 +101,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
       width: double.infinity,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: NetworkImage(_post.pictureUrl),
+          image: NetworkImage(_postDetail.post.pictureUrl),
           fit: BoxFit.cover,
         ),
       ),
