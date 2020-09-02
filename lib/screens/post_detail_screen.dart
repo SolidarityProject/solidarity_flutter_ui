@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:solidarity_flutter_ui/models/dtos/post_detail_dto.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/post_service.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
+import 'package:solidarity_flutter_ui/widgets/logo_animation.dart';
 
 class PostDetailScreen extends StatefulWidget {
   @override
@@ -43,9 +44,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return LogoAnimation();
           }
         },
       );

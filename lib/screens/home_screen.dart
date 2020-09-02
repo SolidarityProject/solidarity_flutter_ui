@@ -8,6 +8,7 @@ import 'package:solidarity_flutter_ui/services/solidarity_service/starred_servic
 import 'package:solidarity_flutter_ui/utils/constants.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
+import 'package:solidarity_flutter_ui/widgets/logo_animation.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -60,9 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return LogoAnimation();
           }
         },
       );

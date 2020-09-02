@@ -7,6 +7,7 @@ import 'package:solidarity_flutter_ui/services/solidarity_service/starred_servic
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
 import 'package:solidarity_flutter_ui/widgets/alert_dialogs.dart';
+import 'package:solidarity_flutter_ui/widgets/logo_animation.dart';
 
 class StarredScreen extends StatefulWidget {
   StarredScreen({Key key}) : super(key: key);
@@ -41,9 +42,7 @@ class _StarredScreenState extends State<StarredScreen> {
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return LogoAnimation();
           }
         },
       );
