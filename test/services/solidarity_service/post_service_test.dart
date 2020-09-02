@@ -17,6 +17,7 @@ void main() async {
 
   final _postId = "5ef789fc398c473790a4e728";
   final _userId = "5ef7803367077a26d8b0f2db";
+  final _userFullName = "Mustafa ÇEVİK";
   final _districtId = "5eef567d7e2213196405353f";
   final _district = "Ödemiş";
   final _provinceId = "5ed2c0e3bd08e22e84efea49";
@@ -27,6 +28,13 @@ void main() async {
       var result = await getPostById(_postId);
       expect(result.id, _postId);
       expect(result.userId, _userId);
+    });
+
+    test("GET: getPostDetailById", () async {
+      var result = await getPostDetailById(_postId);
+      expect(result.post.id, _postId);
+      expect(result.post.userId, _userId);
+      expect(result.createdFullName, _userFullName);
     });
 
     test("GET: getPostsByUserId", () async {
