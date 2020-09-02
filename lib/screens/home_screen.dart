@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
 import 'package:solidarity_flutter_ui/models/dtos/add_starred_post_dto.dart';
 import 'package:solidarity_flutter_ui/models/post_model.dart';
 import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
@@ -9,6 +8,7 @@ import 'package:solidarity_flutter_ui/utils/constants.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
 import 'package:solidarity_flutter_ui/widgets/logo_animation.dart';
+import 'package:solidarity_flutter_ui/widgets/post_card.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -17,10 +17,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   ThemeData _themeData;
-  double _width;
 
   List<Post> _postList;
-  int _index;
 
   //TODO: scroll controller -> appbar show/hide
 
@@ -29,7 +27,6 @@ class _HomeScreenState extends State<HomeScreen> {
     initializeDateFormatting();
 
     _themeData = Theme.of(context);
-    _width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       body: Column(
@@ -52,119 +49,56 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _futureBuilderPostList() => FutureBuilder<List<Post>>(
-        future: futurePostList,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            _postList = snapshot.data;
-            return _postWidgetSelection();
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          } else {
-            return LogoAnimation();
-          }
-        },
-      );
+  Widget _futureBuilderPostList() {
+    return FutureBuilder<List<Post>>(
+      future: futurePostList,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _postList = snapshot.data;
+          return _postWidgetSelection();
+        } else if (snapshot.hasError) {
+          return Text("${snapshot.error}");
+        } else {
+          return LogoAnimation();
+        }
+      },
+    );
+  }
 
-  Widget _postWidgetSelection() => _postList.length == 0
-      ? Center(
-          child: Text(
-            "There is no solidarity post in ${searchAddress.district} / ${searchAddress.province.toUpperCase()} yet.",
-            style: Styles.TF_HINT,
-          ),
-        )
-      : _listView();
-
-  Widget _listView() => ListView.builder(
-        itemCount: _postList.length,
-        itemBuilder: (context, index) {
-          _index = index;
-          return _listViewCard();
-        },
-      );
-
-  Widget _listViewCard() => Card(
-        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-        elevation: 5,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _cardPostInkwell(_postList[_index]),
-            _cardPostItemsRow(),
-          ],
-        ),
-      );
-
-  Widget _cardPostInkwell(Post currentPost) => InkWell(
-        child: _cardPostTouchableColumn(),
-        onTap: () async {
-          await Navigator.pushNamed(
-            context,
-            Constants.ROUTE_POSTDETAIL,
-            arguments: currentPost.id,
-          ).then((_) => setState(() {}));
-        },
-      );
-
-  Widget _cardPostTouchableColumn() => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          _cardImage(),
-          _cardTextsWrap(),
-        ],
-      );
-
-  Widget _cardImage() => Container(
-        height: 180,
-        width: _width,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: NetworkImage(_postList[_index].pictureUrl),
-              fit: BoxFit.cover),
-        ),
-      );
-
-  Widget _cardTextsWrap() => Padding(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              _localDateFormat(
-                "tr_TR",
-                _postList[_index].dateSolidarity.toLocal(),
-              ),
-              style: Styles.POST_DATE,
+  Widget _postWidgetSelection() {
+    return _postList.length == 0
+        ? Center(
+            child: Text(
+              "There is no solidarity post in ${searchAddress.district} / ${searchAddress.province.toUpperCase()} yet.",
+              style: Styles.TF_HINT,
             ),
-            SizedBox(height: 8),
-            Text(
-              _postList[_index].title,
-              style: Styles.POST_TITLE,
-            ),
-            SizedBox(height: 8),
-            Text(
-              _postList[_index].description,
-            ),
-          ],
-        ),
-      );
+          )
+        : _listView();
+  }
 
-  String _localDateFormat(String locale, DateTime date) =>
-      DateFormat.yMMMMEEEEd(locale).format(date) +
-      " - " +
-      DateFormat.Hm(locale).format(date);
+  Widget _listView() {
+    return ListView.builder(
+      itemCount: _postList.length,
+      itemBuilder: (context, index) {
+        final currentPost = _postList[index];
+        return PostCard(
+          post: currentPost,
+          cardOnTap: () => postCardOnTapHome(currentPost.id),
+          cardPostItemStar: _starIconSelection(currentPost.id),
+        );
+      },
+    );
+  }
 
-  Widget _cardPostItemsRow() => Padding(
-        padding: const EdgeInsets.only(bottom: 2.0, right: 8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            _starIconSelection(),
-          ],
-        ),
-      );
+  Future<void> postCardOnTapHome(String currentPostId) async {
+    await Navigator.pushNamed(
+      context,
+      Constants.ROUTE_POSTDETAIL,
+      arguments: currentPostId,
+    ).then((_) => setState(() {}));
+  }
 
-  Widget _starIconSelection() {
+  Widget _starIconSelection(String currentPostId) {
     var _starredStatus = false;
 
     var _text = Text(
@@ -179,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     for (var myPost in myStarredPosts) {
-      if (myPost.toString() == _postList[_index].id) {
+      if (myPost.toString() == currentPostId) {
         _starredStatus = true;
         _text = Text("");
         _icon = Icon(
@@ -190,39 +124,49 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
       }
     }
+
     return _starIconLabelButton(
-        _iconLabel(_text, _icon), _starredStatus, _postList[_index].id);
+      _iconLabel(_text, _icon),
+      _starredStatus,
+      currentPostId,
+    );
   }
 
-  Widget _iconLabel(Text text, Icon icon) => Wrap(
-        crossAxisAlignment: WrapCrossAlignment.center,
-        spacing: 3,
-        children: <Widget>[
-          text,
-          icon,
-        ],
-      );
+  Widget _iconLabel(Text textWidget, Icon iconWidget) {
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 3,
+      children: <Widget>[
+        textWidget,
+        iconWidget,
+      ],
+    );
+  }
 
   Widget _starIconLabelButton(
-          Widget childWidget, bool starredStatus, String postId) =>
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
-        child: InkWell(
-          child: childWidget,
-          onTap: () async {
-            if (starredStatus) {
-              await deleteStarredPost(postId);
-            } else {
-              await addStarredPost(
-                AddStarredPostDTO(postId: postId),
-              );
-            }
-            await getMyStarredPosts();
-            setState(() {
-              myStarredPosts = SharedPrefs.getStarredPosts;
-              futureStarredPostList = getStarredPostsByUserId(user.id);
-            });
-          },
-        ),
-      );
+    Widget childWidget,
+    bool starredStatus,
+    String postId,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+      child: InkWell(
+        child: childWidget,
+        onTap: () async {
+          if (starredStatus) {
+            await deleteStarredPost(postId);
+          } else {
+            await addStarredPost(
+              AddStarredPostDTO(postId: postId),
+            );
+          }
+          await getMyStarredPosts();
+          setState(() {
+            myStarredPosts = SharedPrefs.getStarredPosts;
+            futureStarredPostList = getStarredPostsByUserId(user.id);
+          });
+        },
+      ),
+    );
+  }
 }
