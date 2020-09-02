@@ -102,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
             context,
             Constants.ROUTE_POSTDETAIL,
             arguments: currentPost.id,
-          );
+          ).then((_) => setState(() {}));
         },
       );
 
