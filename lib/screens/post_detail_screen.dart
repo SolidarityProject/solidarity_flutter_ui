@@ -35,19 +35,21 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     );
   }
 
-  Widget _futureBuilderPostDetail() => FutureBuilder<PostDetailDTO>(
-        future: _futurePostDetail,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            _postDetail = snapshot.data;
-            return _buildMainContainer();
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          } else {
-            return LogoAnimation();
-          }
-        },
-      );
+  Widget _futureBuilderPostDetail() {
+    return FutureBuilder<PostDetailDTO>(
+      future: _futurePostDetail,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _postDetail = snapshot.data;
+          return _buildMainContainer();
+        } else if (snapshot.hasError) {
+          return Text("${snapshot.error}");
+        } else {
+          return LogoAnimation();
+        }
+      },
+    );
+  }
 
   Container _buildMainContainer() {
     return Container(
@@ -65,8 +67,9 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildImageContainer(),
+        _buildCreatedContainer(),
         Container(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,6 +94,26 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildCreatedContainer() {
+    return Container(
+      margin: EdgeInsets.only(top: 10, right: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(
+            _postDetail.createdFullName,
+            style: Styles.POST_TITLE.copyWith(fontSize: 17),
+          ),
+          SizedBox(width: 8),
+          CircleAvatar(
+            backgroundImage: NetworkImage(_postDetail.createdPictureUrl),
+            backgroundColor: Theme.of(context).primaryColor,
+          ),
+        ],
+      ),
     );
   }
 
