@@ -8,6 +8,7 @@ class Post {
   String description;
   String pictureUrl;
   Address address;
+  String addressDetail;
   List<dynamic> starredUsers;
   bool activeStatus;
   DateTime dateSolidarity;
@@ -18,6 +19,7 @@ class Post {
       {this.id,
       this.activeStatus,
       this.address,
+      this.addressDetail,
       this.dateCreated,
       this.dateSolidarity,
       this.description,
@@ -31,6 +33,7 @@ class Post {
       id: json["_id"],
       activeStatus: json["activeStatus"],
       address: Address.fromJson(json["address"]),
+      addressDetail: json["addressDetail"],
       dateCreated: DateTime.parse(json["dateCreated"]),
       dateSolidarity: DateTime.parse(json["dateSolidarity"]),
       description: json["description"],

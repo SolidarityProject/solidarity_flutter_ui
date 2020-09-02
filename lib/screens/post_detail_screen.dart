@@ -11,11 +11,15 @@ class PostDetailScreen extends StatefulWidget {
 }
 
 class _PostDetailScreenState extends State<PostDetailScreen> {
+  ThemeData _themeData;
+
   Future<PostDetailDTO> _futurePostDetail;
   PostDetailDTO _postDetail;
 
   @override
   Widget build(BuildContext context) {
+    _themeData = Theme.of(context);
+
     final String postId = ModalRoute.of(context).settings.arguments;
     _futurePostDetail = getPostDetailById(postId);
 
@@ -68,37 +72,28 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
       children: [
         _buildImageContainer(),
         _buildCreatedContainer(),
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                _localDateFormat(
-                  "tr_TR",
-                  _postDetail.post.dateSolidarity.toLocal(),
-                ),
-                style: Styles.POST_DATE,
-              ),
-              SizedBox(height: 8),
-              Text(
-                _postDetail.post.title,
-                style: Styles.POST_TITLE,
-              ),
-              SizedBox(height: 8),
-              Text(
-                _postDetail.post.description,
-              ),
-            ],
-          ),
-        ),
+        _buildPostInfoContainer(),
+        _buildAddressContainer(),
       ],
+    );
+  }
+
+  Widget _buildImageContainer() {
+    return Container(
+      height: 250,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: NetworkImage(_postDetail.post.pictureUrl),
+          fit: BoxFit.cover,
+        ),
+      ),
     );
   }
 
   Widget _buildCreatedContainer() {
     return Container(
+      width: double.infinity,
       margin: EdgeInsets.only(top: 10, right: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -117,15 +112,57 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     );
   }
 
-  Widget _buildImageContainer() {
+  Widget _buildPostInfoContainer() {
     return Container(
-      height: 250,
       width: double.infinity,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: NetworkImage(_postDetail.post.pictureUrl),
-          fit: BoxFit.cover,
-        ),
+      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            _localDateFormat(
+              "tr_TR",
+              _postDetail.post.dateSolidarity.toLocal(),
+            ),
+            style: Styles.POST_DATE,
+          ),
+          SizedBox(height: 8),
+          Text(
+            _postDetail.post.title,
+            style: Styles.POST_TITLE,
+          ),
+          SizedBox(height: 8),
+          Text(
+            _postDetail.post.description,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAddressContainer() {
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.only(top: 5, right: 30),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Icon(
+            Icons.location_on,
+            size: 28,
+            color: _themeData.accentColor,
+          ),
+          SizedBox(height: 8),
+          Text(
+            _postDetail.post.addressDetail,
+          ),
+          SizedBox(height: 8),
+          Text(
+            "${_postDetail.post.address.district} / ${_postDetail.post.address.province}",
+            style: Styles.POST_TITLE.copyWith(fontSize: 17),
+          )
+        ],
       ),
     );
   }
