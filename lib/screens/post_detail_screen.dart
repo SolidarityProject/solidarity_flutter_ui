@@ -5,6 +5,7 @@ import 'package:solidarity_flutter_ui/models/dtos/post_detail_dto.dart';
 import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/post_service.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/starred_service.dart';
+import 'package:solidarity_flutter_ui/utils/constants.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
 import 'package:solidarity_flutter_ui/widgets/logo_animation.dart';
@@ -87,11 +88,21 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     return Container(
       height: 250,
       width: double.infinity,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: NetworkImage(_postDetail.post.pictureUrl),
-          fit: BoxFit.cover,
+      child: GestureDetector(
+        child: Hero(
+          tag: _postDetail.post.title,
+          child: Image.network(
+            _postDetail.post.pictureUrl,
+            fit: BoxFit.cover,
+          ),
         ),
+        onTap: () async {
+          await Navigator.pushNamed(
+            context,
+            Constants.ROUTE_FULLSCREENPHOTO,
+            arguments: [_postDetail.post.title, _postDetail.post.pictureUrl],
+          );
+        },
       ),
     );
   }
