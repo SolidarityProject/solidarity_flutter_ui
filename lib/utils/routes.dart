@@ -3,6 +3,7 @@ import 'package:solidarity_flutter_ui/screens/account_screen.dart';
 import 'package:solidarity_flutter_ui/screens/address_select_screen.dart';
 import 'package:solidarity_flutter_ui/screens/change_address_screen.dart';
 import 'package:solidarity_flutter_ui/screens/change_password_screen.dart';
+import 'package:solidarity_flutter_ui/widgets/full_screen_photo.dart';
 import 'package:solidarity_flutter_ui/screens/home_screen.dart';
 import 'package:solidarity_flutter_ui/screens/login_screen.dart';
 import 'package:solidarity_flutter_ui/screens/post_detail_screen.dart';
@@ -33,5 +34,7 @@ class Routes {
     Constants.ROUTE_STARRED: (BuildContext context) => StarredScreen(),
     Constants.ROUTE_TABCONTROLLER: (BuildContext context) =>
         TabControllerScreen(),
+    Constants.ROUTE_FULLSCREENPHOTO: (BuildContext context) =>
+        FullScreenPhoto(),
   };
 }

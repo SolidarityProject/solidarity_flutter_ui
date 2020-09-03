@@ -12,4 +12,6 @@ class Constants {
   static const String ROUTE_SPLASH = "/splash";
   static const String ROUTE_STARRED = "/starred";
   static const String ROUTE_TABCONTROLLER = "/tabcontroller";
+
+  static const String ROUTE_FULLSCREENPHOTO = "/fullscreenphoto";
 }
