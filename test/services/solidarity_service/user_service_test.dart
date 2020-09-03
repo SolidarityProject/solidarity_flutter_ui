@@ -87,7 +87,7 @@ void main() async {
         lastname: _user.lastname,
         name: _user.name,
         pictureUrl: _user.pictureUrl,
-        username: "testuser",
+        username: "semustafacevik",
       );
 
       var error = false;

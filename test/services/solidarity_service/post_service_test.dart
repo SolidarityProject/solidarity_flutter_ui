@@ -20,7 +20,7 @@ void main() async {
   final _userFullName = "Mustafa ÇEVİK";
   final _districtId = "5eef567d7e2213196405353f";
   final _district = "Ödemiş";
-  final _provinceId = "5ed2c0e3bd08e22e84efea49";
+  final _provinceId = "5eef530e7e22131964053531";
   final _province = "İzmir";
 
   group("Solidarity Service - Post Service Test Functions", () {

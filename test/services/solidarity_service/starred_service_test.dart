@@ -16,7 +16,7 @@ void main() async {
   );
   await login(_login);
 
-  final _postId = "5f19aa46d8bff6125c33b829";
+  final _postId = "5f513134fe24c8148cb86bcc";
   final _userId = "5f4422dc41eead00179a0976";
 
   final _addStarredPostDTO = AddStarredPostDTO(

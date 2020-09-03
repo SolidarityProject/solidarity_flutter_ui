@@ -10,7 +10,7 @@ void main() async {
       expect(result.provinceId, "5eef530e7e22131964053531");
     });
 
-    test("GET : getDistrictsByCountryId", () async {
+    test("GET : getDistrictsByProvinceId", () async {
       var result = await getDistrictsByProvinceId("5eef530e7e22131964053531");
       expect(result[0].id, "5eef567d7e2213196405353c");
       expect(result[0].provinceId, "5eef530e7e22131964053531");
