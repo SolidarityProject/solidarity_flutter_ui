@@ -3,11 +3,13 @@ import 'package:solidarity_flutter_ui/models/dtos/post_detail_dto.dart';
 import 'package:solidarity_flutter_ui/models/post_model.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 
-final _apiUrl = "https://solidarity-backend.herokuapp.com/posts";
+final _apiUrl = "https://solidarity-backend.herokuapp.com/api/v1/posts";
 
 Future<Post> getPostById(String postId) async {
-  final response = await http.get("$_apiUrl/getbyid/$postId",
-      headers: {"token": SharedPrefs.getToken});
+  final response = await http.get(
+    "$_apiUrl/$postId",
+    headers: {"token": SharedPrefs.getToken},
+  );
 
   if (response.statusCode == 200) {
     return postFromJson(response.body);
@@ -17,8 +19,10 @@ Future<Post> getPostById(String postId) async {
 }
 
 Future<PostDetailDTO> getPostDetailById(String postId) async {
-  final response = await http.get("$_apiUrl/getdetailbyid/$postId",
-      headers: {"token": SharedPrefs.getToken});
+  final response = await http.get(
+    "$_apiUrl/$postId/details",
+    headers: {"token": SharedPrefs.getToken},
+  );
 
   if (response.statusCode == 200) {
     return postDetailFromJson(response.body);
@@ -28,8 +32,10 @@ Future<PostDetailDTO> getPostDetailById(String postId) async {
 }
 
 Future<List<Post>> getPostsByUserId(String userId) async {
-  final response = await http.get("$_apiUrl/getbyuserid/$userId",
-      headers: {"token": SharedPrefs.getToken});
+  final response = await http.get(
+    "$_apiUrl/u/$userId",
+    headers: {"token": SharedPrefs.getToken},
+  );
 
   if (response.statusCode == 200) {
     return postListFromJson(response.body);
@@ -38,9 +44,12 @@ Future<List<Post>> getPostsByUserId(String userId) async {
   }
 }
 
+// TODO : edit function name - getPostsByFullAddress
 Future<List<Post>> getPostsByFullAddress(String districtId) async {
-  final response = await http.get("$_apiUrl/getbyfulladdress/$districtId",
-      headers: {"token": SharedPrefs.getToken});
+  final response = await http.get(
+    "$_apiUrl/district/$districtId",
+    headers: {"token": SharedPrefs.getToken},
+  );
 
   if (response.statusCode == 200) {
     return postListFromJson(response.body);
@@ -50,8 +59,10 @@ Future<List<Post>> getPostsByFullAddress(String districtId) async {
 }
 
 Future<List<Post>> getPostsByProvinceAddress(String provinceId) async {
-  final response = await http.get("$_apiUrl/getbyprovinceaddress/$provinceId",
-      headers: {"token": SharedPrefs.getToken});
+  final response = await http.get(
+    "$_apiUrl/province/$provinceId",
+    headers: {"token": SharedPrefs.getToken},
+  );
 
   if (response.statusCode == 200) {
     return postListFromJson(response.body);
@@ -61,8 +72,9 @@ Future<List<Post>> getPostsByProvinceAddress(String provinceId) async {
 }
 
 Future<List<Post>> getPostsByProvinceAddressForFree(String provinceId) async {
-  final response =
-      await http.get("$_apiUrl/free/getbyprovinceaddress/$provinceId");
+  final response = await http.get(
+    "$_apiUrl/free/$provinceId",
+  );
 
   if (response.statusCode == 200) {
     return postListFromJson(response.body);

@@ -7,11 +7,11 @@ import 'package:solidarity_flutter_ui/models/post_model.dart';
 import 'package:solidarity_flutter_ui/models/user_model.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 
-final _apiUrl = "https://solidarity-backend.herokuapp.com/starred";
+final _apiUrl = "https://solidarity-backend.herokuapp.com/api/v1/starred-posts";
 
 Future<bool> getMyStarredPosts() async {
   final response = await http.get(
-    "$_apiUrl/getmystarredposts",
+    "$_apiUrl/my-starred-posts",
     headers: {"token": SharedPrefs.getToken},
   );
 
@@ -38,7 +38,7 @@ Future<List<dynamic>> getStarredUsersByPostId(String postId) async {
 
 Future<List<Post>> getStarredPostsByUserId(String userId) async {
   final response = await http.get(
-    "$_apiUrl/getpostsbyuserid/$userId",
+    "$_apiUrl/p/$userId",
     headers: {"token": SharedPrefs.getToken},
   );
 
@@ -49,9 +49,10 @@ Future<List<Post>> getStarredPostsByUserId(String userId) async {
   }
 }
 
+// TODO : edit function name - getStarredUsersInfoByPostId
 Future<List<User>> getStarredUsersInfoByPostId(String postId) async {
   final response = await http.get(
-    "$_apiUrl/getusersinfobypostid/$postId",
+    "$_apiUrl/u/$postId",
     headers: {"token": SharedPrefs.getToken},
   );
 
@@ -64,7 +65,7 @@ Future<List<User>> getStarredUsersInfoByPostId(String postId) async {
 
 Future<bool> addStarredPost(AddStarredPostDTO addStarredPostDTO) async {
   final response = await http.post(
-    "$_apiUrl/add",
+    "$_apiUrl",
     headers: {
       HttpHeaders.contentTypeHeader: "application/json",
       "token": SharedPrefs.getToken,
@@ -81,7 +82,7 @@ Future<bool> addStarredPost(AddStarredPostDTO addStarredPostDTO) async {
 
 Future<bool> deleteStarredPost(String deleteStarredPostId) async {
   final response = await http.delete(
-    "$_apiUrl/delete/$deleteStarredPostId",
+    "$_apiUrl/$deleteStarredPostId",
     headers: {
       HttpHeaders.contentTypeHeader: "application/json",
       "token": SharedPrefs.getToken,

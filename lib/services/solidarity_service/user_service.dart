@@ -7,11 +7,11 @@ import 'package:solidarity_flutter_ui/models/dtos/update_user_dto.dart';
 import 'package:solidarity_flutter_ui/models/user_model.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 
-final _apiUrl = "https://solidarity-backend.herokuapp.com/users";
+final _apiUrl = "https://solidarity-backend.herokuapp.com/api/v1/users";
 
 Future<User> getUserMe() async {
   final response = await http.get(
-    "$_apiUrl/me",
+    "$_apiUrl/me/info",
     headers: {"token": SharedPrefs.getToken},
   );
 
@@ -27,7 +27,7 @@ Future<User> getUserMe() async {
 
 Future<User> getUserById(String userId) async {
   final response = await http.get(
-    "$_apiUrl/getbyid/$userId",
+    "$_apiUrl/$userId",
     headers: {"token": SharedPrefs.getToken},
   );
 
@@ -40,7 +40,7 @@ Future<User> getUserById(String userId) async {
 
 Future<User> getUserByUsername(String username) async {
   final response = await http.get(
-    "$_apiUrl/getbyusername/$username",
+    "$_apiUrl/u/$username",
     headers: {"token": SharedPrefs.getToken},
   );
 
@@ -53,7 +53,7 @@ Future<User> getUserByUsername(String username) async {
 
 Future<User> updateUser(UpdateUserDTO updateUserDTO) async {
   final response = await http.put(
-    "$_apiUrl/update",
+    "$_apiUrl",
     headers: {
       HttpHeaders.contentTypeHeader: "application/json",
       "token": SharedPrefs.getToken
@@ -68,6 +68,8 @@ Future<User> updateUser(UpdateUserDTO updateUserDTO) async {
     throw Exception("Failed to update user.");
   }
 }
+
+// TODO : PATCH -> backend - change addreess
 
 Future<User> changeUserAddress(Address address) async {
   User user = SharedPrefs.getUser;
@@ -84,7 +86,7 @@ Future<User> changeUserAddress(Address address) async {
   );
 
   final response = await http.put(
-    "$_apiUrl/update",
+    "$_apiUrl/",
     headers: {
       HttpHeaders.contentTypeHeader: "application/json",
       "token": SharedPrefs.getToken
@@ -102,7 +104,7 @@ Future<User> changeUserAddress(Address address) async {
 
 Future<User> changePassword(ChangePasswordDTO changePasswordDTO) async {
   final response = await http.put(
-    "$_apiUrl/changepassword",
+    "$_apiUrl/${changePasswordDTO.id}/password",
     headers: {
       HttpHeaders.contentTypeHeader: "application/json",
       "token": SharedPrefs.getToken

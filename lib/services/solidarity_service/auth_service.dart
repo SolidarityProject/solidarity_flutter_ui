@@ -8,7 +8,7 @@ import 'package:solidarity_flutter_ui/models/dtos/login_dto.dart';
 import 'package:solidarity_flutter_ui/models/dtos/register_dto.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 
-final _apiUrl = "https://solidarity-backend.herokuapp.com/auth";
+final _apiUrl = "https://solidarity-backend.herokuapp.com/api/v1/auth";
 
 Future<bool> login(LoginDTO loginDTO) async {
   final response = await http.post(
@@ -46,7 +46,7 @@ Future<bool> checkAvailableEmail(
   CheckAvailableEmailDTO checkAvailableEmailDTO,
 ) async {
   final response = await http.post(
-    "$_apiUrl/checkavailableemail",
+    "$_apiUrl/available-email",
     headers: {HttpHeaders.contentTypeHeader: "application/json"},
     body: checkAvailableEmailToJson(checkAvailableEmailDTO),
   );
@@ -62,7 +62,7 @@ Future<bool> checkAvailableUsername(
   CheckAvailableUsernameDTO checkAvailableUsernameDTO,
 ) async {
   final response = await http.post(
-    "$_apiUrl/checkavailableusername",
+    "$_apiUrl/available-username",
     headers: {HttpHeaders.contentTypeHeader: "application/json"},
     body: checkAvailableUsernameToJson(checkAvailableUsernameDTO),
   );
