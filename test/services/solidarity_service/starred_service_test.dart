@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solidarity_flutter_ui/models/dtos/add_starred_post_dto.dart';
 import 'package:solidarity_flutter_ui/models/dtos/login_dto.dart';
 import 'package:solidarity_flutter_ui/services/solidarity_service/auth_service.dart';
-import 'package:solidarity_flutter_ui/services/solidarity_service/starred_service.dart';
+import 'package:solidarity_flutter_ui/services/solidarity_service/starred_post_service.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 
 void main() async {

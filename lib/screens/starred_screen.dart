@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:solidarity_flutter_ui/models/post_model.dart';
 import 'package:solidarity_flutter_ui/screens/tab_controller_screen.dart';
-import 'package:solidarity_flutter_ui/services/solidarity_service/starred_service.dart';
+import 'package:solidarity_flutter_ui/services/solidarity_service/starred_post_service.dart';
 import 'package:solidarity_flutter_ui/utils/constants.dart';
 import 'package:solidarity_flutter_ui/utils/shared_prefs.dart';
 import 'package:solidarity_flutter_ui/utils/styles.dart';
