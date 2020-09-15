@@ -33,11 +33,6 @@ void main() async {
       expect(result, true);
     });
 
-    test("GET: getStarredUsersByPostId", () async {
-      var result = await getStarredUsersByPostId(_postId);
-      expect(result[0], _userId);
-    });
-
     test("GET: getStarredPostsByUserId", () async {
       var result = await getStarredPostsByUserId(_userId);
       expect(result[0].id, _postId);
