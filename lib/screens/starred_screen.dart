@@ -16,17 +16,11 @@ class StarredScreen extends StatefulWidget {
   _StarredScreenState createState() => _StarredScreenState();
 }
 
-class _StarredScreenState extends State<StarredScreen>
-    with AutomaticKeepAliveClientMixin<StarredScreen> {
+class _StarredScreenState extends State<StarredScreen> {
   List<Post> _starredPostList;
 
   @override
-  bool get wantKeepAlive => true;
-
-  @override
   Widget build(BuildContext context) {
-    super.build(context);
-
     return Scaffold(
       body: _futureBuilderPostList(),
     );

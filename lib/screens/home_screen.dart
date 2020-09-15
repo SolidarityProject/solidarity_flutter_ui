@@ -15,8 +15,7 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with AutomaticKeepAliveClientMixin<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   ThemeData _themeData;
 
   List<Post> _postList;
@@ -24,12 +23,7 @@ class _HomeScreenState extends State<HomeScreen>
   //TODO: scroll controller -> appbar show/hide
 
   @override
-  bool get wantKeepAlive => true;
-
-  @override
   Widget build(BuildContext context) {
-    super.build(context);
-
     initializeDateFormatting();
 
     _themeData = Theme.of(context);
