@@ -57,7 +57,7 @@ void main() async {
       expect(result.email, _user.email);
     });
 
-    test("PUT: updateUser (update email & username)", () async {
+    test("PUT: updateUser - update email & username", () async {
       var _updateUser = UpdateUserDTO(
         id: _user.id,
         address: _user.address,
@@ -77,7 +77,7 @@ void main() async {
     });
 
     // because username exists
-    test("PUT: updateUser (error)", () async {
+    test("PUT: updateUser error (username exists)", () async {
       var _updateUser = UpdateUserDTO(
         id: _user.id,
         address: _user.address,
@@ -101,7 +101,7 @@ void main() async {
       expect(onErrorResult, "Exception: Failed to update user.");
     });
 
-    test("PUT: updateUser (re-update to first information)", () async {
+    test("PUT: updateUser - re-update to first information", () async {
       var _updateUser = UpdateUserDTO(
         id: _user.id,
         address: _user.address,
@@ -135,7 +135,8 @@ void main() async {
       expect(result.password != oldPass, true);
     });
 
-    test("PUT: changePassword (error)", () async {
+    // because password is not valid
+    test("PUT: changePassword error (password is not valid)", () async {
       var _changePassword = ChangePasswordDTO(
         id: _user.id,
         oldPassword: "tU123123*",

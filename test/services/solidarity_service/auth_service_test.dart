@@ -57,7 +57,7 @@ void main() async {
       expect(result, true);
     });
 
-    test("checkavailableemail", () async {
+    test("checkAvailableEmail", () async {
       var _checkAvailableEmail = CheckAvailableEmailDTO(
         email: "random345@xmail.com",
       );
@@ -68,7 +68,7 @@ void main() async {
     });
 
     //* because email exists
-    test("checkavailableemail (error)", () async {
+    test("checkAvailableEmail error (email exists)", () async {
       var _checkAvailableEmailError = CheckAvailableEmailDTO(
         email: _login.email,
       );
@@ -77,7 +77,7 @@ void main() async {
 
       expect(result, false);
     });
-    test("checkavailableusername", () async {
+    test("checkAvailableUsername", () async {
       var _checkAvailableUsername = CheckAvailableUsernameDTO(
         username: "randomUser12",
       );
@@ -88,7 +88,7 @@ void main() async {
     });
 
     //* because username exists
-    test("checkavailableusername (error)", () async {
+    test("checkAvailableUsername error (username exists)", () async {
       var _checkAvailableUsernameError = CheckAvailableUsernameDTO(
         username: "semustafacevik",
       );
