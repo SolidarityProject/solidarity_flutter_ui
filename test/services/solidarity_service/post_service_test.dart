@@ -43,8 +43,8 @@ void main() async {
       expect(result[1].userId, _userId);
     });
 
-    test("GET: getPostsByFullAddress", () async {
-      var result = await getPostsByFullAddress(_districtId);
+    test("GET: getPostsByDistrictAddress", () async {
+      var result = await getPostsByDistrictAddress(_districtId);
       expect(result[0].address.districtId, _districtId);
       expect(result[0].address.district, _district);
       expect(result[0].address.provinceId, _provinceId);

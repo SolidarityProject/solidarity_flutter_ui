@@ -40,7 +40,7 @@ class _SearchScreenState extends State<SearchScreen> {
   void _submitTrueFunc() async {
     Address _selectedAddress = selectedAddressInfo;
 
-    futurePostList = getPostsByFullAddress(selectedDistrict.id);
+    futurePostList = getPostsByDistrictAddress(selectedDistrict.id);
     searchAddress = _selectedAddress;
 
     var alertDiaolog = AlertDialogOneButton(

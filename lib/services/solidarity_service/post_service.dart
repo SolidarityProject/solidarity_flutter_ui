@@ -44,8 +44,7 @@ Future<List<Post>> getPostsByUserId(String userId) async {
   }
 }
 
-// TODO : edit function name - getPostsByFullAddress
-Future<List<Post>> getPostsByFullAddress(String districtId) async {
+Future<List<Post>> getPostsByDistrictAddress(String districtId) async {
   final response = await http.get(
     "$_apiUrl/district/$districtId",
     headers: {"token": SharedPrefs.getToken},

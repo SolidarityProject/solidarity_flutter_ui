@@ -54,7 +54,7 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
 
     user = await changeUserAddress(_selectedAddress);
 
-    futurePostList = getPostsByFullAddress(selectedAddressInfo.districtId);
+    futurePostList = getPostsByDistrictAddress(selectedAddressInfo.districtId);
     searchAddress = _selectedAddress;
 
     var alertDiaolog = AlertDialogOneButton(

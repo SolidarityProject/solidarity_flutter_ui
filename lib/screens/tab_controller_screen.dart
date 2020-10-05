@@ -36,7 +36,7 @@ class _TabControllerScreenState extends State<TabControllerScreen> {
     user = SharedPrefs.getUser;
     searchAddress = user.address;
     myStarredPosts = user.starredPosts;
-    futurePostList = getPostsByFullAddress(user.address.districtId);
+    futurePostList = getPostsByDistrictAddress(user.address.districtId);
     futureStarredPostList = getStarredPostsByUserId(user.id);
     futureCountryList = getAllCountry();
     super.initState();
