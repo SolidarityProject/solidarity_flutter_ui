@@ -35,8 +35,7 @@ Future<List<Post>> getStarredPostsByUserId(String userId) async {
   }
 }
 
-// TODO : edit function name - getStarredUsersInfoByPostId
-Future<List<User>> getStarredUsersInfoByPostId(String postId) async {
+Future<List<User>> getStarredUsersByPostId(String postId) async {
   final response = await http.get(
     "$_apiUrl/u/$postId",
     headers: {"token": SharedPrefs.getToken},
