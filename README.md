@@ -1,16 +1,24 @@
 # solidarity_flutter_ui
+This project was developed to announce solidarity events to more people.
 
-A new Flutter project.
+### Solidarity Project - Frontend (Flutter) 
 
-## Getting Started
+<b> Technologies </b>: Flutter - RESTful service 
 
-This project is a starting point for a Flutter application.
+<b> Test tool </b> : Flutter-test
 
-A few resources to get you started if this is your first Flutter project:
+<b> RESTful service </b> : https://solidarity-backend.herokuapp.com 
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+<b> Address microservice </b> : https://address-microservicee.herokuapp.com
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<b> Project management board </b> : https://trello.com/b/pOnU3A9c/solidarity-project
+
+#### Screens
+<p align="center">
+  <img src="https://github.com/SolidarityProject/solidarity_flutter_ui/blob/master/SS_flutter/SS_login_screen.png?raw=true" width="400"> 
+  <img src="https://github.com/SolidarityProject/solidarity_flutter_ui/blob/master/SS_flutter/SS_SignUp_last.png?raw=true" width="400">
+  <img src="https://github.com/SolidarityProject/solidarity_flutter_ui/blob/master/SS_flutter/SS_app_bar_title_home.png?raw=true" width="400">
+  <img src="https://github.com/SolidarityProject/solidarity_flutter_ui/blob/master/SS_flutter/SS_post_detail_screen.png?raw=true" width="400">
+</p>
+
+<b> More screens </b> : https://github.com/SolidarityProject/solidarity_flutter_ui/blob/master/SS_flutter
